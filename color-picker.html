@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Color Picker - Quick Tool</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+    font-family:Arial,sans-serif;
+}
+
+
+/* HEADER */
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+
+/* CONTAINER */
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+
+/* TITLE */
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+
+/* COLOR PICKER AREA */
+
+.picker-area{
+    margin-top:20px;
+}
+
+
+/* COLOR SQUARE */
+
+.color-square{
+    position:relative;
+    width:100%;
+    max-width:570px;
+    height:250px;
+    margin:auto;
+    border-radius:10px;
+    overflow:hidden;
+    cursor:crosshair;
+    background:#6c5ce7;
+    touch-action:none;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+
+/* WHITE SATURATION LAYER */
+
+.color-square::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            to right,
+            #fff,
+            transparent
+        );
+
+    z-index:1;
+}
+
+
+/* BLACK VALUE LAYER */
+
+.color-square::after{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            to top,
+            #000,
+            transparent
+        );
+
+    z-index:2;
+}
+
+
+/* PICKER CIRCLE */
+
+.picker-point{
+    position:absolute;
+    width:24px;
+    height:24px;
+    border:3px solid white;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    box-shadow:
+        0 0 0 2px rgba(0,0,0,.25),
+        0 3px 8px rgba(0,0,0,.35);
+    z-index:5;
+    pointer-events:none;
+}
+
+
+/* HUE SLIDER */
+
+.hue-slider{
+    position:relative;
+    width:100%;
+    max-width:570px;
+    height:20px;
+    margin:22px auto 0;
+    border-radius:10px;
+
+    background:linear-gradient(
+        to right,
+        #ff0000 0%,
+        #ffff00 17%,
+        #00ff00 33%,
+        #00ffff 50%,
+        #0000ff 67%,
+        #ff00ff 83%,
+        #ff0000 100%
+    );
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.15);
+
+    cursor:pointer;
+    touch-action:none;
+}
+
+
+/* HUE HANDLE */
+
+.hue-point{
+    position:absolute;
+    top:50%;
+    left:0%;
+    width:30px;
+    height:30px;
+
+    transform:translate(-50%,-50%);
+
+    background:white;
+
+    border-radius:50%;
+
+    border:3px solid #ff4b00;
+
+    box-shadow:
+        0 2px 6px rgba(0,0,0,.35);
+
+    pointer-events:none;
+}
+
+
+/* PREVIEW */
+
+.preview{
+    margin-top:20px;
+    height:50px;
+    border-radius:10px;
+    background:#6c5ce7;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+
+/* VALUES */
+
+.values{
+    margin-top:20px;
+}
+
+.value{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:10px;
+    padding:14px;
+    border-radius:15px;
+    background:#f5f3ff;
+}
+
+.value strong{
+    font-size:14px;
+}
+
+.value span{
+    font-family:monospace;
+    font-weight:bold;
+    word-break:break-all;
+}
+
+
+/* COPY BUTTON */
+
+.copy{
+    border:0;
+    border-radius:10px;
+    padding:8px 12px;
+    background:#00b894;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+/* INFO */
+
+.info{
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.6;
+}
+
+
+/* DARK MODE */
+
+.dark{
+    background:#101321;
+    color:white;
+}
+
+.dark .box{
+    background:#191d2d;
+}
+
+.dark .title p{
+    color:#aaa;
+}
+
+.dark .value,
+.dark .info{
+    background:#242039;
+}
+
+
+/* MOBILE */
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .color-square{
+        height:250px;
+    }
+
+    .hue-slider{
+        height:30px;
+    }
+
+    .value{
+        flex-wrap:wrap;
+    }
+
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="header-inner">
+
+        <button
+            class="back"
+            onclick="goHome()">
+            ‹
+        </button>
+
+        <div class="logo">
+            ⚡ Quick Tool
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+<div class="box">
+
+
+    <!-- TITLE -->
+
+    <div class="title">
+
+        <div class="title-icon">
+            🎨
+        </div>
+
+        <h1>
+            Color Picker
+        </h1>
+
+        <p>
+            Pick a color and get its HEX, RGB, HSL, HSV and CMYK values.
+        </p>
+
+    </div>
+
+
+
+    <!-- COLOR PICKER -->
+
+    <div class="picker-area">
+
+
+        <!-- SQUARE PICKER -->
+
+        <div
+            class="color-square"
+            id="colorSquare">
+
+            <div
+                class="picker-point"
+                id="pickerPoint">
+            </div>
+
+        </div>
+
+
+
+        <!-- RAINBOW HUE LINE -->
+
+        <div
+            class="hue-slider"
+            id="hueSlider">
+
+            <div
+                class="hue-point"
+                id="huePoint">
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- PREVIEW -->
+
+    <div
+        class="preview"
+        id="preview">
+    </div>
+
+
+
+    <!-- VALUES -->
+
+    <div class="values">
+
+
+        <!-- HEX -->
+
+        <div class="value">
+
+            <strong>
+                HEX
+            </strong>
+
+            <span id="hex">
+                #6C5CE7
+            </span>
+
+            <button
+                class="copy"
+                onclick="copyValue('hex')">
+                Copy
+            </button>
+
+        </div>
+
+
+
+        <!-- RGB -->
+
+        <div class="value">
+
+            <strong>
+                RGB
+            </strong>
+
+            <span id="rgb">
+                108, 92, 231
+            </span>
+
+            <button
+                class="copy"
+                onclick="copyValue('rgb')">
+                Copy
+            </button>
+
+        </div>
+
+
+
+        <!-- HSL -->
+
+        <div class="value">
+
+            <strong>
+                HSL
+            </strong>
+
+            <span id="hsl">
+                248°, 74%, 63%
+            </span>
+
+            <button
+                class="copy"
+                onclick="copyValue('hsl')">
+                Copy
+            </button>
+
+        </div>
+
+
+
+        <!-- HSV -->
+
+        <div class="value">
+
+            <strong>
+                HSV
+            </strong>
+
+            <span id="hsv">
+                248°, 60%, 91%
+            </span>
+
+            <button
+                class="copy"
+                onclick="copyValue('hsv')">
+                Copy
+            </button>
+
+        </div>
+
+
+
+        <!-- CMYK -->
+
+        <div class="value">
+
+            <strong>
+                CMYK
+            </strong>
+
+            <span id="cmyk">
+                53%, 60%, 0%, 9%
+            </span>
+
+            <button
+                class="copy"
+                onclick="copyValue('cmyk')">
+                Copy
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- INFO -->
+
+    <div class="info">
+
+        🎨 Select any color to instantly see its color codes.
+
+    </div>
+
+
+</div>
+
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+
+
+<script>
+
+
+/* CURRENT COLOR */
+
+let hue = 248;
+
+let saturation = 60;
+
+let value = 91;
+
+
+/* ELEMENTS */
+
+const square =
+    document.getElementById("colorSquare");
+
+const squarePoint =
+    document.getElementById("pickerPoint");
+
+const hueSlider =
+    document.getElementById("hueSlider");
+
+const huePoint =
+    document.getElementById("huePoint");
+
+
+/* HUE TO RGB */
+
+function hueToRgb(h){
+
+    h = h / 60;
+
+    const c = 1;
+
+    const x =
+        1 - Math.abs((h % 2) - 1);
+
+    let r = 0;
+    let g = 0;
+    let b = 0;
+
+
+    if(h >= 0 && h < 1){
+
+        r = 1;
+        g = x;
+
+    }
+    else if(h >= 1 && h < 2){
+
+        r = x;
+        g = 1;
+
+    }
+    else if(h >= 2 && h < 3){
+
+        g = 1;
+        b = x;
+
+    }
+    else if(h >= 3 && h < 4){
+
+        g = x;
+        b = 1;
+
+    }
+    else if(h >= 4 && h < 5){
+
+        r = x;
+        b = 1;
+
+    }
+    else{
+
+        r = 1;
+        b = x;
+
+    }
+
+
+    return {
+
+        r:Math.round(r * 255),
+
+        g:Math.round(g * 255),
+
+        b:Math.round(b * 255)
+
+    };
+
+}
+
+
+/* HSV TO RGB */
+
+function hsvToRgb(h,s,v){
+
+    s /= 100;
+    v /= 100;
+
+    const c =
+        v * s;
+
+    const x =
+        c * (
+            1 -
+            Math.abs(
+                ((h / 60) % 2) - 1
+            )
+        );
+
+    const m =
+        v - c;
+
+    let r = 0;
+    let g = 0;
+    let b = 0;
+
+
+    if(h < 60){
+
+        r=c;
+        g=x;
+
+    }
+    else if(h < 120){
+
+        r=x;
+        g=c;
+
+    }
+    else if(h < 180){
+
+        g=c;
+        b=x;
+
+    }
+    else if(h < 240){
+
+        g=x;
+        b=c;
+
+    }
+    else if(h < 300){
+
+        r=x;
+        b=c;
+
+    }
+    else{
+
+        r=c;
+        b=x;
+
+    }
+
+
+    return {
+
+        r:Math.round((r+m)*255),
+
+        g:Math.round((g+m)*255),
+
+        b:Math.round((b+m)*255)
+
+    };
+
+}
+
+
+/* RGB TO HSL */
+
+function rgbToHsl(r,g,b){
+
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+
+    const max =
+        Math.max(r,g,b);
+
+    const min =
+        Math.min(r,g,b);
+
+
+    let h = 0;
+
+    let s = 0;
+
+
+    const l =
+        (max + min) / 2;
+
+
+    if(max !== min){
+
+        const d =
+            max - min;
+
+
+        s =
+            l > 0.5
+            ? d / (2 - max - min)
+            : d / (max + min);
+
+
+        switch(max){
+
+            case r:
+
+                h =
+                    (g-b)/d +
+                    (g<b ? 6 : 0);
+
+                break;
+
+            case g:
+
+                h =
+                    (b-r)/d + 2;
+
+                break;
+
+            case b:
+
+                h =
+                    (r-g)/d + 4;
+
+                break;
+
+        }
+
+
+        h /= 6;
+
+    }
+
+
+    return {
+
+        h:Math.round(h*360),
+
+        s:Math.round(s*100),
+
+        l:Math.round(l*100)
+
+    };
+
+}
+
+
+/* RGB TO CMYK */
+
+function rgbToCmyk(r,g,b){
+
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+
+    const k =
+        1 - Math.max(r,g,b);
+
+
+    if(k === 1){
+
+        return {
+
+            c:0,
+            m:0,
+            y:0,
+            k:100
+
+        };
+
+    }
+
+
+    return {
+
+        c:Math.round(
+            ((1-r-k)/(1-k))*100
+        ),
+
+        m:Math.round(
+            ((1-g-k)/(1-k))*100
+        ),
+
+        y:Math.round(
+            ((1-b-k)/(1-k))*100
+        ),
+
+        k:Math.round(k*100)
+
+    };
+
+}
+
+
+/* UPDATE */
+
+function updateColor(){
+
+    const rgb =
+        hsvToRgb(
+            hue,
+            saturation,
+            value
+        );
+
+
+    const hex =
+        "#" +
+        [rgb.r,rgb.g,rgb.b]
+        .map(x =>
+            x.toString(16)
+             .padStart(2,"0")
+        )
+        .join("")
+        .toUpperCase();
+
+
+    /* SQUARE BACKGROUND */
+
+    const pure =
+        hueToRgb(hue);
+
+
+    square.style.background =
+        `rgb(${pure.r},${pure.g},${pure.b})`;
+
+
+    /* PREVIEW */
+
+    document.getElementById("preview")
+        .style.background = hex;
+
+
+    /* HEX */
+
+    document.getElementById("hex")
+        .textContent = hex;
+
+
+    /* RGB */
+
+    document.getElementById("rgb")
+        .textContent =
+        rgb.r + ", " +
+        rgb.g + ", " +
+        rgb.b;
+
+
+    /* HSL */
+
+    const hsl =
+        rgbToHsl(
+            rgb.r,
+            rgb.g,
+            rgb.b
+        );
+
+
+    document.getElementById("hsl")
+        .textContent =
+        hsl.h + "°, " +
+        hsl.s + "%, " +
+        hsl.l + "%";
+
+
+    /* HSV */
+
+    document.getElementById("hsv")
+        .textContent =
+        Math.round(hue) + "°, " +
+        Math.round(saturation) + "%, " +
+        Math.round(value) + "%";
+
+
+    /* CMYK */
+
+    const cmyk =
+        rgbToCmyk(
+            rgb.r,
+            rgb.g,
+            rgb.b
+        );
+
+
+    document.getElementById("cmyk")
+        .textContent =
+        cmyk.c + "%, " +
+        cmyk.m + "%, " +
+        cmyk.y + "%, " +
+        cmyk.k + "%";
+
+
+    /* SQUARE POINT */
+
+    squarePoint.style.left =
+        saturation + "%";
+
+    squarePoint.style.top =
+        (100-value) + "%";
+
+
+    /* HUE POINT */
+
+    huePoint.style.left =
+        (hue/360*100) + "%";
+
+}
+
+
+/* SQUARE TOUCH / CLICK */
+
+function moveSquare(e){
+
+    const rect =
+        square.getBoundingClientRect();
+
+
+    let x =
+        e.clientX - rect.left;
+
+    let y =
+        e.clientY - rect.top;
+
+
+    x =
+        Math.max(
+            0,
+            Math.min(rect.width,x)
+        );
+
+    y =
+        Math.max(
+            0,
+            Math.min(rect.height,y)
+        );
+
+
+    saturation =
+        (x / rect.width) * 100;
+
+
+    value =
+        100 -
+        (y / rect.height) * 100;
+
+
+    updateColor();
+
+}
+
+
+/* SQUARE MOUSE */
+
+square.addEventListener(
+    "pointerdown",
+    function(e){
+
+        square.setPointerCapture(e.pointerId);
+
+        moveSquare(e);
+
+    }
+);
+
+
+square.addEventListener(
+    "pointermove",
+    function(e){
+
+        if(e.buttons){
+
+            moveSquare(e);
+
+        }
+
+    }
+);
+
+
+/* HUE TOUCH / CLICK */
+
+function moveHue(e){
+
+    const rect =
+        hueSlider.getBoundingClientRect();
+
+
+    let x =
+        e.clientX - rect.left;
+
+
+    x =
+        Math.max(
+            0,
+            Math.min(rect.width,x)
+        );
+
+
+    hue =
+        (x / rect.width) * 360;
+
+
+    updateColor();
+
+}
+
+
+/* HUE POINTER */
+
+hueSlider.addEventListener(
+    "pointerdown",
+    function(e){
+
+        hueSlider.setPointerCapture(e.pointerId);
+
+        moveHue(e);
+
+    }
+);
+
+
+hueSlider.addEventListener(
+    "pointermove",
+    function(e){
+
+        if(e.buttons){
+
+            moveHue(e);
+
+        }
+
+    }
+);
+
+
+/* COPY */
+
+function copyValue(id){
+
+    const text =
+        document
+        .getElementById(id)
+        .textContent
+        .trim();
+
+
+    if(
+        navigator.clipboard &&
+        window.isSecureContext
+    ){
+
+        navigator.clipboard
+            .writeText(text);
+
+    }
+    else{
+
+        const temp =
+            document.createElement("textarea");
+
+        temp.value = text;
+
+        document.body.appendChild(temp);
+
+        temp.select();
+
+        document.execCommand("copy");
+
+        temp.remove();
+
+    }
+
+}
+
+
+/* HOME */
+
+function goHome(){
+
+    window.location.href =
+        "tool.html";
+
+}
+
+
+/* INITIAL */
+
+updateColor();
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

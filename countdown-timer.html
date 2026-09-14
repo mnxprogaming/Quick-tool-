@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown Timer - Quick Tool</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+    font-family:Arial,sans-serif;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.inputs{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.input-group label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+    text-align:center;
+}
+
+input{
+    width:100%;
+    padding:14px 8px;
+    border:2px solid #e2e2ed;
+    border-radius:15px;
+    font-size:18px;
+    text-align:center;
+    outline:none;
+}
+
+input:focus{
+    border-color:#6c5ce7;
+}
+
+.timer{
+    text-align:center;
+    font-size:48px;
+    font-weight:800;
+    letter-spacing:2px;
+    margin:30px 0;
+    font-variant-numeric:tabular-nums;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+}
+
+.action-btn{
+    border:none;
+    padding:15px 8px;
+    border-radius:16px;
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.start{
+    background:#00b894;
+}
+
+.pause{
+    background:#e67e22;
+}
+
+.reset{
+    background:#e74c3c;
+}
+
+.status{
+    text-align:center;
+    margin-top:20px;
+    color:#777;
+    font-size:14px;
+}
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark input{
+    background:#15192a;
+    color:white;
+    border-color:#444;
+}
+
+body.dark .status{
+    color:#aaa;
+}
+
+@media(max-width:500px){
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .inputs{
+        gap:7px;
+    }
+
+    input{
+        font-size:16px;
+        padding:13px 5px;
+    }
+
+    .timer{
+        font-size:35px;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</div>
+
+<div class="container">
+<div class="box">
+
+    <div class="title">
+        <div class="title-icon">⏳</div>
+
+        <h1>Countdown Timer</h1>
+
+        <p>Set a countdown timer for hours, minutes and seconds.</p>
+    </div>
+
+    <div class="inputs">
+
+        <div class="input-group">
+            <label>Hours</label>
+            <input type="number" id="hours" min="0" max="99" value="0">
+        </div>
+
+        <div class="input-group">
+            <label>Minutes</label>
+            <input type="number" id="minutes" min="0" max="59" value="5">
+        </div>
+
+        <div class="input-group">
+            <label>Seconds</label>
+            <input type="number" id="seconds" min="0" max="59" value="0">
+        </div>
+
+    </div>
+
+    <div class="timer" id="timer">
+        00:05:00
+    </div>
+
+    <div class="actions">
+
+        <button class="action-btn start" onclick="startTimer()">
+            ▶ Start
+        </button>
+
+        <button class="action-btn pause" onclick="pauseTimer()">
+            ⏸ Pause
+        </button>
+
+        <button class="action-btn reset" onclick="resetTimer()">
+            🔄 Reset
+        </button>
+
+    </div>
+
+    <div class="status" id="status">
+        Ready
+    </div>
+
+</div>
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+let remaining=300000;
+let timerInterval=null;
+let running=false;
+
+const hoursInput=document.getElementById("hours");
+const minutesInput=document.getElementById("minutes");
+const secondsInput=document.getElementById("seconds");
+
+function getInputMilliseconds(){
+
+    const hours=Math.max(
+        0,
+        parseInt(hoursInput.value)||0
+    );
+
+    const minutes=Math.max(
+        0,
+        parseInt(minutesInput.value)||0
+    );
+
+    const seconds=Math.max(
+        0,
+        parseInt(secondsInput.value)||0
+    );
+
+    return (
+        hours*3600000+
+        minutes*60000+
+        seconds*1000
+    );
+}
+
+function formatTime(ms){
+
+    const totalSeconds=Math.ceil(ms/1000);
+
+    const hours=Math.floor(totalSeconds/3600);
+
+    const minutes=Math.floor(
+        (totalSeconds%3600)/60
+    );
+
+    const seconds=totalSeconds%60;
+
+    return pad(hours)+":"+pad(minutes)+":"+pad(seconds);
+}
+
+function pad(number){
+    return String(number).padStart(2,"0");
+}
+
+function updateDisplay(){
+
+    document.getElementById("timer").textContent=
+        formatTime(remaining);
+}
+
+function startTimer(){
+
+    if(running){
+        return;
+    }
+
+    if(remaining<=0){
+        remaining=getInputMilliseconds();
+    }
+
+    if(remaining<=0){
+        alert("Please set a time first.");
+        return;
+    }
+
+    running=true;
+
+    document.getElementById("status").textContent=
+        "Timer running...";
+
+    let lastTime=Date.now();
+
+    timerInterval=setInterval(function(){
+
+        const now=Date.now();
+
+        remaining-=now-lastTime;
+
+        lastTime=now;
+
+        if(remaining<=0){
+
+            remaining=0;
+
+            clearInterval(timerInterval);
+
+            timerInterval=null;
+            running=false;
+
+            updateDisplay();
+
+            document.getElementById("status").textContent=
+                "⏰ Time's up!";
+
+            alert("⏰ Time's up!");
+
+            return;
+        }
+
+        updateDisplay();
+
+    },50);
+}
+
+function pauseTimer(){
+
+    if(!running){
+        return;
+    }
+
+    clearInterval(timerInterval);
+
+    timerInterval=null;
+    running=false;
+
+    document.getElementById("status").textContent=
+        "Paused";
+
+    updateDisplay();
+}
+
+function resetTimer(){
+
+    clearInterval(timerInterval);
+
+    timerInterval=null;
+    running=false;
+
+    remaining=getInputMilliseconds();
+
+    updateDisplay();
+
+    document.getElementById("status").textContent=
+        "Ready";
+}
+
+function updateFromInputs(){
+
+    if(!running){
+
+        remaining=getInputMilliseconds();
+
+        updateDisplay();
+
+    }
+}
+
+hoursInput.addEventListener(
+    "input",
+    updateFromInputs
+);
+
+minutesInput.addEventListener(
+    "input",
+    updateFromInputs
+);
+
+secondsInput.addEventListener(
+    "input",
+    updateFromInputs
+);
+
+updateDisplay();
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

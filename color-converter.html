@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Color Converter - Quick Tool</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+    font-family:Arial,sans-serif;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.color-preview{
+    height:50px;
+    border-radius:10px;
+    background:#6c5ce7;
+    margin-top:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+.field{
+    margin-top:18px;
+}
+
+.field label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.field input{
+    width:100%;
+    padding:14px;
+    border:2px solid #e2defd;
+    border-radius:15px;
+    font-size:15px;
+    outline:none;
+}
+
+.field input:focus{
+    border-color:#6c5ce7;
+}
+
+.convert-btn{
+    width:100%;
+    margin-top:20px;
+    padding:16px;
+    border:0;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.results{
+    display:none;
+    margin-top:22px;
+}
+
+.result{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:10px;
+    padding:14px;
+    border-radius:15px;
+    background:#f5f3ff;
+}
+
+.result strong{
+    font-size:14px;
+    flex-shrink:0;
+}
+
+.result span{
+    font-family:monospace;
+    font-weight:bold;
+    word-break:break-all;
+    flex:1;
+}
+
+.copy{
+    border:0;
+    border-radius:10px;
+    padding:8px 12px;
+    background:#00b894;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    flex-shrink:0;
+}
+
+.message{
+    display:none;
+    margin-top:18px;
+    padding:14px;
+    border-radius:16px;
+    text-align:center;
+    font-size:14px;
+}
+
+.success{
+    background:#eafff7;
+    color:#008f6d;
+}
+
+.error{
+    background:#fff0f0;
+    color:#d63031;
+}
+
+.info{
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+}
+
+.dark{
+    background:#101321;
+    color:white;
+}
+
+.dark .box{
+    background:#191d2d;
+}
+
+.dark .title p{
+    color:#aaa;
+}
+
+.dark .field input{
+    background:#15192a;
+    color:white;
+    border-color:#8075ef;
+}
+
+.dark .result,
+.dark .info{
+    background:#242039;
+}
+
+.dark .success{
+    background:#102b25;
+    color:#66e6c1;
+}
+
+.dark .error{
+    background:#321c20;
+    color:#ff8c8c;
+}
+
+
+/* ============================= */
+/* MOBILE */
+/* ============================= */
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .result{
+        flex-wrap:nowrap;
+        gap:7px;
+    }
+
+    .result strong{
+        font-size:14px;
+        width:52px;
+    }
+
+    .result span{
+        font-size:12px;
+        min-width:0;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+
+    .copy{
+        padding:8px 10px;
+        font-size:13px;
+    }
+
+}
+
+
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+
+</style>
+
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">⚡ Quick Tool</div>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+<div class="box">
+
+
+    <div class="title">
+
+        <div class="title-icon">🌈</div>
+
+        <h1>Color Converter</h1>
+
+        <p>
+            Convert HEX colors into RGB, HSL, HSV and CMYK values.
+        </p>
+
+    </div>
+
+
+    <div
+        class="color-preview"
+        id="preview">
+    </div>
+
+
+    <div class="field">
+
+        <label>Color Code</label>
+
+        <input
+            type="text"
+            id="hexInput"
+            value="#6c5ce7"
+            placeholder="#6c5ce7">
+
+    </div>
+
+
+    <button
+        class="convert-btn"
+        onclick="convertColor()">
+
+        Convert Color
+
+    </button>
+
+
+    <div
+        class="message"
+        id="message">
+    </div>
+
+
+    <div
+        class="results"
+        id="results">
+
+
+        <!-- HEX -->
+
+        <div class="result">
+
+            <strong>HEX</strong>
+
+            <span id="hexResult">
+                #6C5CE7
+            </span>
+
+            <button
+                class="copy"
+                onclick="copyValue('hexResult')">
+
+                Copy
+
+            </button>
+
+        </div>
+
+
+        <!-- RGB -->
+
+        <div class="result">
+
+            <strong>RGB</strong>
+
+            <span id="rgbResult">
+                rgb(108, 92, 231)
+            </span>
+
+            <button
+                class="copy"
+                onclick="copyValue('rgbResult')">
+
+                Copy
+
+            </button>
+
+        </div>
+
+
+        <!-- HSL -->
+
+        <div class="result">
+
+            <strong>HSL</strong>
+
+            <span id="hslResult">
+                hsl(248°, 74%, 63%)
+            </span>
+
+            <button
+                class="copy"
+                onclick="copyValue('hslResult')">
+
+                Copy
+
+            </button>
+
+        </div>
+
+
+        <!-- HSV -->
+
+        <div class="result">
+
+            <strong>HSV</strong>
+
+            <span id="hsvResult">
+                hsv(248°, 60%, 91%)
+            </span>
+
+            <button
+                class="copy"
+                onclick="copyValue('hsvResult')">
+
+                Copy
+
+            </button>
+
+        </div>
+
+
+        <!-- CMYK -->
+
+        <div class="result">
+
+            <strong>CMYK</strong>
+
+            <span id="cmykResult">
+                cmyk(53%, 60%, 0%, 9%)
+            </span>
+
+            <button
+                class="copy"
+                onclick="copyValue('cmykResult')">
+
+                Copy
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="info">
+
+        🎨 Enter a HEX color such as #6c5ce7.
+
+    </div>
+
+
+</div>
+
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+
+<script>
+
+
+/* ========================= */
+/* MAIN CONVERTER */
+/* ========================= */
+
+function convertColor(){
+
+    let hex =
+        document.getElementById("hexInput")
+        .value
+        .trim();
+
+
+    if(!/^#?[0-9A-Fa-f]{6}$/.test(hex)){
+
+        showMessage(
+            "❌ Please enter a valid 6-digit HEX color.",
+            false
+        );
+
+        return;
+    }
+
+
+    if(!hex.startsWith("#")){
+
+        hex = "#" + hex;
+
+    }
+
+
+    const rgb =
+        hexToRgb(hex);
+
+
+    const hsl =
+        rgbToHsl(
+            rgb.r,
+            rgb.g,
+            rgb.b
+        );
+
+
+    const hsv =
+        rgbToHsv(
+            rgb.r,
+            rgb.g,
+            rgb.b
+        );
+
+
+    const cmyk =
+        rgbToCmyk(
+            rgb.r,
+            rgb.g,
+            rgb.b
+        );
+
+
+    /* Preview */
+
+    document.getElementById("preview")
+        .style.background = hex;
+
+
+    /* HEX */
+
+    document.getElementById("hexResult")
+        .textContent =
+        hex.toUpperCase();
+
+
+    /* RGB */
+
+    document.getElementById("rgbResult")
+        .textContent =
+        "rgb(" +
+        rgb.r + ", " +
+        rgb.g + ", " +
+        rgb.b +
+        ")";
+
+
+    /* HSL */
+
+    document.getElementById("hslResult")
+        .textContent =
+        "hsl(" +
+        hsl.h + "°, " +
+        hsl.s + "%, " +
+        hsl.l + "%" +
+        ")";
+
+
+    /* HSV */
+
+    document.getElementById("hsvResult")
+        .textContent =
+        "hsv(" +
+        hsv.h + "°, " +
+        hsv.s + "%, " +
+        hsv.v + "%" +
+        ")";
+
+
+    /* CMYK */
+
+    document.getElementById("cmykResult")
+        .textContent =
+        "cmyk(" +
+        cmyk.c + "%, " +
+        cmyk.m + "%, " +
+        cmyk.y + "%, " +
+        cmyk.k + "%" +
+        ")";
+
+
+    document.getElementById("results")
+        .style.display =
+        "block";
+
+
+    showMessage(
+        "✅ Color converted successfully.",
+        true
+    );
+
+}
+
+
+/* ========================= */
+/* HEX TO RGB */
+/* ========================= */
+
+function hexToRgb(hex){
+
+    return {
+
+        r:parseInt(
+            hex.substring(1,3),
+            16
+        ),
+
+        g:parseInt(
+            hex.substring(3,5),
+            16
+        ),
+
+        b:parseInt(
+            hex.substring(5,7),
+            16
+        )
+
+    };
+
+}
+
+
+/* ========================= */
+/* RGB TO HSL */
+/* ========================= */
+
+function rgbToHsl(r,g,b){
+
+    r /= 255;
+
+    g /= 255;
+
+    b /= 255;
+
+
+    const max =
+        Math.max(r,g,b);
+
+    const min =
+        Math.min(r,g,b);
+
+
+    let h = 0;
+
+    let s = 0;
+
+
+    const l =
+        (max + min) / 2;
+
+
+    if(max !== min){
+
+        const d =
+            max - min;
+
+
+        s =
+            l > 0.5
+            ? d / (2 - max - min)
+            : d / (max + min);
+
+
+        switch(max){
+
+            case r:
+
+                h =
+                    (g-b)/d +
+                    (g < b ? 6 : 0);
+
+                break;
+
+
+            case g:
+
+                h =
+                    (b-r)/d + 2;
+
+                break;
+
+
+            case b:
+
+                h =
+                    (r-g)/d + 4;
+
+                break;
+
+        }
+
+
+        h /= 6;
+
+    }
+
+
+    return {
+
+        h:Math.round(h * 360),
+
+        s:Math.round(s * 100),
+
+        l:Math.round(l * 100)
+
+    };
+
+}
+
+
+/* ========================= */
+/* RGB TO HSV */
+/* ========================= */
+
+function rgbToHsv(r,g,b){
+
+    r /= 255;
+
+    g /= 255;
+
+    b /= 255;
+
+
+    const max =
+        Math.max(r,g,b);
+
+    const min =
+        Math.min(r,g,b);
+
+    const d =
+        max - min;
+
+
+    let h = 0;
+
+
+    if(d !== 0){
+
+        if(max === r){
+
+            h =
+                60 * (((g-b)/d) % 6);
+
+        }
+        else if(max === g){
+
+            h =
+                60 * ((b-r)/d + 2);
+
+        }
+        else{
+
+            h =
+                60 * ((r-g)/d + 4);
+
+        }
+
+    }
+
+
+    if(h < 0){
+
+        h += 360;
+
+    }
+
+
+    const s =
+        max === 0
+        ? 0
+        : d / max;
+
+
+    const v =
+        max;
+
+
+    return {
+
+        h:Math.round(h),
+
+        s:Math.round(s * 100),
+
+        v:Math.round(v * 100)
+
+    };
+
+}
+
+
+/* ========================= */
+/* RGB TO CMYK */
+/* ========================= */
+
+function rgbToCmyk(r,g,b){
+
+    const R =
+        r / 255;
+
+    const G =
+        g / 255;
+
+    const B =
+        b / 255;
+
+
+    const k =
+        1 - Math.max(R,G,B);
+
+
+    if(k === 1){
+
+        return {
+
+            c:0,
+
+            m:0,
+
+            y:0,
+
+            k:100
+
+        };
+
+    }
+
+
+    const c =
+        (1-R-k) / (1-k);
+
+
+    const m =
+        (1-G-k) / (1-k);
+
+
+    const y =
+        (1-B-k) / (1-k);
+
+
+    return {
+
+        c:Math.round(c * 100),
+
+        m:Math.round(m * 100),
+
+        y:Math.round(y * 100),
+
+        k:Math.round(k * 100)
+
+    };
+
+}
+
+
+/* ========================= */
+/* MESSAGE */
+/* ========================= */
+
+function showMessage(text,success){
+
+    const message =
+        document.getElementById("message");
+
+
+    message.textContent =
+        text;
+
+
+    message.className =
+        success
+        ? "message success"
+        : "message error";
+
+
+    message.style.display =
+        "block";
+
+}
+
+
+/* ========================= */
+/* COPY */
+/* ========================= */
+
+function copyValue(id){
+
+    const text =
+        document.getElementById(id)
+        .textContent;
+
+
+    navigator.clipboard.writeText(text)
+
+        .then(() => {
+
+            showMessage(
+                "✅ Copied!",
+                true
+            );
+
+        })
+
+        .catch(() => {
+
+            const temp =
+                document.createElement("textarea");
+
+
+            temp.value =
+                text;
+
+
+            document.body.appendChild(temp);
+
+
+            temp.select();
+
+
+            document.execCommand("copy");
+
+
+            temp.remove();
+
+
+            showMessage(
+                "✅ Copied!",
+                true
+            );
+
+        });
+
+}
+
+
+/* ========================= */
+/* HOME */
+/* ========================= */
+
+function goHome(){
+
+    window.location.href =
+        "tool.html";
+
+}
+
+
+/* ========================= */
+/* START */
+/* ========================= */
+
+convertColor();
+
+/* DARK MODE */
+
+if(
+    localStorage.getItem("theme")
+    === "dark"
+){
+
+    document.body.classList.add(
+        "dark"
+    );
+
+}
+
+</script>
+
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+
+</html>

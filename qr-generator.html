@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Advanced QR Code Generator - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:40px;
+    font-family:Arial,sans-serif;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:18px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:26px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* SLIDER STYLES */
+.type-select{
+    margin-bottom:18px;
+}
+
+.type-select label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.type-slider{
+    display:flex;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+}
+
+.type-slider::-webkit-scrollbar{
+    display:none;
+}
+
+.type-page{
+    flex:0 0 100%;
+    scroll-snap-align:start;
+}
+
+.type-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    grid-template-rows:repeat(3,1fr);
+    gap:8px;
+}
+
+.type-chip{
+    border:1px solid #e1e4ee;
+    background:#f8f9ff;
+    border-radius:14px;
+    padding:10px 4px;
+    text-align:center;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:bold;
+    color:#555;
+    line-height:1.3;
+    user-select:none;
+    transition:all 0.15s ease;
+}
+
+.type-chip:hover{
+    border-color:#6c5ce7;
+}
+
+.type-chip .type-chip-icon{
+    display:block;
+    font-size:20px;
+    margin-bottom:4px;
+}
+
+.type-chip.active{
+    background:#eeeaff;
+    border-color:#6c5ce7;
+    color:#6c5ce7;
+}
+
+.type-dots{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    margin-top:12px;
+}
+
+.type-dots .dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#ddd;
+    cursor:pointer;
+    transition:all .2s;
+}
+
+.type-dots .dot.active{
+    background:#6c5ce7;
+    width:18px;
+    border-radius:4px;
+}
+
+/* FORM FIELDS */
+.settings{
+    margin-top:14px;
+}
+
+.settings label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+.field-group{
+    margin-bottom:12px;
+}
+
+.field-group:last-child{
+    margin-bottom:0;
+}
+
+.sub-label{
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:6px;
+    display:block;
+    color:#555;
+}
+
+.field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+textarea,
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="number"],
+input[type="datetime-local"],
+select{
+    width:100%;
+    padding:13px 15px;
+    border:1px solid #ddd;
+    border-radius:15px;
+    font-size:14px;
+    outline:none;
+    font-family:Arial,sans-serif;
+    background:white;
+    color:#172033;
+    transition:border-color 0.2s;
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+textarea:focus,
+input:focus,
+select:focus{
+    border-color:#6c5ce7;
+}
+
+/* ADVANCED CUSTOMIZER PANEL */
+.accordion-box{
+    margin-top:18px;
+    border:1px solid #e7e9f3;
+    border-radius:16px;
+    overflow:hidden;
+    background:#fafbff;
+}
+
+.accordion-head{
+    padding:14px 16px;
+    font-weight:bold;
+    font-size:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+    user-select:none;
+}
+
+.accordion-body{
+    padding:16px;
+    background:white;
+    border-top:1px solid #eef0f7;
+    display:none;
+}
+
+.accordion-body.open{
+    display:block;
+}
+
+.custom-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:12px;
+}
+
+.custom-chip{
+    border:1px solid #ddd;
+    background:#fff;
+    border-radius:12px;
+    padding:8px 4px;
+    text-align:center;
+    font-size:12px;
+    font-weight:bold;
+    cursor:pointer;
+    color:#555;
+    transition:all .15s ease;
+}
+
+.custom-chip.active{
+    background:#eeeaff;
+    border-color:#6c5ce7;
+    color:#6c5ce7;
+}
+
+.color-input-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:6px 10px;
+    background:#fff;
+}
+
+.color-input-wrap input[type="color"]{
+    width:32px;
+    height:32px;
+    padding:0;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    flex-shrink:0;
+}
+
+.color-value{
+    font-size:12px;
+    color:#555;
+    text-transform:uppercase;
+}
+
+/* LOGO SELECTOR */
+.logo-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:8px;
+    margin-bottom:12px;
+}
+
+.logo-item{
+    height:44px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    background:#fff;
+    transition:.15s;
+}
+
+.logo-item.active{
+    border-color:#6c5ce7;
+    background:#eeeaff;
+}
+
+.logo-item svg,
+.logo-item img{
+    width:22px;
+    height:22px;
+}
+
+.file-upload-btn{
+    display:block;
+    width:100%;
+    text-align:center;
+    padding:11px;
+    background:#f4f6ff;
+    border:1px dashed #6c5ce7;
+    border-radius:12px;
+    color:#6c5ce7;
+    font-size:13px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ACTION & RESULT */
+.generate-btn{
+    width:100%;
+    border:none;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.generate-btn:active{
+    transform:scale(0.98);
+}
+
+.result{
+    display:none;
+    margin-top:20px;
+    padding:22px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin-bottom:15px;
+}
+
+#qrcode{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:white;
+    padding:16px;
+    border-radius:16px;
+    width:max-content;
+    max-width:100%;
+    margin:auto;
+    box-shadow:0 6px 20px rgba(0,0,0,.06);
+}
+
+#qrcode canvas,
+#qrcode svg{
+    max-width:100%;
+    height:auto;
+    display:block;
+}
+
+.download-wrap{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:16px;
+}
+
+.download-btn{
+    padding:13px 20px;
+    border-radius:14px;
+    background:#00b894;
+    color:white;
+    font-weight:bold;
+    font-size:13px;
+    cursor:pointer;
+    border:none;
+    transition:0.2s;
+}
+
+.download-btn.secondary{
+    background:#6c5ce7;
+}
+
+.download-btn:active{
+    transform:scale(0.97);
+}
+
+.hint{
+    font-size:12px;
+    color:#888;
+    margin-top:5px;
+}
+
+/* Responsive & Dark Mode */
+@media(max-width:500px){
+    .header{ padding-bottom:28px; }
+    .box{ padding:20px 15px; }
+    .title h1{ font-size:23px; }
+    .field-row{ grid-template-columns:1fr; }
+    .custom-grid{ grid-template-columns:repeat(2,1fr); }
+    .logo-grid{ grid-template-columns:repeat(4,1fr); }
+}
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box,
+body.dark .accordion-body{
+    background:#191d2d;
+}
+
+body.dark .title p{ color:#aaa; }
+
+body.dark textarea,
+body.dark input,
+body.dark select{
+    background:#15192a;
+    color:white;
+    border-color:#3a3f58;
+}
+
+body.dark .type-chip,
+body.dark .custom-chip,
+body.dark .logo-item,
+body.dark .accordion-box,
+body.dark .color-input-wrap{
+    background:#15192a;
+    border-color:#3a3f58;
+    color:#ccc;
+}
+
+body.dark .type-chip.active,
+body.dark .custom-chip.active,
+body.dark .logo-item.active{
+    background:#2a2440;
+    border-color:#6c5ce7;
+    color:#b8a9ff;
+}
+
+body.dark .sub-label,
+body.dark .color-value{ color:#ccc; }
+
+body.dark .result{ background:#102b25; }
+
+@media (min-width: 900px){
+    body{ padding-bottom:50px; }
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+    .header-inner{ max-width:1200px; gap:20px; }
+    .back{ width:56px; height:56px; font-size:34px; }
+    .logo{ font-size:30px; }
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+    .box{
+        padding:40px;
+        border-radius:30px;
+    }
+    .title h1{ font-size:36px; }
+}
+
+/* Tool suggestions */
+.tool-suggestions{ margin-top:25px; }
+.suggestions-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+}
+.suggestions-title h2{
+    margin:0;
+    font-size:20px;
+    color:#172033;
+}
+.suggestions-grid{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+.suggestion-card{
+    background:#fff;
+    border-radius:18px;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    box-shadow:0 5px 18px rgba(0,0,0,.07);
+    cursor:pointer;
+    transition:.2s;
+}
+.suggestion-card:hover{ transform:translateY(-2px); }
+.suggestion-icon{
+    width:48px;
+    height:48px;
+    flex-shrink:0;
+    border-radius:15px;
+    background:#eeeaff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+}
+.suggestion-content{ flex:1; min-width:0; }
+.suggestion-content h3{ margin:0 0 4px; font-size:16px; color:#172033; }
+.suggestion-content p{ margin:0; font-size:12px; color:#777; line-height:1.4; }
+.suggestion-arrow{ font-size:24px; color:#6c5ce7; }
+body.dark .suggestions-title h2,
+body.dark .suggestion-content h3{ color:#f4f5ff; }
+body.dark .suggestion-card{ background:#191d2d; }
+body.dark .suggestion-content p{ color:#aeb4c8; }
+body.dark .suggestion-icon{ background:#242039; }
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">Quick Tool</div>
+    </div>
+</header>
+
+<div class="container">
+<div class="box">
+
+    <div class="title">
+        <div class="title-icon">🎨</div>
+        <h1>Pro QR Code Generator</h1>
+        <p>Generate highly-customized, high-resolution vector and graphic QR codes.</p>
+    </div>
+
+    <!-- 27 QR TYPE SELECTOR -->
+    <div class="type-select">
+        <label>Select QR Code Type</label>
+
+        <div class="type-slider" id="typeSlider">
+            <!-- PAGE 1: Essential & Direct Contacts -->
+            <div class="type-page">
+                <div class="type-grid">
+                    <div class="type-chip active" data-type="url"><span class="type-chip-icon">🔗</span>URL / Link</div>
+                    <div class="type-chip" data-type="text"><span class="type-chip-icon">📝</span>Plain Text</div>
+                    <div class="type-chip" data-type="phone"><span class="type-chip-icon">📞</span>Phone Call</div>
+                    <div class="type-chip" data-type="sms"><span class="type-chip-icon">💬</span>SMS</div>
+                    <div class="type-chip" data-type="whatsapp"><span class="type-chip-icon">🟢</span>WhatsApp</div>
+                    <div class="type-chip" data-type="email"><span class="type-chip-icon">✉️</span>E-mail</div>
+                    <div class="type-chip" data-type="vcard"><span class="type-chip-icon">👤</span>vCard</div>
+                    <div class="type-chip" data-type="wifi"><span class="type-chip-icon">📶</span>Wi-Fi</div>
+                    <div class="type-chip" data-type="map"><span class="type-chip-icon">📍</span>Map</div>
+                </div>
+            </div>
+
+            <!-- PAGE 2: Social & Messaging -->
+            <div class="type-page">
+                <div class="type-grid">
+                    <div class="type-chip" data-type="instagram"><span class="type-chip-icon">📸</span>Instagram</div>
+                    <div class="type-chip" data-type="youtube"><span class="type-chip-icon">▶️</span>YouTube</div>
+                    <div class="type-chip" data-type="telegram"><span class="type-chip-icon">✈️</span>Telegram</div>
+                    <div class="type-chip" data-type="facebook"><span class="type-chip-icon">📘</span>Facebook</div>
+                    <div class="type-chip" data-type="linkedin"><span class="type-chip-icon">💼</span>LinkedIn</div>
+                    <div class="type-chip" data-type="twitter"><span class="type-chip-icon">𝕏</span>X (Twitter)</div>
+                    <div class="type-chip" data-type="tiktok"><span class="type-chip-icon">🎵</span>TikTok</div>
+                    <div class="type-chip" data-type="skype"><span class="type-chip-icon">📞</span>Skype</div>
+                    <div class="type-chip" data-type="meeting"><span class="type-chip-icon">📹</span>Zoom/Meet</div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: Payments, Business & Media -->
+            <div class="type-page">
+                <div class="type-grid">
+                    <div class="type-chip" data-type="upi"><span class="type-chip-icon">💳</span>UPI Pay</div>
+                    <div class="type-chip" data-type="paypal"><span class="type-chip-icon">🅿️</span>PayPal</div>
+                    <div class="type-chip" data-type="crypto"><span class="type-chip-icon">₿</span>Crypto</div>
+                    <div class="type-chip" data-type="event"><span class="type-chip-icon">📅</span>Calendar</div>
+                    <div class="type-chip" data-type="app"><span class="type-chip-icon">📲</span>App Stores</div>
+                    <div class="type-chip" data-type="audio"><span class="type-chip-icon">🎧</span>Spotify/Audio</div>
+                    <div class="type-chip" data-type="pdf"><span class="type-chip-icon">📄</span>PDF/Doc</div>
+                    <div class="type-chip" data-type="mecard"><span class="type-chip-icon">📇</span>MeCard</div>
+                    <div class="type-chip" data-type="multilink"><span class="type-chip-icon">🌐</span>Multi-Link</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="type-dots" id="typeDots">
+            <span class="dot active" data-page="0"></span>
+            <span class="dot" data-page="1"></span>
+            <span class="dot" data-page="2"></span>
+        </div>
+    </div>
+
+    <!-- TYPE INPUT FORMS -->
+    <div class="settings" id="fields-url">
+        <label for="qrText">Website or Destination URL</label>
+        <textarea id="qrText" placeholder="https://example.com"></textarea>
+    </div>
+
+    <div class="settings" id="fields-text" style="display:none">
+        <label for="qrPlainText">Plain Text / Message</label>
+        <textarea id="qrPlainText" placeholder="Type your text content here..."></textarea>
+    </div>
+
+    <div class="settings" id="fields-phone" style="display:none">
+        <div class="field-group">
+            <label for="phoneNumber">Phone Number (with Country Code)</label>
+            <input type="tel" id="phoneNumber" placeholder="+91 98765 43210">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-sms" style="display:none">
+        <div class="field-group">
+            <label for="smsNumber">Phone Number</label>
+            <input type="tel" id="smsNumber" placeholder="+91 98765 43210">
+        </div>
+        <div class="field-group">
+            <label for="smsMessage">Default SMS Text</label>
+            <textarea id="smsMessage" placeholder="Pre-filled SMS text..."></textarea>
+        </div>
+    </div>
+
+    <div class="settings" id="fields-whatsapp" style="display:none">
+        <div class="field-group">
+            <label for="waNumber">WhatsApp Number (e.g. 919876543210)</label>
+            <input type="tel" id="waNumber" placeholder="919876543210">
+            <div class="hint">Country code followed by digits, without '+' or space.</div>
+        </div>
+        <div class="field-group">
+            <label for="waMessage">Prefilled Message (optional)</label>
+            <textarea id="waMessage" placeholder="Hi! I want to know more about..."></textarea>
+        </div>
+    </div>
+
+    <div class="settings" id="fields-email" style="display:none">
+        <div class="field-group">
+            <label for="emailAddress">Email Address</label>
+            <input type="email" id="emailAddress" placeholder="contact@example.com">
+        </div>
+        <div class="field-group">
+            <label for="emailSubject">Subject (optional)</label>
+            <input type="text" id="emailSubject" placeholder="Inquiry">
+        </div>
+        <div class="field-group">
+            <label for="emailBody">Body (optional)</label>
+            <textarea id="emailBody" placeholder="Type email draft..."></textarea>
+        </div>
+    </div>
+
+    <div class="settings" id="fields-vcard" style="display:none">
+        <div class="field-row">
+            <div class="field-group">
+                <label for="vFirst">First Name</label>
+                <input type="text" id="vFirst" placeholder="John">
+            </div>
+            <div class="field-group">
+                <label for="vLast">Last Name</label>
+                <input type="text" id="vLast" placeholder="Doe">
+            </div>
+        </div>
+        <div class="field-row">
+            <div class="field-group">
+                <label for="vPhone">Mobile</label>
+                <input type="tel" id="vPhone" placeholder="+91 98765 43210">
+            </div>
+            <div class="field-group">
+                <label for="vEmail">Email</label>
+                <input type="email" id="vEmail" placeholder="john@domain.com">
+            </div>
+        </div>
+        <div class="field-group">
+            <label for="vCompany">Company / Title (optional)</label>
+            <input type="text" id="vCompany" placeholder="Designation, Organization">
+        </div>
+        <div class="field-group">
+            <label for="vWebsite">Website (optional)</label>
+            <input type="url" id="vWebsite" placeholder="https://example.com">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-wifi" style="display:none">
+        <div class="field-group">
+            <label for="wifiSsid">Wi-Fi Network Name (SSID)</label>
+            <input type="text" id="wifiSsid" placeholder="MyWiFiNetwork">
+        </div>
+        <div class="field-group">
+            <label for="wifiPassword">Password</label>
+            <input type="text" id="wifiPassword" placeholder="Wi-Fi Security Key">
+        </div>
+        <div class="field-group">
+            <label for="wifiSecurity">Security Type</label>
+            <select id="wifiSecurity">
+                <option value="WPA">WPA/WPA2/WPA3</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">None (Open)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="settings" id="fields-map" style="display:none">
+        <div class="field-group">
+            <label for="mapAddress">Address or Landmark</label>
+            <input type="text" id="mapAddress" placeholder="e.g. Connaught Place, New Delhi">
+        </div>
+        <div class="field-row">
+            <div class="field-group">
+                <label for="mapLat">Latitude</label>
+                <input type="text" id="mapLat" placeholder="28.6315">
+            </div>
+            <div class="field-group">
+                <label for="mapLng">Longitude</label>
+                <input type="text" id="mapLng" placeholder="77.2167">
+            </div>
+        </div>
+    </div>
+
+    <div class="settings" id="fields-instagram" style="display:none">
+        <div class="field-group">
+            <label for="instaUsername">Instagram Profile Link or Username</label>
+            <input type="text" id="instaUsername" placeholder="e.g. @yourbrand or full link">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-youtube" style="display:none">
+        <div class="field-group">
+            <label for="ytUrl">YouTube Video URL or Channel Handle</label>
+            <input type="text" id="ytUrl" placeholder="e.g. @Channel or https://youtube.com/watch?v=...">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-telegram" style="display:none">
+        <div class="field-group">
+            <label for="tgUser">Telegram Username or Channel Link</label>
+            <input type="text" id="tgUser" placeholder="e.g. username or https://t.me/...">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-facebook" style="display:none">
+        <div class="field-group">
+            <label for="fbUrl">Facebook Page or Profile Link</label>
+            <input type="text" id="fbUrl" placeholder="https://facebook.com/yourpage">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-linkedin" style="display:none">
+        <div class="field-group">
+            <label for="inUrl">LinkedIn Profile / Company Page</label>
+            <input type="text" id="inUrl" placeholder="https://linkedin.com/in/username">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-twitter" style="display:none">
+        <div class="field-group">
+            <label for="twUser">X (Twitter) Profile or Post URL</label>
+            <input type="text" id="twUser" placeholder="@handle or https://x.com/...">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-tiktok" style="display:none">
+        <div class="field-group">
+            <label for="tiktokUser">TikTok Username or Video Link</label>
+            <input type="text" id="tiktokUser" placeholder="@username">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-skype" style="display:none">
+        <div class="field-group">
+            <label for="skypeUser">Skype ID or Username</label>
+            <input type="text" id="skypeUser" placeholder="e.g. john.doe">
+        </div>
+        <div class="field-group">
+            <label for="skypeAction">Action</label>
+            <select id="skypeAction">
+                <option value="call">Start Audio Call</option>
+                <option value="chat">Open Chat</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="settings" id="fields-meeting" style="display:none">
+        <div class="field-group">
+            <label for="meetUrl">Meeting Link (Zoom, Meet, Teams)</label>
+            <input type="url" id="meetUrl" placeholder="https://zoom.us/j/... or https://meet.google.com/...">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-upi" style="display:none">
+        <div class="field-group">
+            <label for="upiId">UPI Virtual Payment Address (VPA)</label>
+            <input type="text" id="upiId" placeholder="name@oksbi or mobile@paytm">
+        </div>
+        <div class="field-group">
+            <label for="upiName">Payee Name (optional)</label>
+            <input type="text" id="upiName" placeholder="Store or Merchant Name">
+        </div>
+        <div class="field-row">
+            <div class="field-group">
+                <label for="upiAmount">Amount (INR)</label>
+                <input type="number" id="upiAmount" placeholder="Optional">
+            </div>
+            <div class="field-group">
+                <label for="upiNote">Note</label>
+                <input type="text" id="upiNote" placeholder="Order ID / Payment">
+            </div>
+        </div>
+    </div>
+
+    <div class="settings" id="fields-paypal" style="display:none">
+        <div class="field-group">
+            <label for="paypalUsername">PayPal.Me Username</label>
+            <input type="text" id="paypalUsername" placeholder="yourname">
+        </div>
+        <div class="field-row">
+            <div class="field-group">
+                <label for="paypalAmount">Amount (optional)</label>
+                <input type="number" id="paypalAmount" placeholder="e.g. 25">
+            </div>
+            <div class="field-group">
+                <label for="paypalCurrency">Currency</label>
+                <select id="paypalCurrency">
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="INR">INR (₹)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings" id="fields-crypto" style="display:none">
+        <div class="field-group">
+            <label for="cryptoCoin">Cryptocurrency</label>
+            <select id="cryptoCoin">
+                <option value="bitcoin">Bitcoin (BTC)</option>
+                <option value="ethereum">Ethereum (ETH)</option>
+                <option value="litecoin">Litecoin (LTC)</option>
+                <option value="tether">Tether (USDT)</option>
+            </select>
+        </div>
+        <div class="field-group">
+            <label for="cryptoAddress">Wallet Address</label>
+            <input type="text" id="cryptoAddress" placeholder="Recipient wallet public key">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-event" style="display:none">
+        <div class="field-group">
+            <label for="evTitle">Event Name</label>
+            <input type="text" id="evTitle" placeholder="Summit / Wedding / Party">
+        </div>
+        <div class="field-row">
+            <div class="field-group">
+                <label for="evStart">Start Time</label>
+                <input type="datetime-local" id="evStart">
+            </div>
+            <div class="field-group">
+                <label for="evEnd">End Time</label>
+                <input type="datetime-local" id="evEnd">
+            </div>
+        </div>
+        <div class="field-group">
+            <label for="evLocation">Venue</label>
+            <input type="text" id="evLocation" placeholder="Hall / Hotel">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-app" style="display:none">
+        <div class="field-group">
+            <label for="appStoreLink">App Store / Play Store URL</label>
+            <input type="url" id="appStoreLink" placeholder="https://play.google.com/store/apps/details?id=...">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-audio" style="display:none">
+        <div class="field-group">
+            <label for="audioLink">Spotify / Apple Music Track Link</label>
+            <input type="url" id="audioLink" placeholder="https://open.spotify.com/track/...">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-pdf" style="display:none">
+        <div class="field-group">
+            <label for="pdfUrl">PDF / Document Hosted URL</label>
+            <input type="url" id="pdfUrl" placeholder="https://yourdrive.link/document.pdf">
+        </div>
+    </div>
+
+    <div class="settings" id="fields-mecard" style="display:none">
+        <div class="field-group">
+            <label for="meName">Contact Name</label>
+            <input type="text" id="meName" placeholder="Full Name">
+        </div>
+        <div class="field-row">
+            <div class="field-group">
+                <label for="meTel">Mobile</label>
+                <input type="tel" id="meTel" placeholder="+91 9876543210">
+            </div>
+            <div class="field-group">
+                <label for="meEmail">Email</label>
+                <input type="email" id="meEmail" placeholder="name@email.com">
+            </div>
+        </div>
+    </div>
+
+    <div class="settings" id="fields-multilink" style="display:none">
+        <div class="field-group">
+            <label for="multiUrl">Multi-link Landing Page (Linktree/Bento)</label>
+            <input type="url" id="multiUrl" placeholder="https://linktr.ee/username">
+        </div>
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- ADVANCED CUSTOMIZER (PRO PLATFORM FEATURE)    -->
+    <!-- ============================================== -->
+
+    <!-- ACCORDION 1: PATTERNS & CORNERS -->
+    <div class="accordion-box">
+        <div class="accordion-head" onclick="toggleAccordion('accPatterns')">
+            <span>✨ Pattern & Shape Customization</span>
+            <span id="accPatterns-arrow">▼</span>
+        </div>
+        <div class="accordion-body open" id="accPatterns">
+            <label class="sub-label">Body Dot Pattern</label>
+            <div class="custom-grid" id="dotStyleGrid">
+                <div class="custom-chip active" data-style="square">Square</div>
+                <div class="custom-chip" data-style="dots">Dots</div>
+                <div class="custom-chip" data-style="rounded">Rounded</div>
+                <div class="custom-chip" data-style="extra-rounded">Extra-Round</div>
+                <div class="custom-chip" data-style="classy">Classy</div>
+                <div class="custom-chip" data-style="classy-rounded">Classy-Round</div>
+            </div>
+
+            <label class="sub-label">Corner Frame (Outer Eye)</label>
+            <div class="custom-grid" id="cornerSquareGrid">
+                <div class="custom-chip active" data-style="square">Square</div>
+                <div class="custom-chip" data-style="extra-rounded">Round Frame</div>
+                <div class="custom-chip" data-style="dot">Circle Frame</div>
+            </div>
+
+            <label class="sub-label">Corner Center (Inner Ball)</label>
+            <div class="custom-grid" id="cornerDotGrid">
+                <div class="custom-chip active" data-style="square">Square</div>
+                <div class="custom-chip" data-style="dot">Circle Dot</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCORDION 2: COLORS & GRADIENTS -->
+    <div class="accordion-box">
+        <div class="accordion-head" onclick="toggleAccordion('accColors')">
+            <span>🎨 Color & Gradient Customization</span>
+            <span id="accColors-arrow">▶</span>
+        </div>
+        <div class="accordion-body" id="accColors">
+            <div class="field-group">
+                <label class="sub-label">Color Mode</label>
+                <div class="custom-grid" style="grid-template-columns:1fr 1fr">
+                    <div class="custom-chip active" id="modeSingle" onclick="setColorMode('single')">Single Color</div>
+                    <div class="custom-chip" id="modeGradient" onclick="setColorMode('gradient')">Dual Gradient</div>
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field-group">
+                    <label class="sub-label" id="primaryColorLabel">Primary Color</label>
+                    <div class="color-input-wrap">
+                        <input type="color" id="qrFgColor" value="#172033">
+                        <span class="color-value" id="qrFgColorVal">#172033</span>
+                    </div>
+                </div>
+
+                <div class="field-group" id="gradientSecWrap" style="display:none">
+                    <label class="sub-label">Gradient 2nd Color</label>
+                    <div class="color-input-wrap">
+                        <input type="color" id="qrGradientColor" value="#6c5ce7">
+                        <span class="color-value" id="qrGradientColorVal">#6c5ce7</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field-group">
+                    <label class="sub-label">Corner Eyes Color</label>
+                    <div class="color-input-wrap">
+                        <input type="color" id="qrCornerColor" value="#172033">
+                        <span class="color-value" id="qrCornerColorVal">#172033</span>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label class="sub-label">Background Color</label>
+                    <div class="color-input-wrap">
+                        <input type="color" id="qrBgColor" value="#ffffff">
+                        <span class="color-value" id="qrBgColorVal">#FFFFFF</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label style="font-weight:normal;font-size:13px;cursor:pointer">
+                    <input type="checkbox" id="transparentBg" style="width:auto;vertical-align:middle;margin-right:6px"> Transparent Background
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCORDION 3: LOGO & BRANDING -->
+    <div class="accordion-box">
+        <div class="accordion-head" onclick="toggleAccordion('accLogo')">
+            <span>🛡️ Center Logo / Watermark</span>
+            <span id="accLogo-arrow">▶</span>
+        </div>
+        <div class="accordion-body" id="accLogo">
+            <label class="sub-label">Select Brand Icon</label>
+            <div class="logo-grid" id="logoGrid">
+                <div class="logo-item active" data-logo="" title="No Logo">✕</div>
+                <div class="logo-item" data-logo="wa" title="WhatsApp">🟢</div>
+                <div class="logo-item" data-logo="insta" title="Instagram">📸</div>
+                <div class="logo-item" data-logo="yt" title="YouTube">▶️</div>
+                <div class="logo-item" data-logo="tg" title="Telegram">✈️</div>
+                <div class="logo-item" data-logo="fb" title="Facebook">📘</div>
+                <div class="logo-item" data-logo="x" title="X">𝕏</div>
+                <div class="logo-item" data-logo="upi" title="UPI">💳</div>
+                <div class="logo-item" data-logo="paypal" title="PayPal">🅿️</div>
+                <div class="logo-item" data-logo="btc" title="Bitcoin">₿</div>
+            </div>
+
+            <label class="sub-label" style="margin-top:10px">Or Upload Custom Logo</label>
+            <label class="file-upload-btn">
+                📂 Choose Logo Image (PNG / SVG)
+                <input type="file" id="customLogoFile" accept="image/*" style="display:none">
+            </label>
+            <div id="customLogoName" class="hint" style="text-align:center"></div>
+        </div>
+    </div>
+
+    <!-- ACCORDION 4: RESOLUTION & PRINT -->
+    <div class="accordion-box">
+        <div class="accordion-head" onclick="toggleAccordion('accRes')">
+            <span>⚙️ Quality & Output Size</span>
+            <span id="accRes-arrow">▶</span>
+        </div>
+        <div class="accordion-body" id="accRes">
+            <div class="field-row">
+                <div class="field-group">
+                    <label class="sub-label">Resolution (Download Scale)</label>
+                    <select id="qrResSize">
+                        <option value="300">Standard Web (300px)</option>
+                        <option value="600" selected>High-Res HD (600px)</option>
+                        <option value="1200">Print Quality (1200px)</option>
+                        <option value="2000">Ultra 4K Vector Print (2000px)</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="sub-label">Error Correction</label>
+                    <select id="qrErrorLevel">
+                        <option value="H" selected>High (30% - Best with Logo)</option>
+                        <option value="Q">Quarter (25%)</option>
+                        <option value="M">Medium (15%)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="generate-btn" onclick="generateCustomQR()">⚡ Generate Pro QR Code</button>
+
+    <!-- RESULT OUTPUT -->
+    <div class="result" id="result">
+        <h2>✓ High Quality QR Ready</h2>
+        <div id="qrcode"></div>
+        <div class="download-wrap">
+            <button class="download-btn" onclick="downloadQR('png')">Download PNG (HD)</button>
+            <button class="download-btn secondary" onclick="downloadQR('svg')">Download Vector SVG</button>
+        </div>
+    </div>
+
+</div>
+
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<!-- Modern Styled QR Code Engine (Supports SVG vector, dot shapes, gradients, eye shapes, center logos) -->
+<script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
+
+<script>
+let currentType = "url";
+let currentDotStyle = "square";
+let currentCornerSquareStyle = "square";
+let currentCornerDotStyle = "square";
+let colorMode = "single";
+let selectedLogo = "";
+let customLogoDataUrl = "";
+let qrCodeInstance = null;
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+// Accordion Control
+function toggleAccordion(id){
+    const body = document.getElementById(id);
+    const arrow = document.getElementById(id + "-arrow");
+    const isOpen = body.classList.contains("open");
+    body.classList.toggle("open", !isOpen);
+    arrow.textContent = isOpen ? "▶" : "▼";
+}
+
+// Slider Swipe / Selection
+const typeSlider = document.getElementById("typeSlider");
+const typeDots = document.getElementById("typeDots");
+
+typeSlider.addEventListener("click", function(e){
+    const chip = e.target.closest(".type-chip");
+    if(!chip) return;
+    document.querySelectorAll(".type-chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    currentType = chip.getAttribute("data-type");
+    showFieldsFor(currentType);
+});
+
+typeDots.addEventListener("click", function(e){
+    const dot = e.target.closest(".dot");
+    if(!dot) return;
+    const page = parseInt(dot.getAttribute("data-page"), 10);
+    typeSlider.scrollTo({left: page * typeSlider.clientWidth, behavior:"smooth"});
+});
+
+let scrollTimeout;
+typeSlider.addEventListener("scroll", function(){
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function(){
+        const page = Math.round(typeSlider.scrollLeft / typeSlider.clientWidth);
+        typeDots.querySelectorAll(".dot").forEach((d, i) => d.classList.toggle("active", i === page));
+    }, 80);
+});
+
+function showFieldsFor(type){
+    document.querySelectorAll(".settings[id^='fields-']").forEach(el => el.style.display = "none");
+    const target = document.getElementById("fields-" + type);
+    if(target) target.style.display = "block";
+}
+
+// Shape Customization Selection
+function setupChipGroup(containerId, callback){
+    document.getElementById(containerId).addEventListener("click", function(e){
+        const chip = e.target.closest(".custom-chip");
+        if(!chip) return;
+        this.querySelectorAll(".custom-chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        callback(chip.getAttribute("data-style"));
+    });
+}
+setupChipGroup("dotStyleGrid", val => currentDotStyle = val);
+setupChipGroup("cornerSquareGrid", val => currentCornerSquareStyle = val);
+setupChipGroup("cornerDotGrid", val => currentCornerDotStyle = val);
+
+// Color Mode
+function setColorMode(mode){
+    colorMode = mode;
+    document.getElementById("modeSingle").classList.toggle("active", mode === "single");
+    document.getElementById("modeGradient").classList.toggle("active", mode === "gradient");
+    document.getElementById("gradientSecWrap").style.display = mode === "gradient" ? "block" : "none";
+}
+
+// Color value live badge update
+["qrFgColor", "qrGradientColor", "qrCornerColor", "qrBgColor"].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener("input", function(){
+        document.getElementById(id + "Val").textContent = this.value;
+    });
+});
+
+// Logo Preset Badges (SVG Data URIs for razor-sharp rendering)
+const PRESET_LOGOS = {
+    wa: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
+    insta: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg",
+    yt: "https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg",
+    tg: "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg",
+    fb: "https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg",
+    x: "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
+    upi: "https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg",
+    paypal: "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg",
+    btc: "https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg"
+};
+
+document.getElementById("logoGrid").addEventListener("click", function(e){
+    const item = e.target.closest(".logo-item");
+    if(!item) return;
+    this.querySelectorAll(".logo-item").forEach(i => i.classList.remove("active"));
+    item.classList.add("active");
+    selectedLogo = item.getAttribute("data-logo");
+    customLogoDataUrl = "";
+    document.getElementById("customLogoName").textContent = "";
+});
+
+// Custom Logo Upload
+document.getElementById("customLogoFile").addEventListener("change", function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt){
+        customLogoDataUrl = evt.target.result;
+        selectedLogo = "custom";
+        document.querySelectorAll("#logoGrid .logo-item").forEach(i => i.classList.remove("active"));
+        document.getElementById("customLogoName").textContent = "✓ Uploaded: " + file.name;
+    };
+    reader.readAsDataURL(file);
+});
+
+// Helper Escape utilities
+function escapeVCard(str){
+    return String(str || "").replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
+}
+function escapeWifi(str){
+    return String(str || "").replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/:/g,"\\:");
+}
+function formatICSDate(val){
+    if(!val) return "";
+    const d = new Date(val);
+    const pad = n => String(n).padStart(2,"0");
+    return d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + "T" + pad(d.getHours()) + pad(d.getMinutes()) + "00";
+}
+
+// Build Payload for 27 Tools
+function getQRData(type){
+    if(type === "url"){
+        let val = document.getElementById("qrText").value.trim();
+        if(!val) return "";
+        return /^https?:\/\//i.test(val) ? val : "https://" + val;
+    }
+    if(type === "text") return document.getElementById("qrPlainText").value.trim();
+    if(type === "phone"){
+        const num = document.getElementById("phoneNumber").value.trim();
+        return num ? "tel:" + num.replace(/\s+/g,"") : "";
+    }
+    if(type === "sms"){
+        const num = document.getElementById("smsNumber").value.trim();
+        return num ? `SMSTO:${num.replace(/\s+/g,"")}:${document.getElementById("smsMessage").value.trim()}` : "";
+    }
+    if(type === "whatsapp"){
+        const num = document.getElementById("waNumber").value.trim().replace(/[^\d]/g,"");
+        const msg = document.getElementById("waMessage").value.trim();
+        return num ? `https://wa.me/${num}${msg ? '?text=' + encodeURIComponent(msg) : ''}` : "";
+    }
+    if(type === "email"){
+        const addr = document.getElementById("emailAddress").value.trim();
+        if(!addr) return "";
+        const s = document.getElementById("emailSubject").value.trim();
+        const b = document.getElementById("emailBody").value.trim();
+        return `mailto:${addr}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b)}`;
+    }
+    if(type === "vcard"){
+        const first = document.getElementById("vFirst").value.trim();
+        const last = document.getElementById("vLast").value.trim();
+        const phone = document.getElementById("vPhone").value.trim();
+        const email = document.getElementById("vEmail").value.trim();
+        if(!first && !last && !phone && !email) return "";
+        return `BEGIN:VCARD\nVERSION:3.0\nN:${escapeVCard(last)};${escapeVCard(first)};;;\nFN:${escapeVCard((first+' '+last).trim())}\nORG:${escapeVCard(document.getElementById("vCompany").value.trim())}\nTEL;TYPE=CELL:${escapeVCard(phone)}\nEMAIL:${escapeVCard(email)}\nURL:${escapeVCard(document.getElementById("vWebsite").value.trim())}\nEND:VCARD`;
+    }
+    if(type === "wifi"){
+        const ssid = document.getElementById("wifiSsid").value.trim();
+        if(!ssid) return "";
+        return `WIFI:T:${document.getElementById("wifiSecurity").value};S:${escapeWifi(ssid)};P:${escapeWifi(document.getElementById("wifiPassword").value)};;`;
+    }
+    if(type === "map"){
+        const a = document.getElementById("mapAddress").value.trim();
+        const lat = document.getElementById("mapLat").value.trim();
+        const lng = document.getElementById("mapLng").value.trim();
+        if(lat && lng) return `geo:${lat},${lng}`;
+        return a ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a)}` : "";
+    }
+    if(type === "instagram"){
+        const h = document.getElementById("instaUsername").value.trim();
+        if(!h) return "";
+        return h.startsWith("http") ? h : `https://instagram.com/${h.replace(/^@/,"")}`;
+    }
+    if(type === "youtube"){
+        const y = document.getElementById("ytUrl").value.trim();
+        if(!y) return "";
+        return y.startsWith("http") ? y : `https://youtube.com/${y}`;
+    }
+    if(type === "telegram"){
+        const t = document.getElementById("tgUser").value.trim();
+        if(!t) return "";
+        return t.startsWith("http") ? t : `https://t.me/${t.replace(/^@/,"")}`;
+    }
+    if(type === "facebook") return document.getElementById("fbUrl").value.trim();
+    if(type === "linkedin") return document.getElementById("inUrl").value.trim();
+    if(type === "twitter"){
+        const tw = document.getElementById("twUser").value.trim();
+        if(!tw) return "";
+        return tw.startsWith("http") ? tw : `https://x.com/${tw.replace(/^@/,"")}`;
+    }
+    if(type === "tiktok"){
+        const tk = document.getElementById("tiktokUser").value.trim();
+        if(!tk) return "";
+        return tk.startsWith("http") ? tk : `https://tiktok.com/@${tk.replace(/^@/,"")}`;
+    }
+    if(type === "skype"){
+        const sk = document.getElementById("skypeUser").value.trim();
+        return sk ? `skype:${sk}?${document.getElementById("skypeAction").value}` : "";
+    }
+    if(type === "meeting") return document.getElementById("meetUrl").value.trim();
+    if(type === "upi"){
+        const upi = document.getElementById("upiId").value.trim();
+        if(!upi) return "";
+        let u = `upi://pay?pa=${encodeURIComponent(upi)}&cu=INR`;
+        const name = document.getElementById("upiName").value.trim();
+        const amt = document.getElementById("upiAmount").value.trim();
+        const note = document.getElementById("upiNote").value.trim();
+        if(name) u += `&pn=${encodeURIComponent(name)}`;
+        if(amt) u += `&am=${encodeURIComponent(amt)}`;
+        if(note) u += `&tn=${encodeURIComponent(note)}`;
+        return u;
+    }
+    if(type === "paypal"){
+        const user = document.getElementById("paypalUsername").value.trim().replace(/^@/,"");
+        const amt = document.getElementById("paypalAmount").value.trim();
+        const curr = document.getElementById("paypalCurrency").value;
+        return user ? `https://paypal.me/${user}${amt ? '/' + amt + curr : ''}` : "";
+    }
+    if(type === "crypto"){
+        const coin = document.getElementById("cryptoCoin").value;
+        const addr = document.getElementById("cryptoAddress").value.trim();
+        return addr ? `${coin}:${addr}` : "";
+    }
+    if(type === "event"){
+        const title = document.getElementById("evTitle").value.trim();
+        const start = document.getElementById("evStart").value;
+        if(!title || !start) return "";
+        return `BEGIN:VEVENT\nSUMMARY:${escapeVCard(title)}\nDTSTART:${formatICSDate(start)}\nDTEND:${formatICSDate(document.getElementById("evEnd").value)}\nLOCATION:${escapeVCard(document.getElementById("evLocation").value.trim())}\nEND:VEVENT`;
+    }
+    if(type === "app") return document.getElementById("appStoreLink").value.trim();
+    if(type === "audio") return document.getElementById("audioLink").value.trim();
+    if(type === "pdf") return document.getElementById("pdfUrl").value.trim();
+    if(type === "mecard"){
+        const n = document.getElementById("meName").value.trim();
+        const t = document.getElementById("meTel").value.trim();
+        return (n || t) ? `MECARD:N:${n};TEL:${t};EMAIL:${document.getElementById("meEmail").value.trim()};;` : "";
+    }
+    if(type === "multilink") return document.getElementById("multiUrl").value.trim();
+    return "";
+}
+
+// Generate Pro Stylized QR Code
+function generateCustomQR(){
+    const data = getQRData(currentType);
+    if(!data){
+        alert("Please fill in the required field(s) to generate your QR Code.");
+        return;
+    }
+
+    const fgColor = document.getElementById("qrFgColor").value;
+    const gradientColor = document.getElementById("qrGradientColor").value;
+    const cornerColor = document.getElementById("qrCornerColor").value;
+    const isTransparent = document.getElementById("transparentBg").checked;
+    const bgColor = isTransparent ? "transparent" : document.getElementById("qrBgColor").value;
+    const errorLevel = document.getElementById("qrErrorLevel").value;
+
+    // Determine Logo source
+    let logoImage = "";
+    if(selectedLogo === "custom" && customLogoDataUrl){
+        logoImage = customLogoDataUrl;
+    } else if(selectedLogo && PRESET_LOGOS[selectedLogo]){
+        logoImage = PRESET_LOGOS[selectedLogo];
+    }
+
+    // Dots configuration (with optional gradient)
+    const dotsOptions = {
+        type: currentDotStyle
+    };
+    if(colorMode === "gradient"){
+        dotsOptions.gradient = {
+            type: "linear",
+            rotation: 0,
+            colorStops: [
+                { offset: 0, color: fgColor },
+                { offset: 1, color: gradientColor }
+            ]
+        };
+    } else {
+        dotsOptions.color = fgColor;
+    }
+
+    const qrOptions = {
+        width: 280,
+        height: 280,
+        data: data,
+        image: logoImage || undefined,
+        dotsOptions: dotsOptions,
+        cornersSquareOptions: {
+            type: currentCornerSquareStyle,
+            color: cornerColor
+        },
+        cornersDotOptions: {
+            type: currentCornerDotStyle,
+            color: cornerColor
+        },
+        backgroundOptions: {
+            color: bgColor
+        },
+        imageOptions: {
+            crossOrigin: "anonymous",
+            margin: 6,
+            imageSize: 0.35,
+            hideBackgroundDots: true
+        },
+        qrOptions: {
+            errorCorrectionLevel: errorLevel
+        }
+    };
+
+    const container = document.getElementById("qrcode");
+    container.innerHTML = "";
+
+    qrCodeInstance = new QRCodeStyling(qrOptions);
+    qrCodeInstance.append(container);
+
+    document.getElementById("result").style.display = "block";
+    document.getElementById("result").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+// Multi-format High-Res Download (PNG, SVG)
+function downloadQR(extension){
+    if(!qrCodeInstance) return;
+    const targetSize = parseInt(document.getElementById("qrResSize").value, 10);
+    qrCodeInstance.update({
+        width: targetSize,
+        height: targetSize
+    });
+
+    qrCodeInstance.download({
+        name: "pro-quick-tool-qr",
+        extension: extension
+    });
+
+    // Reset preview size back
+    setTimeout(() => {
+        qrCodeInstance.update({ width: 280, height: 280 });
+    }, 400);
+}
+
+// Dark Mode Persistence
+if(localStorage.getItem("theme") === "dark"){
+    document.body.classList.add("dark");
+}
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

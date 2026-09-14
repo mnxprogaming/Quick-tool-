@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Background Remover - Quick Tool</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+}
+
+/* HEADER */
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+/* CONTAINER */
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+    position:relative;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 10px 30px rgba(40,50,100,.10);
+}
+
+/* TITLE */
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#e4fff5;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* UPLOAD */
+
+.upload{
+    display:block;
+    text-align:center;
+    border:2px dashed #6c5ce7;
+    border-radius:10px;
+    padding:35px 15px;
+    background:#faf9ff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload:hover{
+    background:#f1efff;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.upload strong{
+    display:block;
+    font-size:17px;
+    margin-bottom:7px;
+}
+
+.upload small{
+    color:#888;
+    font-size:12px;
+}
+
+#file{
+    display:none;
+}
+
+/* PREVIEW */
+
+.preview{
+    display:none;
+    margin-top:22px;
+    text-align:center;
+}
+
+.preview-title{
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.preview img{
+    max-width:100%;
+    max-height:300px;
+    border-radius:10px;
+    display:block;
+    margin:auto;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+    background:#fafafa;
+}
+
+/* INFO */
+
+.info{
+    display:none;
+    margin-top:18px;
+    padding:15px;
+    border-radius:10px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.6;
+}
+
+/* SENSITIVITY */
+
+.sensitivity{
+    display:none;
+    margin-top:18px;
+    padding:15px 18px;
+    border-radius:10px;
+    background:#f5f3ff;
+    transition:box-shadow .2s;
+}
+
+.sensitivity.highlight{
+    box-shadow:0 0 0 3px #6c5ce7;
+}
+
+.sensitivity label{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.sensitivity input[type="range"]{
+    width:100%;
+}
+
+.sensitivity small{
+    display:block;
+    margin-top:6px;
+    color:#777;
+    font-size:11px;
+    line-height:1.5;
+}
+
+/* REMOVE BUTTON */
+
+.remove-btn{
+    display:none;
+    width:100%;
+    border:none;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.remove-btn:active{
+    transform:scale(.98);
+}
+
+.remove-btn:disabled{
+    opacity:.65;
+    cursor:wait;
+}
+
+/* STATUS */
+
+.status{
+    display:none;
+    margin-top:18px;
+    padding:15px;
+    border-radius:10px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.6;
+}
+
+.status.error{
+    background:#fff0f0;
+    color:#a13a3a;
+}
+
+.status.warn{
+    background:#fff8e6;
+    color:#8a6d1d;
+}
+
+/* ========================================= */
+/* RESULT — transparent viewer                */
+/* ========================================= */
+
+.result{
+    display:none;
+    margin-top:25px;
+}
+
+.result-frame{
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    background-color:#fff;
+    background-image:
+        linear-gradient(45deg,#e3e3e3 25%,transparent 25%),
+        linear-gradient(-45deg,#e3e3e3 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#e3e3e3 75%),
+        linear-gradient(-45deg,transparent 75%,#e3e3e3 75%);
+    background-size:22px 22px;
+    background-position:0 0, 0 11px, 11px -11px, -11px 0;
+    min-height:340px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 10px 30px rgba(40,50,100,.14);
+}
+
+.result-frame img{
+    max-width:100%;
+    max-height:420px;
+    display:block;
+}
+
+/* BOTTOM TOOLBAR */
+
+.toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-top:20px;
+    padding:14px 4px 4px;
+    border-top:1px solid #eee;
+}
+
+.tool-item{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:#444;
+    font-size:11px;
+    padding:4px 2px;
+}
+
+.tool-item .icon-circle{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f1f1f4;
+    font-size:16px;
+    transition:background .15s,color .15s,transform .1s;
+    border:2px solid transparent;
+}
+
+.tool-item:active .icon-circle{
+    transform:scale(.92);
+}
+
+.tool-item.primary .icon-circle{
+    background:#3b82f6;
+    color:white;
+}
+
+.tool-item.active .icon-circle{
+    background:#6c5ce7;
+    color:white;
+    border-color:#6c5ce7;
+}
+
+.tool-item span{
+    color:#555;
+}
+
+.tool-item .tool-tag{
+    font-size:9px;
+    color:#6c5ce7;
+    font-weight:bold;
+}
+
+/* ACTIONS UNDER TOOLBAR */
+
+.result-actions{
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+}
+
+.reset{
+    flex:1;
+    text-align:center;
+    padding:14px 10px;
+    border-radius:15px;
+    font-weight:bold;
+    text-decoration:none;
+    border:0;
+    cursor:pointer;
+    font-size:14px;
+    background:#6c5ce7;
+    color:white;
+}
+
+/* HIDDEN CANVASES (processing only) */
+
+.workspace{
+    position:absolute;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    opacity:0;
+    pointer-events:none;
+}
+
+/* DARK */
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .upload{
+    background:#15192a;
+    border-color:#8075ef;
+}
+
+body.dark .upload small{
+    color:#aaa;
+}
+
+body.dark .info,
+body.dark .status,
+body.dark .sensitivity{
+    background:#242039;
+}
+
+body.dark .status.error{
+    background:#3a1f1f;
+    color:#ff9d9d;
+}
+
+body.dark .status.warn{
+    background:#3a331a;
+    color:#f0d98a;
+}
+
+body.dark .toolbar{
+    border-color:#2a2f45;
+}
+
+body.dark .tool-item .icon-circle{
+    background:#242a3f;
+}
+
+body.dark .tool-item span{
+    color:#bbb;
+}
+
+/* MOBILE */
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .upload{
+        padding:30px 10px;
+    }
+
+    .tool-item{
+        font-size:10px;
+    }
+
+}
+
+/* DESKTOP */
+
+@media(min-width:900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+}
+
+</style>
+
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+
+<body>
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <button
+            class="back"
+            type="button"
+            onclick="goHome()">
+
+            ‹
+
+        </button>
+
+        <div class="logo">
+            ⚡ Quick Tool
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+<div class="box">
+
+    <!-- TITLE -->
+
+    <div class="title">
+
+        <div class="title-icon">
+            ✂️
+        </div>
+
+        <h1>
+            Image Background Remover
+        </h1>
+
+        <p>
+            Remove image backgrounds automatically and create transparent PNG images.
+        </p>
+
+    </div>
+
+
+    <!-- UPLOAD -->
+
+    <label
+        class="upload"
+        for="file">
+
+        <div class="upload-icon">
+            🖼️
+        </div>
+
+        <strong>
+            Choose Image
+        </strong>
+
+        <small>
+            JPG • JPEG • PNG • WEBP • Max 10MB
+        </small>
+
+    </label>
+
+
+    <input
+        type="file"
+        id="file"
+        accept="image/jpeg,image/png,image/webp">
+
+
+    <!-- PREVIEW -->
+
+    <div
+        class="preview"
+        id="preview">
+
+        <div class="preview-title">
+            Image Preview
+        </div>
+
+        <img
+            id="previewImg"
+            alt="Image Preview">
+
+    </div>
+
+
+    <!-- INFO -->
+
+    <div
+        class="info"
+        id="info">
+    </div>
+
+
+    <!-- SENSITIVITY -->
+
+    <div
+        class="sensitivity"
+        id="sensitivity">
+
+        <label>
+            <span>🎚️ Background sensitivity</span>
+            <span id="sensitivityValue">32</span>
+        </label>
+
+        <input
+            type="range"
+            id="sensitivitySlider"
+            min="10"
+            max="90"
+            value="32"
+            step="1">
+
+        <small>
+            Higher = removes more shades near the background color. Lower = keeps edges tighter. Works best on plain, mostly-solid backgrounds. After moving the slider, tap "Remove Background" again.
+        </small>
+
+    </div>
+
+
+    <!-- REMOVE BUTTON -->
+
+    <button
+        class="remove-btn"
+        id="removeBtn"
+        type="button">
+
+        ✂️ Remove Background
+
+    </button>
+
+
+    <!-- STATUS -->
+
+    <div
+        class="status"
+        id="status">
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div
+        class="result"
+        id="result">
+
+        <div class="result-frame">
+
+            <img
+                id="resultImg"
+                alt="Background Removed">
+
+        </div>
+
+        <div class="toolbar">
+
+            <button class="tool-item primary" type="button" id="downloadBtn">
+                <span class="icon-circle">⬇️</span>
+                <span>Download</span>
+            </button>
+
+            <button class="tool-item" type="button" id="bgBtn">
+                <span class="icon-circle">🖼️</span>
+                <span>Background</span>
+                <span class="tool-tag" id="bgTag">Transparent</span>
+            </button>
+
+            <button class="tool-item" type="button" id="cutoutBtn">
+                <span class="icon-circle">✂️</span>
+                <span>Cutout</span>
+            </button>
+
+            <button class="tool-item" type="button" id="adjustBtn">
+                <span class="icon-circle">🔲</span>
+                <span>Adjust</span>
+            </button>
+
+            <button class="tool-item" type="button" id="effectsBtn">
+                <span class="icon-circle">⚫</span>
+                <span>Effects</span>
+                <span class="tool-tag" id="effectsTag"></span>
+            </button>
+
+            <button class="tool-item" type="button" id="designBtn">
+                <span class="icon-circle">🎨</span>
+                <span>Design</span>
+            </button>
+
+        </div>
+
+        <div class="result-actions">
+
+            <button class="reset" type="button" id="resetBtn">
+                🔄 Remove Another
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</main>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+
+<!-- Hidden workspace canvases used for processing only -->
+<div class="workspace">
+    <canvas id="workCanvas"></canvas>
+    <canvas id="cutoutCanvas"></canvas>
+    <canvas id="outCanvas"></canvas>
+</div>
+
+
+<script>
+
+/* ========================================= */
+/* VARIABLES */
+/* ========================================= */
+
+let selectedFile = null;
+
+let originalDataUrl = null;
+
+let resultDataUrl = null;
+
+const MAX_DIMENSION = 1600;
+
+/* view state applied on top of the cutout */
+
+const viewState = {
+    background: "transparent",   // transparent | #ffffff | #000000 | #eef0ff
+    cropped: false,
+    effect: "none",               // none | grayscale | sepia | bright
+    shadow: false
+};
+
+const BG_CYCLE = [
+    { value: "transparent", label: "Transparent" },
+    { value: "#ffffff",     label: "White" },
+    { value: "#111111",     label: "Black" },
+    { value: "#dfe6ff",     label: "Soft blue" }
+];
+
+const EFFECT_CYCLE = [
+    { value: "none",      label: "" },
+    { value: "grayscale", label: "B&W" },
+    { value: "sepia",     label: "Sepia" },
+    { value: "bright",    label: "Bright" }
+];
+
+
+/* ========================================= */
+/* ELEMENTS */
+/* ========================================= */
+
+const fileInput = document.getElementById("file");
+const preview = document.getElementById("preview");
+const previewImg = document.getElementById("previewImg");
+const info = document.getElementById("info");
+const sensitivity = document.getElementById("sensitivity");
+const sensitivitySlider = document.getElementById("sensitivitySlider");
+const sensitivityValue = document.getElementById("sensitivityValue");
+const removeBtn = document.getElementById("removeBtn");
+const status = document.getElementById("status");
+const result = document.getElementById("result");
+const resultImg = document.getElementById("resultImg");
+const resetBtn = document.getElementById("resetBtn");
+
+const workCanvas = document.getElementById("workCanvas");
+const cutoutCanvas = document.getElementById("cutoutCanvas");
+const outCanvas = document.getElementById("outCanvas");
+
+const downloadBtn = document.getElementById("downloadBtn");
+const bgBtn = document.getElementById("bgBtn");
+const bgTag = document.getElementById("bgTag");
+const cutoutBtn = document.getElementById("cutoutBtn");
+const adjustBtn = document.getElementById("adjustBtn");
+const effectsBtn = document.getElementById("effectsBtn");
+const effectsTag = document.getElementById("effectsTag");
+const designBtn = document.getElementById("designBtn");
+
+
+/* ========================================= */
+/* UPLOAD */
+/* ========================================= */
+
+fileInput.addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(!file){
+        return;
+    }
+
+    if(file.size > 10 * 1024 * 1024){
+        alert("Please choose an image smaller than 10MB.");
+        this.value = "";
+        return;
+    }
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    if(!allowedTypes.includes(file.type)){
+        alert("Please choose JPG, PNG or WEBP image.");
+        this.value = "";
+        return;
+    }
+
+    selectedFile = file;
+
+    /*
+     * Use FileReader -> data URL instead of URL.createObjectURL().
+     * Blob URLs can fail to render (broken image icon) inside
+     * sandboxed preview frames, while data URLs always work.
+     */
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+        originalDataUrl = e.target.result;
+
+        previewImg.src = originalDataUrl;
+
+        preview.style.display = "block";
+
+        info.innerHTML =
+            "📄 File: <b>" + escapeHtml(file.name) + "</b><br>" +
+            "📦 Size: <b>" + formatSize(file.size) + "</b><br>" +
+            "🖼️ Type: <b>" + escapeHtml(file.type) + "</b>";
+
+        info.style.display = "block";
+
+        sensitivity.style.display = "block";
+
+        removeBtn.style.display = "block";
+        removeBtn.disabled = false;
+        removeBtn.innerText = "✂️ Remove Background";
+
+        result.style.display = "none";
+        status.style.display = "none";
+        status.className = "status";
+        status.innerHTML = "";
+
+        /* reset view state for a fresh image */
+
+        viewState.background = "transparent";
+        viewState.cropped = false;
+        viewState.effect = "none";
+        viewState.shadow = false;
+        updateToolbarUI();
+
+    };
+
+    reader.onerror = function(){
+        alert("Could not read that image. Please try another file.");
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+
+/* ========================================= */
+/* SENSITIVITY LABEL */
+/* ========================================= */
+
+sensitivitySlider.addEventListener("input", function(){
+    sensitivityValue.innerText = this.value;
+});
+
+
+/* ========================================= */
+/* REMOVE BACKGROUND (canvas-based, no        */
+/* workers / no network)                      */
+/* ========================================= */
+
+removeBtn.addEventListener("click", removeBackground);
+
+
+function removeBackground(){
+
+    if(!originalDataUrl){
+        alert("Please select an image first.");
+        return;
+    }
+
+    removeBtn.disabled = true;
+    removeBtn.innerText = "⏳ Removing Background...";
+
+    status.className = "status";
+    status.style.display = "block";
+    status.innerHTML =
+        "⏳ Processing image...<br>" +
+        "<small>This runs entirely on your device.</small>";
+
+    result.style.display = "none";
+
+    setTimeout(function(){
+
+        try{
+
+            const img = new Image();
+
+            img.onload = function(){
+
+                try{
+
+                    const removedFraction = processImage(
+                        img,
+                        parseInt(sensitivitySlider.value, 10)
+                    );
+
+                    /* reset view state on a fresh removal */
+
+                    viewState.background = "transparent";
+                    viewState.cropped = false;
+                    viewState.effect = "none";
+                    viewState.shadow = false;
+                    updateToolbarUI();
+
+                    renderResult();
+
+                    if(removedFraction > 0.985){
+
+                        status.className = "status warn";
+                        status.style.display = "block";
+                        status.innerHTML =
+                            "⚠️ Almost the whole image got removed.<br>" +
+                            "<small>Try lowering the sensitivity slider above and tap Remove Background again.</small>";
+
+                    } else if(removedFraction < 0.01){
+
+                        status.className = "status warn";
+                        status.style.display = "block";
+                        status.innerHTML =
+                            "⚠️ Barely anything was removed.<br>" +
+                            "<small>Try raising the sensitivity slider above and tap Remove Background again.</small>";
+
+                    } else {
+
+                        status.style.display = "none";
+
+                    }
+
+                    result.style.display = "block";
+
+                    result.scrollIntoView({ behavior: "smooth" });
+
+                }
+
+                catch(err){
+                    showError(err);
+                }
+
+                finally{
+                    removeBtn.disabled = false;
+                    removeBtn.innerText = "✂️ Remove Background";
+                }
+
+            };
+
+            img.onerror = function(){
+                showError(new Error("Could not load the image for processing."));
+                removeBtn.disabled = false;
+                removeBtn.innerText = "✂️ Remove Background";
+            };
+
+            img.src = originalDataUrl;
+
+        }
+
+        catch(err){
+            showError(err);
+            removeBtn.disabled = false;
+            removeBtn.innerText = "✂️ Remove Background";
+        }
+
+    }, 30);
+
+}
+
+
+function showError(error){
+
+    console.error("Background remover error:", error);
+
+    status.className = "status error";
+    status.style.display = "block";
+    status.innerHTML =
+        "❌ Background Remover Failed.<br><br>" +
+        "<small>" + escapeHtml(error && error.message ? error.message : "Unknown error occurred") + "</small>";
+
+}
+
+
+/*
+ * Core processing: draws the image to a hidden canvas, estimates
+ * the background color from the border pixels, then flood-fills
+ * inward from the four edges through pixels that are still close
+ * to that ORIGINAL background reference color (not to whichever
+ * neighbor came before it). Comparing against a fixed reference
+ * instead of chaining neighbor-to-neighbor stops the removal from
+ * "leaking" across gradual color gradients in a photo, which is
+ * what was wiping out entire images before.
+ *
+ * The resulting cutout (with alpha) is kept in `cutoutCanvas` so
+ * the toolbar (background fill, crop, effects, shadow) can be
+ * re-applied without re-running the removal.
+ *
+ * Returns the fraction of pixels that were removed.
+ */
+
+function processImage(img, sensitivity){
+
+    let w = img.naturalWidth;
+    let h = img.naturalHeight;
+
+    if(w > MAX_DIMENSION || h > MAX_DIMENSION){
+        const scale = MAX_DIMENSION / Math.max(w, h);
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+    }
+
+    workCanvas.width = w;
+    workCanvas.height = h;
+
+    const ctx = workCanvas.getContext("2d", { willReadFrequently: true });
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(img, 0, 0, w, h);
+
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const data = imageData.data;
+    const total = w * h;
+
+    /*
+     * Estimate the background reference color from the border pixels
+     * using a small 2-cluster k-means pass instead of a plain average.
+     * A plain average gets pulled off target when the subject touches
+     * an edge (e.g. feet at the bottom) or the backdrop has a lighting
+     * gradient/shadow. k-means separates the border samples into two
+     * groups and picks the larger one (the actual background), then
+     * reports how spread out that group is so the removal threshold
+     * can adapt to a slightly uneven wall/backdrop instead of using
+     * one fixed number for every photo.
+     */
+
+    const borderColors = [];
+
+    for(let x = 0; x < w; x += Math.max(1, Math.floor(w / 400))){
+        borderColors.push([ data[(0 * w + x) * 4], data[(0 * w + x) * 4 + 1], data[(0 * w + x) * 4 + 2] ]);
+        borderColors.push([ data[((h - 1) * w + x) * 4], data[((h - 1) * w + x) * 4 + 1], data[((h - 1) * w + x) * 4 + 2] ]);
+    }
+
+    for(let y = 0; y < h; y += Math.max(1, Math.floor(h / 400))){
+        borderColors.push([ data[(y * w + 0) * 4], data[(y * w + 0) * 4 + 1], data[(y * w + 0) * 4 + 2] ]);
+        borderColors.push([ data[(y * w + (w - 1)) * 4], data[(y * w + (w - 1)) * 4 + 1], data[(y * w + (w - 1)) * 4 + 2] ]);
+    }
+
+    function colorDist3(a, b){
+        const dr = a[0] - b[0], dg = a[1] - b[1], db = a[2] - b[2];
+        return Math.sqrt(dr * dr + dg * dg + db * db);
+    }
+
+    function estimateBackground(colors){
+
+        if(colors.length === 0) return { center: [255, 255, 255], std: 20 };
+
+        let c0 = colors[0];
+        let c1 = colors[0];
+        let maxD = -1;
+
+        for(const c of colors){
+            const d = colorDist3(c, c0);
+            if(d > maxD){ maxD = d; c1 = c; }
+        }
+
+        let centroids = [ c0.slice(), c1.slice() ];
+        let assign = new Array(colors.length).fill(0);
+
+        for(let iter = 0; iter < 8; iter++){
+
+            for(let i = 0; i < colors.length; i++){
+                const d0 = colorDist3(colors[i], centroids[0]);
+                const d1 = colorDist3(colors[i], centroids[1]);
+                assign[i] = d0 <= d1 ? 0 : 1;
+            }
+
+            const sums = [[0, 0, 0], [0, 0, 0]];
+            const counts = [0, 0];
+
+            for(let i = 0; i < colors.length; i++){
+                const a = assign[i];
+                sums[a][0] += colors[i][0];
+                sums[a][1] += colors[i][1];
+                sums[a][2] += colors[i][2];
+                counts[a]++;
+            }
+
+            for(let k = 0; k < 2; k++){
+                if(counts[k] > 0){
+                    centroids[k] = [ sums[k][0] / counts[k], sums[k][1] / counts[k], sums[k][2] / counts[k] ];
+                }
+            }
+
+        }
+
+        const counts = [0, 0];
+        for(const a of assign) counts[a]++;
+
+        const bgIdx = counts[0] >= counts[1] ? 0 : 1;
+
+        let sumSqDist = 0, n = 0;
+
+        for(let i = 0; i < colors.length; i++){
+            if(assign[i] === bgIdx){
+                const d = colorDist3(colors[i], centroids[bgIdx]);
+                sumSqDist += d * d;
+                n++;
+            }
+        }
+
+        const std = n > 0 ? Math.sqrt(sumSqDist / n) : 20;
+
+        return { center: centroids[bgIdx], std: std };
+
+    }
+
+    const bgStats = estimateBackground(borderColors);
+    const bgRef = bgStats.center;
+
+    /* threshold: adapts to how uniform the backdrop actually is, plus the user's slider */
+
+    const threshold = Math.max(18, bgStats.std * 2.4) + sensitivity * 0.9; // ~ +9 to +81 from the slider
+
+    const visited = new Uint8Array(total);
+    const removedMask = new Uint8Array(total);
+
+    const queue = new Int32Array(total);
+    let qHead = 0, qTail = 0;
+
+    function colorAt(idx){
+        const o = idx * 4;
+        return [ data[o], data[o + 1], data[o + 2] ];
+    }
+
+    function distToBg(c){
+        const dr = c[0] - bgRef[0];
+        const dg = c[1] - bgRef[1];
+        const db = c[2] - bgRef[2];
+        return Math.sqrt(dr * dr + dg * dg + db * db);
+    }
+
+    function tryPush(idx){
+        if(visited[idx]) return;
+        visited[idx] = 1;
+        if(distToBg(colorAt(idx)) < threshold){
+            queue[qTail++] = idx;
+        }
+    }
+
+    for(let x = 0; x < w; x++){
+        tryPush(0 * w + x);
+        tryPush((h - 1) * w + x);
+    }
+
+    for(let y = 0; y < h; y++){
+        tryPush(y * w + 0);
+        tryPush(y * w + (w - 1));
+    }
+
+    let removedCount = 0;
+
+    while(qHead < qTail){
+
+        const idx = queue[qHead++];
+        removedMask[idx] = 1;
+        removedCount++;
+
+        const x = idx % w;
+        const y = (idx / w) | 0;
+
+        const candidates = [
+            [x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]
+        ];
+
+        for(let n = 0; n < 4; n++){
+
+            const nx = candidates[n][0];
+            const ny = candidates[n][1];
+
+            if(nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+
+            const nIdx = ny * w + nx;
+
+            if(visited[nIdx]) continue;
+            visited[nIdx] = 1;
+
+            if(distToBg(colorAt(nIdx)) < threshold){
+                queue[qTail++] = nIdx;
+            }
+
+        }
+
+    }
+
+    /* Smooth the mask (majority vote over each pixel's 3x3 neighborhood) to clean up speckled edges */
+
+    const smoothedMask = new Uint8Array(total);
+
+    for(let y = 0; y < h; y++){
+        for(let x = 0; x < w; x++){
+
+            let removedNeighbors = 0, totalNeighbors = 0;
+
+            for(let dy = -1; dy <= 1; dy++){
+                for(let dx = -1; dx <= 1; dx++){
+
+                    const nx = x + dx, ny = y + dy;
+                    if(nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+
+                    totalNeighbors++;
+                    if(removedMask[ny * w + nx]) removedNeighbors++;
+
+                }
+            }
+
+            smoothedMask[y * w + x] = removedNeighbors >= Math.ceil(totalNeighbors * 0.55) ? 1 : 0;
+
+        }
+    }
+
+    for(let i = 0; i < total; i++){
+        removedMask[i] = smoothedMask[i];
+    }
+
+    /* Apply mask with a soft edge feather */
+
+    for(let y = 0; y < h; y++){
+        for(let x = 0; x < w; x++){
+
+            const idx = y * w + x;
+            if(!removedMask[idx]) continue;
+
+            let bordersKept = false;
+
+            if(x > 0 && !removedMask[idx - 1]) bordersKept = true;
+            if(x < w - 1 && !removedMask[idx + 1]) bordersKept = true;
+            if(y > 0 && !removedMask[idx - w]) bordersKept = true;
+            if(y < h - 1 && !removedMask[idx + w]) bordersKept = true;
+
+            const o = idx * 4;
+            data[o + 3] = bordersKept ? 90 : 0;
+
+        }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+
+    /* store the raw cutout (with alpha) for the toolbar to reuse */
+
+    cutoutCanvas.width = w;
+    cutoutCanvas.height = h;
+    const cctx = cutoutCanvas.getContext("2d");
+    cctx.clearRect(0, 0, w, h);
+    cctx.drawImage(workCanvas, 0, 0);
+
+    return removedCount / total;
+
+}
+
+
+/* ========================================= */
+/* RE-RENDER PIPELINE (background / crop /    */
+/* effects / shadow) applied on top of the    */
+/* stored cutout, without re-running removal  */
+/* ========================================= */
+
+function getContentBoundingBox(canvasEl){
+
+    const w = canvasEl.width, h = canvasEl.height;
+    const ctx = canvasEl.getContext("2d");
+    const data = ctx.getImageData(0, 0, w, h).data;
+
+    let minX = w, minY = h, maxX = -1, maxY = -1;
+
+    for(let y = 0; y < h; y++){
+        for(let x = 0; x < w; x++){
+            const a = data[(y * w + x) * 4 + 3];
+            if(a > 10){
+                if(x < minX) minX = x;
+                if(x > maxX) maxX = x;
+                if(y < minY) minY = y;
+                if(y > maxY) maxY = y;
+            }
+        }
+    }
+
+    if(maxX < minX || maxY < minY) return null;
+
+    const pad = 6;
+    minX = Math.max(0, minX - pad);
+    minY = Math.max(0, minY - pad);
+    maxX = Math.min(w - 1, maxX + pad);
+    maxY = Math.min(h - 1, maxY + pad);
+
+    return { x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1 };
+
+}
+
+
+function applyEffect(ctx, w, h, effect){
+
+    if(effect === "none") return;
+
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const data = imageData.data;
+
+    for(let i = 0; i < data.length; i += 4){
+
+        const r = data[i], g = data[i + 1], b = data[i + 2];
+
+        if(effect === "grayscale"){
+
+            const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+            data[i] = gray; data[i + 1] = gray; data[i + 2] = gray;
+
+        } else if(effect === "sepia"){
+
+            data[i]     = Math.min(255, r * 0.393 + g * 0.769 + b * 0.189);
+            data[i + 1] = Math.min(255, r * 0.349 + g * 0.686 + b * 0.168);
+            data[i + 2] = Math.min(255, r * 0.272 + g * 0.534 + b * 0.131);
+
+        } else if(effect === "bright"){
+
+            data[i]     = Math.min(255, r * 1.18 + 12);
+            data[i + 1] = Math.min(255, g * 1.18 + 12);
+            data[i + 2] = Math.min(255, b * 1.18 + 12);
+
+        }
+
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+
+}
+
+
+function renderResult(){
+
+    if(!cutoutCanvas.width || !cutoutCanvas.height) return;
+
+    let sx = 0, sy = 0, sw = cutoutCanvas.width, sh = cutoutCanvas.height;
+
+    if(viewState.cropped){
+        const bbox = getContentBoundingBox(cutoutCanvas);
+        if(bbox){
+            sx = bbox.x; sy = bbox.y; sw = bbox.w; sh = bbox.h;
+        }
+    }
+
+    outCanvas.width = sw;
+    outCanvas.height = sh;
+
+    const octx = outCanvas.getContext("2d");
+    octx.clearRect(0, 0, sw, sh);
+
+    /* 1. background fill (bottom layer) */
+
+    if(viewState.background !== "transparent"){
+        octx.fillStyle = viewState.background;
+        octx.fillRect(0, 0, sw, sh);
+    }
+
+    /* 2. soft drop shadow behind the subject */
+
+    if(viewState.shadow){
+        octx.save();
+        octx.filter = "blur(16px)";
+        octx.globalAlpha = 0.4;
+        octx.drawImage(cutoutCanvas, sx, sy, sw, sh, 10, 16, sw, sh);
+        octx.restore();
+    }
+
+    /* 3. the subject itself */
+
+    octx.drawImage(cutoutCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
+
+    /* 4. effect filter over the composed image */
+
+    applyEffect(octx, sw, sh, viewState.effect);
+
+    resultDataUrl = outCanvas.toDataURL("image/png");
+    resultImg.src = resultDataUrl;
+
+}
+
+
+/* ========================================= */
+/* TOOLBAR ACTIONS */
+/* ========================================= */
+
+bgBtn.addEventListener("click", function(){
+
+    const idx = BG_CYCLE.findIndex(function(o){ return o.value === viewState.background; });
+    const next = BG_CYCLE[(idx + 1) % BG_CYCLE.length];
+
+    viewState.background = next.value;
+    updateToolbarUI();
+    renderResult();
+
+});
+
+
+cutoutBtn.addEventListener("click", function(){
+
+    viewState.cropped = !viewState.cropped;
+    updateToolbarUI();
+    renderResult();
+
+});
+
+
+adjustBtn.addEventListener("click", function(){
+
+    sensitivity.classList.add("highlight");
+    sensitivity.scrollIntoView({ behavior: "smooth", block: "center" });
+    sensitivitySlider.focus();
+
+    setTimeout(function(){
+        sensitivity.classList.remove("highlight");
+    }, 1600);
+
+});
+
+
+effectsBtn.addEventListener("click", function(){
+
+    const idx = EFFECT_CYCLE.findIndex(function(o){ return o.value === viewState.effect; });
+    const next = EFFECT_CYCLE[(idx + 1) % EFFECT_CYCLE.length];
+
+    viewState.effect = next.value;
+    updateToolbarUI();
+    renderResult();
+
+});
+
+
+designBtn.addEventListener("click", function(){
+
+    viewState.shadow = !viewState.shadow;
+    updateToolbarUI();
+    renderResult();
+
+});
+
+
+downloadBtn.addEventListener("click", function(){
+
+    if(!resultDataUrl) return;
+
+    const a = document.createElement("a");
+    a.href = resultDataUrl;
+    a.download = "quicktool-background-removed.png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+});
+
+
+function updateToolbarUI(){
+
+    const bgInfo = BG_CYCLE.find(function(o){ return o.value === viewState.background; });
+    bgTag.innerText = bgInfo ? bgInfo.label : "";
+    bgBtn.classList.toggle("active", viewState.background !== "transparent");
+
+    cutoutBtn.classList.toggle("active", viewState.cropped);
+
+    const fxInfo = EFFECT_CYCLE.find(function(o){ return o.value === viewState.effect; });
+    effectsTag.innerText = fxInfo ? fxInfo.label : "";
+    effectsBtn.classList.toggle("active", viewState.effect !== "none");
+
+    designBtn.classList.toggle("active", viewState.shadow);
+
+}
+
+
+/* ========================================= */
+/* RESET */
+/* ========================================= */
+
+resetBtn.addEventListener("click", resetTool);
+
+
+function resetTool(){
+
+    selectedFile = null;
+    originalDataUrl = null;
+    resultDataUrl = null;
+
+    fileInput.value = "";
+    previewImg.src = "";
+    resultImg.src = "";
+
+    preview.style.display = "none";
+    info.style.display = "none";
+    sensitivity.style.display = "none";
+
+    sensitivitySlider.value = 32;
+    sensitivityValue.innerText = "32";
+
+    removeBtn.style.display = "none";
+    removeBtn.disabled = false;
+    removeBtn.innerText = "✂️ Remove Background";
+
+    status.style.display = "none";
+    status.className = "status";
+    status.innerHTML = "";
+
+    result.style.display = "none";
+
+    viewState.background = "transparent";
+    viewState.cropped = false;
+    viewState.effect = "none";
+    viewState.shadow = false;
+    updateToolbarUI();
+
+}
+
+
+/* ========================================= */
+/* FILE SIZE */
+/* ========================================= */
+
+function formatSize(bytes){
+
+    if(bytes < 1024) return bytes + " B";
+    if(bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+
+}
+
+
+/* ========================================= */
+/* SAFE TEXT */
+/* ========================================= */
+
+function escapeHtml(text){
+
+    return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ========================================= */
+/* HOME */
+/* ========================================= */
+
+function goHome(){
+    window.location.href = "tool.html";
+}
+
+
+/* ========================================= */
+/* DARK MODE */
+/* ========================================= */
+
+if(localStorage.getItem("theme") === "dark"){
+    document.body.classList.add("dark");
+}
+
+/* initial toolbar label state */
+
+updateToolbarUI();
+
+</script>
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

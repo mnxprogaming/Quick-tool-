@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Calculator - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    font-family:Arial,sans-serif;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.input-group{
+    margin-bottom:16px;
+}
+
+.input-group label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:9px;
+    font-size:14px;
+}
+
+.input-group input{
+    width:100%;
+    padding:15px;
+    border:2px solid #eeeaff;
+    border-radius:15px;
+    outline:none;
+    font-size:16px;
+    color:#172033;
+    background:#faf9ff;
+}
+
+.input-group input:focus{
+    border-color:#6c5ce7;
+}
+
+.action-btn{
+    width:100%;
+    border:0;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:5px;
+}
+
+.action-btn:active{
+    transform:scale(.99);
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin:0 0 15px;
+    text-align:center;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+.result-item{
+    background:white;
+    padding:13px 14px;
+    border-radius:13px;
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    font-size:14px;
+}
+
+.result-item span:first-child{
+    color:#666;
+}
+
+.result-item span:last-child{
+    font-weight:bold;
+    text-align:right;
+    word-break:break-word;
+}
+
+.error{
+    display:none;
+    margin-top:15px;
+    padding:14px;
+    border-radius:14px;
+    background:#fff0f0;
+    color:#d63031;
+    text-align:center;
+    font-size:14px;
+}
+
+.note{
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    color:#666;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.dark{
+    background:#101321;
+    color:white;
+}
+
+.dark .box{
+    background:#191d2d;
+}
+
+.dark .title p{
+    color:#aaa;
+}
+
+.dark .input-group input{
+    background:#15192a;
+    border-color:#302b50;
+    color:white;
+}
+
+.dark .note{
+    background:#242039;
+    color:#ccc;
+}
+
+.dark .result{
+    background:#102b25;
+}
+
+.dark .result-item{
+    background:#191d2d;
+}
+
+.dark .result-item span:first-child{
+    color:#aaa;
+}
+
+.dark .error{
+    background:#351d22;
+    color:#ff8f8f;
+}
+
+@media(max-width:500px){
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+
+        <div class="title">
+            <div class="title-icon">🌐</div>
+            <h1>IP Calculator</h1>
+            <p>Calculate IPv4 network details quickly and easily.</p>
+        </div>
+
+        <div class="input-group">
+            <label>IPv4 Address</label>
+            <input
+                type="text"
+                id="ip"
+                placeholder="Example: 192.168.1.10"
+                value="192.168.1.10">
+        </div>
+
+        <div class="input-group">
+            <label>CIDR Prefix</label>
+            <input
+                type="number"
+                id="cidr"
+                min="0"
+                max="32"
+                placeholder="Example: 24"
+                value="24">
+        </div>
+
+        <button class="action-btn" onclick="calculateIP()">
+            Calculate IP
+        </button>
+
+        <div class="error" id="error"></div>
+
+        <div class="result" id="result">
+
+            <h2>IP Information</h2>
+
+            <div class="result-grid">
+
+                <div class="result-item">
+                    <span>IP Address</span>
+                    <span id="rIP">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span>CIDR</span>
+                    <span id="rCIDR">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span>Subnet Mask</span>
+                    <span id="rMask">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span>Network Address</span>
+                    <span id="rNetwork">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span>Broadcast Address</span>
+                    <span id="rBroadcast">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span>First Host</span>
+                    <span id="rFirst">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span>Last Host</span>
+                    <span id="rLast">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span>Total Addresses</span>
+                    <span id="rTotal">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span>Usable Hosts</span>
+                    <span id="rUsable">-</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="note">
+            This IP Calculator works directly in your browser.
+            No IP address is uploaded or stored.
+        </div>
+
+    </div>
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+function ipToNumber(ip){
+
+    const parts=ip.trim().split(".");
+
+    if(parts.length!==4){
+        return null;
+    }
+
+    let num=0;
+
+    for(let part of parts){
+
+        if(!/^\d+$/.test(part)){
+            return null;
+        }
+
+        const value=Number(part);
+
+        if(value<0 || value>255){
+            return null;
+        }
+
+        num=(num*256)+value;
+    }
+
+    return num;
+}
+
+function numberToIP(num){
+
+    return [
+        Math.floor(num/16777216)%256,
+        Math.floor(num/65536)%256,
+        Math.floor(num/256)%256,
+        num%256
+    ].join(".");
+}
+
+function calculateIP(){
+
+    const ip=document.getElementById("ip").value.trim();
+    const cidrValue=document.getElementById("cidr").value.trim();
+
+    const error=document.getElementById("error");
+    const result=document.getElementById("result");
+
+    error.style.display="none";
+    result.style.display="none";
+
+    const ipNumber=ipToNumber(ip);
+
+    if(ipNumber===null){
+        error.textContent="Please enter a valid IPv4 address.";
+        error.style.display="block";
+        return;
+    }
+
+    const cidr=Number(cidrValue);
+
+    if(
+        cidrValue==="" ||
+        !Number.isInteger(cidr) ||
+        cidr<0 ||
+        cidr>32
+    ){
+        error.textContent="CIDR must be a number between 0 and 32.";
+        error.style.display="block";
+        return;
+    }
+
+    let mask;
+
+    if(cidr===0){
+        mask=0;
+    }else{
+        mask=(4294967295 << (32-cidr)) >>> 0;
+    }
+
+    const network=(ipNumber & mask) >>> 0;
+    const broadcast=(network | (~mask >>> 0)) >>> 0;
+
+    let firstHost;
+    let lastHost;
+    let usableHosts;
+
+    if(cidr===32){
+
+        firstHost=network;
+        lastHost=network;
+        usableHosts=1;
+
+    }else if(cidr===31){
+
+        firstHost=network;
+        lastHost=broadcast;
+        usableHosts=2;
+
+    }else{
+
+        firstHost=network+1;
+        lastHost=broadcast-1;
+        usableHosts=broadcast-network-1;
+    }
+
+    const totalAddresses=broadcast-network+1;
+
+    document.getElementById("rIP").textContent=ip;
+    document.getElementById("rCIDR").textContent="/"+cidr;
+    document.getElementById("rMask").textContent=numberToIP(mask);
+    document.getElementById("rNetwork").textContent=numberToIP(network);
+    document.getElementById("rBroadcast").textContent=numberToIP(broadcast);
+    document.getElementById("rFirst").textContent=numberToIP(firstHost);
+    document.getElementById("rLast").textContent=numberToIP(lastHost);
+    document.getElementById("rTotal").textContent=totalAddresses.toLocaleString("en-IN");
+    document.getElementById("rUsable").textContent=usableHosts.toLocaleString("en-IN");
+
+    result.style.display="block";
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

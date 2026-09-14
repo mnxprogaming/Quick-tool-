@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendar Generator - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    font-family:Arial,sans-serif;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.input-group{
+    margin-top:18px;
+}
+
+.input-group label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.input-group select,
+.input-group input{
+    width:100%;
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:15px;
+    font-size:16px;
+    outline:none;
+    background:white;
+    color:#172033;
+}
+
+.input-group select:focus,
+.input-group input:focus{
+    border-color:#6c5ce7;
+}
+
+.action-btn{
+    width:100%;
+    border:0;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.secondary{
+    width:100%;
+    border:0;
+    margin-top:12px;
+    padding:14px;
+    border-radius:15px;
+    background:#eeeaff;
+    color:#5547c7;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin:0 0 15px;
+}
+
+.calendar{
+    overflow-x:auto;
+}
+
+.calendar table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:420px;
+}
+
+.calendar th{
+    padding:10px 5px;
+    font-size:13px;
+    color:#6c5ce7;
+}
+
+.calendar td{
+    padding:10px 5px;
+    text-align:center;
+    border-radius:8px;
+    font-size:14px;
+}
+
+.calendar td.empty{
+    background:transparent;
+}
+
+.calendar td.today{
+    background:#6c5ce7;
+    color:white;
+    font-weight:bold;
+}
+
+.calendar td:hover:not(.empty){
+    background:#eeeaff;
+}
+
+.dark .calendar td:hover:not(.empty){
+    background:#242039;
+}
+
+.info{
+    margin-top:20px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.6;
+}
+
+.dark{
+    background:#101321;
+    color:white;
+}
+
+.dark .box{
+    background:#191d2d;
+}
+
+.dark .title p{
+    color:#aaa;
+}
+
+.dark .input-group select,
+.dark .input-group input{
+    background:#15192a;
+    color:white;
+    border-color:#33384d;
+}
+
+.dark .secondary{
+    background:#242039;
+    color:#aaa5ff;
+}
+
+.dark .info{
+    background:#242039;
+}
+
+.dark .result{
+    background:#102b25;
+}
+
+@media(max-width:500px){
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .calendar table{
+        min-width:350px;
+    }
+
+    .calendar td{
+        padding:8px 3px;
+    }
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+
+        <div class="title">
+            <div class="title-icon">🗓️</div>
+
+            <h1>Calendar Generator</h1>
+
+            <p>
+                Generate a monthly calendar for any year.
+            </p>
+        </div>
+
+        <div class="input-group">
+            <label for="month">Month</label>
+
+            <select id="month">
+
+                <option value="0">January</option>
+                <option value="1">February</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5">June</option>
+                <option value="6">July</option>
+                <option value="7">August</option>
+                <option value="8">September</option>
+                <option value="9">October</option>
+                <option value="10">November</option>
+                <option value="11">December</option>
+
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="year">Year</label>
+
+            <input
+                type="number"
+                id="year"
+                min="1"
+                max="9999"
+                placeholder="Example: 2026"
+            >
+        </div>
+
+        <button class="action-btn" onclick="generateCalendar()">
+            Generate Calendar
+        </button>
+
+        <button class="secondary" onclick="currentMonth()">
+            Current Month
+        </button>
+
+        <button class="secondary" onclick="clearAll()">
+            Clear
+        </button>
+
+        <div class="result" id="result">
+
+            <h2 id="calendarTitle"></h2>
+
+            <div class="calendar" id="calendar"></div>
+
+        </div>
+
+        <div class="info">
+            <strong>Tip:</strong><br>
+            Select any month and year to generate its complete calendar.
+            Today's date is automatically highlighted when applicable.
+        </div>
+
+    </div>
+    <div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+
+const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+];
+
+
+function currentMonth(){
+
+    const today = new Date();
+
+    document.getElementById("month").value =
+        today.getMonth();
+
+    document.getElementById("year").value =
+        today.getFullYear();
+
+    generateCalendar();
+
+}
+
+
+function generateCalendar(){
+
+    const month =
+        Number(document.getElementById("month").value);
+
+    const year =
+        Number(document.getElementById("year").value);
+
+    const result =
+        document.getElementById("result");
+
+    const title =
+        document.getElementById("calendarTitle");
+
+    const calendar =
+        document.getElementById("calendar");
+
+    result.style.display = "none";
+
+    if(
+        !Number.isInteger(year) ||
+        year < 1 ||
+        year > 9999
+    ){
+        alert("Please enter a valid year between 1 and 9999.");
+        return;
+    }
+
+    const firstDay =
+        new Date(year,month,1).getDay();
+
+    const daysInMonth =
+        new Date(year,month+1,0).getDate();
+
+    const today =
+        new Date();
+
+    let html = "";
+
+    html += "<table>";
+
+    html += "<thead>";
+
+    html += "<tr>";
+
+    const weekdays = [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+    ];
+
+    weekdays.forEach(function(day){
+
+        html += "<th>" + day + "</th>";
+
+    });
+
+    html += "</tr>";
+
+    html += "</thead>";
+
+    html += "<tbody>";
+
+    let day = 1;
+
+    for(let row = 0; row < 6; row++){
+
+        html += "<tr>";
+
+        for(let col = 0; col < 7; col++){
+
+            if(
+                (row === 0 && col < firstDay) ||
+                day > daysInMonth
+            ){
+
+                html += '<td class="empty"></td>';
+
+            }else{
+
+                let todayClass = "";
+
+                if(
+                    day === today.getDate() &&
+                    month === today.getMonth() &&
+                    year === today.getFullYear()
+                ){
+                    todayClass = "today";
+                }
+
+                html +=
+                    '<td class="' +
+                    todayClass +
+                    '">' +
+                    day +
+                    "</td>";
+
+                day++;
+
+            }
+
+        }
+
+        html += "</tr>";
+
+        if(day > daysInMonth){
+            break;
+        }
+
+    }
+
+    html += "</tbody>";
+
+    html += "</table>";
+
+    title.textContent =
+        monthNames[month] + " " + year;
+
+    calendar.innerHTML = html;
+
+    result.style.display = "block";
+
+}
+
+
+function clearAll(){
+
+    document.getElementById("year").value = "";
+
+    document.getElementById("month").value =
+        new Date().getMonth();
+
+    document.getElementById("result").style.display =
+        "none";
+
+    document.getElementById("calendar").innerHTML =
+        "";
+
+}
+
+
+currentMonth();
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

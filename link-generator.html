@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Link Generator - Quick Tool</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+    font-family:Arial,sans-serif;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.tabs{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.tab{
+    border:none;
+    padding:12px 5px;
+    border-radius:13px;
+    background:#f0efff;
+    color:#5b4bd8;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.tab.active{
+    background:#6c5ce7;
+    color:white;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+textarea,
+input[type="text"]{
+    width:100%;
+    border:2px solid #e4e5ef;
+    border-radius:10px;
+    padding:14px;
+    font-size:15px;
+    outline:none;
+    font-family:Arial,sans-serif;
+}
+
+textarea{
+    min-height:130px;
+    resize:vertical;
+}
+
+textarea:focus,
+input:focus{
+    border-color:#6c5ce7;
+}
+
+.file-box{
+    border:2px dashed #b9b5ed;
+    background:#f8f7ff;
+    border-radius:10px;
+    padding:28px 15px;
+    text-align:center;
+    cursor:pointer;
+}
+
+.file-box-icon{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.file-box strong{
+    display:block;
+    font-size:16px;
+    margin-bottom:6px;
+}
+
+.file-box span{
+    color:#777;
+    font-size:13px;
+}
+
+input[type="file"]{
+    display:none;
+}
+
+.selected-file{
+    display:none;
+    margin-top:12px;
+    padding:12px;
+    border-radius:12px;
+    background:#eefaf6;
+    color:#00896d;
+    font-size:14px;
+    word-break:break-word;
+}
+
+.generate{
+    width:100%;
+    margin-top:16px;
+    padding:16px;
+    border:none;
+    border-radius:16px;
+    background:#6c5ce7;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding-top:25px;
+    border-top:1px solid #eee;
+}
+
+.result h2{
+    font-size:19px;
+    margin:0 0 12px;
+}
+
+.link-box{
+    display:flex;
+    gap:8px;
+}
+
+.link-box input{
+    flex:1;
+    min-width:0;
+    background:#f5f5fa;
+}
+
+.copy{
+    border:none;
+    border-radius:13px;
+    padding:0 18px;
+    background:#00b894;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.note{
+    margin-top:12px;
+    font-size:12px;
+    color:#777;
+    line-height:1.5;
+}
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark textarea,
+body.dark input[type="text"]{
+    background:#24283a;
+    color:white;
+    border-color:#34394e;
+}
+
+body.dark .file-box{
+    background:#202438;
+}
+
+body.dark .result{
+    border-color:#34394e;
+}
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .tabs{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .tab{
+        font-size:12px;
+    }
+
+    .link-box{
+        flex-direction:column;
+    }
+
+    .copy{
+        padding:14px;
+    }
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">⚡ Quick Tool</div>
+
+    </div>
+</div>
+
+<div class="container">
+
+<div class="box">
+
+    <div class="title">
+
+        <div class="title-icon">🔗</div>
+
+        <h1>Link Generator</h1>
+
+        <p>Convert text, images, videos and files into a shareable link.</p>
+
+    </div>
+
+    <div class="tabs">
+
+        <button class="tab active" onclick="showTab('text',this)">
+            📝 Text
+        </button>
+
+        <button class="tab" onclick="showTab('file',this)">
+            📁 File
+        </button>
+
+        <button class="tab" onclick="showTab('url',this)">
+            🌐 URL
+        </button>
+
+    </div>
+
+    <!-- TEXT -->
+
+    <div class="section active" id="text">
+
+        <label>Enter Text</label>
+
+        <textarea
+            id="textInput"
+            placeholder="Write or paste your text here..."></textarea>
+
+        <button class="generate" onclick="generateTextLink()">
+            🔗 Generate Link
+        </button>
+
+    </div>
+
+    <!-- FILE -->
+
+    <div class="section" id="file">
+
+        <label>Select File</label>
+
+        <label class="file-box" for="fileInput">
+
+            <div class="file-box-icon">📁</div>
+
+            <strong>Choose Image, Video, PDF or File</strong>
+
+            <span>Tap here to select a file</span>
+
+        </label>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept="image/*,video/*,audio/*,.pdf,.txt">
+
+        <div class="selected-file" id="selectedFile"></div>
+
+        <button class="generate" onclick="generateFileLink()">
+            🔗 Generate Link
+        </button>
+
+    </div>
+
+    <!-- URL -->
+
+    <div class="section" id="url">
+
+        <label>Enter URL</label>
+
+        <input
+            type="text"
+            id="urlInput"
+            placeholder="https://example.com">
+
+        <button class="generate" onclick="generateURLLink()">
+            🔗 Generate Link
+        </button>
+
+    </div>
+
+    <!-- RESULT -->
+
+    <div class="result" id="result">
+
+        <h2>Generated Link</h2>
+
+        <div class="link-box">
+
+            <input
+                type="text"
+                id="generatedLink"
+                readonly>
+
+            <button class="copy" onclick="copyLink()">
+                Copy
+            </button>
+
+        </div>
+
+        <div class="note" id="note"></div>
+
+    </div>
+
+</div>
+
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+function showTab(tabName,button){
+
+    document.querySelectorAll(".section")
+        .forEach(section=>{
+            section.classList.remove("active");
+        });
+
+    document.querySelectorAll(".tab")
+        .forEach(tab=>{
+            tab.classList.remove("active");
+        });
+
+    document.getElementById(tabName)
+        .classList.add("active");
+
+    button.classList.add("active");
+
+    document.getElementById("result")
+        .style.display="none";
+}
+
+function showResult(link,note){
+
+    document.getElementById("generatedLink").value=link;
+
+    document.getElementById("note").textContent=note;
+
+    document.getElementById("result").style.display="block";
+
+    document.getElementById("result")
+        .scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+}
+
+function generateTextLink(){
+
+    const text=document
+        .getElementById("textInput")
+        .value
+        .trim();
+
+    if(!text){
+
+        alert("Please enter some text first.");
+
+        return;
+    }
+
+    const link=
+        window.location.origin+
+        window.location.pathname+
+        "?text="+
+        encodeURIComponent(text);
+
+    showResult(
+        link,
+        "This link contains your text in the URL. It is suitable for sharing short text."
+    );
+}
+
+function generateURLLink(){
+
+    let url=document
+        .getElementById("urlInput")
+        .value
+        .trim();
+
+    if(!url){
+
+        alert("Please enter a URL first.");
+
+        return;
+    }
+
+    if(!/^https?:\/\//i.test(url)){
+
+        url="https://"+url;
+    }
+
+    showResult(
+        url,
+        "This is the URL you entered."
+    );
+}
+
+function generateFileLink(){
+
+    const file=
+        document.getElementById("fileInput")
+        .files[0];
+
+    if(!file){
+
+        alert("Please select a file first.");
+
+        return;
+    }
+
+    /*
+      Browser-only temporary file link.
+      The link works while this page remains open
+      in the same browser session.
+    */
+
+    const blobURL=
+        URL.createObjectURL(file);
+
+    showResult(
+        blobURL,
+        "Temporary browser link generated. For a permanent public link, connect a storage backend."
+    );
+}
+
+document
+.getElementById("fileInput")
+.addEventListener("change",function(){
+
+    const file=this.files[0];
+
+    const box=
+        document.getElementById("selectedFile");
+
+    if(file){
+
+        box.style.display="block";
+
+        box.textContent=
+            "📄 "+
+            file.name+
+            " • "+
+            formatSize(file.size);
+    }
+
+});
+
+function formatSize(bytes){
+
+    if(bytes<1024)
+        return bytes+" B";
+
+    if(bytes<1024*1024)
+        return (bytes/1024).toFixed(1)+" KB";
+
+    if(bytes<1024*1024*1024)
+        return (bytes/1024/1024).toFixed(1)+" MB";
+
+    return (bytes/1024/1024/1024).toFixed(1)+" GB";
+}
+
+async function copyLink(){
+
+    const input=
+        document.getElementById("generatedLink");
+
+    try{
+
+        await navigator.clipboard.writeText(input.value);
+
+        const button=
+            document.querySelector(".copy");
+
+        button.textContent="Copied ✓";
+
+        setTimeout(()=>{
+            button.textContent="Copy";
+        },1500);
+
+    }catch(error){
+
+        input.select();
+
+        document.execCommand("copy");
+
+        alert("Link copied!");
+    }
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

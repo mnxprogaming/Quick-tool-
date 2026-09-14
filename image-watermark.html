@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Watermark - Quick Tool</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+    position:relative;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 10px 30px rgba(40,50,100,.10);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    background:#eeeaff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.upload{
+    display:block;
+    text-align:center;
+    border:2px dashed #6c5ce7;
+    border-radius:10px;
+    padding:35px 15px;
+    background:#faf9ff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload:hover{
+    background:#f1efff;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:14px;
+}
+
+.upload strong{
+    display:block;
+    font-size:17px;
+    margin-bottom:7px;
+}
+
+.upload span{
+    display:block;
+    color:#888;
+    font-size:12px;
+}
+
+#file{
+    display:none;
+}
+
+.preview{
+    display:none;
+    margin-top:22px;
+    text-align:center;
+}
+
+.preview-title{
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.canvas-wrap{
+    width:100%;
+    overflow:hidden;
+    background:#eef0f5;
+    border-radius:12px;
+    padding:10px;
+    text-align:center;
+
+    /* Important for mobile dragging */
+    touch-action:none;
+    user-select:none;
+}
+
+#canvas{
+    max-width:100%;
+    height:auto;
+    display:block;
+    margin:auto;
+    border-radius:1px;
+
+    /* Important for dragging */
+    touch-action:none;
+    user-select:none;
+    cursor:grab;
+}
+
+#canvas.dragging{
+    cursor:grabbing;
+}
+
+.drag-hint{
+    text-align:center;
+    margin-top:9px;
+    color:#888;
+    font-size:12px;
+}
+
+.controls{
+    display:none;
+    margin-top:18px;
+    padding:18px;
+    border-radius:10px;
+    background:#f7f5ff;
+}
+
+.control{
+    margin-bottom:16px;
+}
+
+.control label{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:7px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.control input[type="text"]{
+    width:100%;
+    border:1px solid #d9deea;
+    border-radius:10px;
+    padding:12px;
+    outline:none;
+    font-size:15px;
+}
+
+.control input[type="text"]:focus{
+    border-color:#6c5ce7;
+}
+
+.control input[type="range"]{
+    width:100%;
+    accent-color:#6c5ce7;
+}
+
+.control input[type="color"]{
+    width:55px;
+    height:40px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    padding:3px;
+    background:white;
+}
+
+.color-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.color-value{
+    font-size:13px;
+    color:#687386;
+}
+
+.position-title{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:9px;
+}
+
+.position-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+}
+
+.position-btn{
+    border:1px solid #d9deea;
+    background:#f8f9fc;
+    color:#344054;
+    border-radius:9px;
+    padding:10px 5px;
+    font-size:12px;
+    cursor:pointer;
+}
+
+.position-btn.active{
+    background:#6c5ce7;
+    border-color:#6c5ce7;
+    color:white;
+}
+
+.watermark-btn{
+    width:100%;
+    border:none;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.watermark-btn:active{
+    transform:scale(.98);
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.result-info{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+    margin-bottom:14px;
+}
+
+.download{
+    display:inline-block;
+    margin-top:15px;
+    padding:14px 25px;
+    border-radius:15px;
+    background:#00b894;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.reset{
+    margin-top:12px;
+    border:1px solid #d9deea;
+    background:white;
+    color:#344054;
+    padding:10px 16px;
+    border-radius:9px;
+    cursor:pointer;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .upload{
+        padding:30px 10px;
+    }
+
+}
+
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media(min-width:900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark{
+    background:#10131c;
+    color:#f2f4f8;
+}
+
+body.dark .box{
+    background:#181c27;
+}
+
+body.dark .title p,
+body.dark .result-info,
+body.dark .color-value,
+body.dark .drag-hint{
+    color:#aeb6c5;
+}
+
+body.dark .upload{
+    background:#201d35;
+}
+
+body.dark .control input[type="text"]{
+    background:#11151e;
+    color:white;
+    border-color:#343b4b;
+}
+
+body.dark .control input[type="color"]{
+    background:#11151e;
+    border-color:#343b4b;
+}
+
+body.dark .position-btn{
+    background:#11151e;
+    color:#dce1ea;
+    border-color:#343b4b;
+}
+
+body.dark .position-btn.active{
+    background:#6c5ce7;
+    color:white;
+    border-color:#6c5ce7;
+}
+
+body.dark .reset{
+    background:#11151e;
+    color:#e5e9f0;
+    border-color:#343b4b;
+}
+
+body.dark .canvas-wrap{
+    background:#10131c;
+}
+
+body.dark .controls{
+    background:#242039;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+</style>
+
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+
+</head>
+
+<body>
+
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">
+            ⚡ Quick Tool
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+<div class="box">
+
+
+    <div class="title">
+
+        <div class="title-icon">
+            💧
+        </div>
+
+        <h1>Image Watermark</h1>
+
+        <p>
+            Add custom text watermarks to your images quickly and easily.
+        </p>
+
+    </div>
+
+
+    <label class="upload" for="file">
+
+        <div class="upload-icon">
+            🖼️
+        </div>
+
+        <strong>
+            Choose Image
+        </strong>
+
+        <span>
+            JPG, PNG or WEBP • Maximum 10 MB
+        </span>
+
+    </label>
+
+
+    <input
+        type="file"
+        id="file"
+        accept="image/jpeg,image/png,image/webp"
+    >
+
+
+    <div class="preview" id="preview">
+
+        <div class="preview-title">
+            Watermark Preview
+        </div>
+
+
+        <div class="canvas-wrap">
+
+            <canvas id="canvas"></canvas>
+
+        </div>
+
+
+        <div class="drag-hint">
+            👆 Drag watermark with your finger or mouse
+        </div>
+
+    </div>
+
+
+    <div class="controls" id="controls">
+
+
+        <div class="control">
+
+            <label>
+                <span>Watermark Text</span>
+            </label>
+
+            <input
+                type="text"
+                id="watermarkText"
+                value="Quick Tool"
+                maxlength="100"
+                placeholder="Enter watermark text"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+
+                <span>Text Size</span>
+
+                <span>
+                    <span id="sizeValue">32</span> px
+                </span>
+
+            </label>
+
+            <input
+                type="range"
+                id="textSize"
+                min="12"
+                max="150"
+                value="32"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+
+                <span>Opacity</span>
+
+                <span>
+                    <span id="opacityValue">50</span>%
+                </span>
+
+            </label>
+
+            <input
+                type="range"
+                id="opacity"
+                min="10"
+                max="100"
+                value="50"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                <span>Watermark Color</span>
+            </label>
+
+            <div class="color-row">
+
+                <input
+                    type="color"
+                    id="textColor"
+                    value="#ffffff"
+                >
+
+                <span
+                    class="color-value"
+                    id="colorText">
+                    #ffffff
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="position-title">
+                Watermark Position
+            </div>
+
+
+            <div class="position-grid">
+
+                <button
+                    class="position-btn"
+                    data-position="top-left">
+                    ↖ Top Left
+                </button>
+
+                <button
+                    class="position-btn"
+                    data-position="top-center">
+                    ↑ Top Center
+                </button>
+
+                <button
+                    class="position-btn"
+                    data-position="top-right">
+                    ↗ Top Right
+                </button>
+
+                <button
+                    class="position-btn"
+                    data-position="middle-left">
+                    ← Middle Left
+                </button>
+
+                <button
+                    class="position-btn active"
+                    data-position="center">
+                    ● Center
+                </button>
+
+                <button
+                    class="position-btn"
+                    data-position="middle-right">
+                    → Middle Right
+                </button>
+
+                <button
+                    class="position-btn"
+                    data-position="bottom-left">
+                    ↙ Bottom Left
+                </button>
+
+                <button
+                    class="position-btn"
+                    data-position="bottom-center">
+                    ↓ Bottom Center
+                </button>
+
+                <button
+                    class="position-btn"
+                    data-position="bottom-right">
+                    ↘ Bottom Right
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="watermark-btn"
+            id="watermarkBtn">
+
+            💧 Add Watermark
+
+        </button>
+
+
+    </div>
+
+
+    <div class="result" id="result">
+
+        <h2>
+            ✅ Watermark Added
+        </h2>
+
+        <div
+            class="result-info"
+            id="resultInfo">
+        </div>
+
+        <a
+            id="download"
+            class="download"
+            download="quicktool-watermarked.png">
+
+            ⬇️ Download Image
+
+        </a>
+
+        <br>
+
+        <button
+            class="reset"
+            id="resetBtn">
+
+            🔄 Edit Another Image
+
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<div
+    id="toolSuggestions"
+    class="tool-suggestions">
+</div>
+<div id="introSection"></div>
+
+</main>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+<script>
+
+let selectedFile = null;
+let image = null;
+let resultUrl = null;
+
+/* Watermark position in ORIGINAL image coordinates */
+let watermarkX = 0;
+let watermarkY = 0;
+
+let position = "center";
+
+let dragging = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+
+const fileInput =
+    document.getElementById("file");
+
+const canvas =
+    document.getElementById("canvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+const preview =
+    document.getElementById("preview");
+
+const controls =
+    document.getElementById("controls");
+
+const result =
+    document.getElementById("result");
+
+const watermarkText =
+    document.getElementById("watermarkText");
+
+const textSize =
+    document.getElementById("textSize");
+
+const opacity =
+    document.getElementById("opacity");
+
+const textColor =
+    document.getElementById("textColor");
+
+const sizeValue =
+    document.getElementById("sizeValue");
+
+const opacityValue =
+    document.getElementById("opacityValue");
+
+const colorText =
+    document.getElementById("colorText");
+
+const watermarkBtn =
+    document.getElementById("watermarkBtn");
+
+const download =
+    document.getElementById("download");
+
+const resultInfo =
+    document.getElementById("resultInfo");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+
+/* =========================
+   FILE UPLOAD
+========================= */
+
+fileInput.addEventListener(
+    "change",
+    function(){
+
+        const file = this.files[0];
+
+        if(!file) return;
+
+
+        if(!file.type.startsWith("image/")){
+
+            alert(
+                "Please select a valid image."
+            );
+
+            this.value = "";
+
+            return;
+        }
+
+
+        if(
+            file.size >
+            10 * 1024 * 1024
+        ){
+
+            alert(
+                "Maximum file size is 10 MB."
+            );
+
+            this.value = "";
+
+            return;
+        }
+
+
+        selectedFile = file;
+
+
+        const url =
+            URL.createObjectURL(file);
+
+
+        image = new Image();
+
+
+        image.onload = function(){
+
+            canvas.width =
+                image.naturalWidth;
+
+            canvas.height =
+                image.naturalHeight;
+
+
+            /*
+               Start watermark
+               in center.
+            */
+
+            setPosition(
+                "center"
+            );
+
+
+            preview.style.display =
+                "block";
+
+            controls.style.display =
+                "block";
+
+            result.style.display =
+                "none";
+
+
+            drawPreview();
+
+
+            URL.revokeObjectURL(url);
+
+        };
+
+
+        image.onerror = function(){
+
+            alert(
+                "Unable to load this image."
+            );
+
+            URL.revokeObjectURL(url);
+
+        };
+
+
+        image.src = url;
+
+    }
+);
+
+
+/* =========================
+   GET FONT SIZE
+========================= */
+
+function getFontSize(){
+
+    const baseSize =
+        Number(textSize.value);
+
+    const scale =
+        Math.max(
+            1,
+            canvas.width / 1000
+        );
+
+    return baseSize * scale;
+
+}
+
+
+/* =========================
+   WATERMARK METRICS
+========================= */
+
+function getWatermarkMetrics(){
+
+    const text =
+        watermarkText.value.trim();
+
+    const fontSize =
+        getFontSize();
+
+
+    ctx.save();
+
+    ctx.font =
+        `bold ${fontSize}px Arial`;
+
+    const width =
+        ctx.measureText(text).width;
+
+    ctx.restore();
+
+
+    return {
+        width: width,
+        height: fontSize,
+        fontSize: fontSize
+    };
+
+}
+
+
+/* =========================
+   SET POSITION
+========================= */
+
+function setPosition(newPosition){
+
+    if(!image) return;
+
+    position =
+        newPosition;
+
+
+    const metrics =
+        getWatermarkMetrics();
+
+    const padding =
+        Math.max(
+            20,
+            canvas.width * 0.04
+        );
+
+
+    switch(position){
+
+        case "top-left":
+
+            watermarkX =
+                padding + metrics.width / 2;
+
+            watermarkY =
+                padding + metrics.height / 2;
+
+            break;
+
+
+        case "top-center":
+
+            watermarkX =
+                canvas.width / 2;
+
+            watermarkY =
+                padding + metrics.height / 2;
+
+            break;
+
+
+        case "top-right":
+
+            watermarkX =
+                canvas.width -
+                padding -
+                metrics.width / 2;
+
+            watermarkY =
+                padding + metrics.height / 2;
+
+            break;
+
+
+        case "middle-left":
+
+            watermarkX =
+                padding +
+                metrics.width / 2;
+
+            watermarkY =
+                canvas.height / 2;
+
+            break;
+
+
+        case "center":
+
+            watermarkX =
+                canvas.width / 2;
+
+            watermarkY =
+                canvas.height / 2;
+
+            break;
+
+
+        case "middle-right":
+
+            watermarkX =
+                canvas.width -
+                padding -
+                metrics.width / 2;
+
+            watermarkY =
+                canvas.height / 2;
+
+            break;
+
+
+        case "bottom-left":
+
+            watermarkX =
+                padding +
+                metrics.width / 2;
+
+            watermarkY =
+                canvas.height -
+                padding -
+                metrics.height / 2;
+
+            break;
+
+
+        case "bottom-center":
+
+            watermarkX =
+                canvas.width / 2;
+
+            watermarkY =
+                canvas.height -
+                padding -
+                metrics.height / 2;
+
+            break;
+
+
+        case "bottom-right":
+
+            watermarkX =
+                canvas.width -
+                padding -
+                metrics.width / 2;
+
+            watermarkY =
+                canvas.height -
+                padding -
+                metrics.height / 2;
+
+            break;
+
+    }
+
+}
+
+
+/* =========================
+   DRAW PREVIEW
+========================= */
+
+function drawPreview(){
+
+    if(!image) return;
+
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    ctx.drawImage(
+        image,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    const text =
+        watermarkText.value.trim();
+
+
+    if(!text) return;
+
+
+    const metrics =
+        getWatermarkMetrics();
+
+
+    /*
+       Keep watermark inside
+       image boundaries.
+    */
+
+    const minX =
+        metrics.width / 2;
+
+    const maxX =
+        canvas.width -
+        metrics.width / 2;
+
+    const minY =
+        metrics.height / 2;
+
+    const maxY =
+        canvas.height -
+        metrics.height / 2;
+
+
+    watermarkX =
+        Math.max(
+            minX,
+            Math.min(
+                maxX,
+                watermarkX
+            )
+        );
+
+
+    watermarkY =
+        Math.max(
+            minY,
+            Math.min(
+                maxY,
+                watermarkY
+            )
+        );
+
+
+    ctx.save();
+
+
+    ctx.font =
+        `bold ${metrics.fontSize}px Arial`;
+
+    ctx.textAlign =
+        "center";
+
+    ctx.textBaseline =
+        "middle";
+
+    ctx.globalAlpha =
+        Number(opacity.value) / 100;
+
+    ctx.fillStyle =
+        textColor.value;
+
+
+    ctx.shadowColor =
+        "rgba(0,0,0,0.45)";
+
+    ctx.shadowBlur =
+        Math.max(
+            2,
+            metrics.fontSize * 0.08
+        );
+
+    ctx.shadowOffsetX =
+        Math.max(
+            1,
+            metrics.fontSize * 0.04
+        );
+
+    ctx.shadowOffsetY =
+        Math.max(
+            1,
+            metrics.fontSize * 0.04
+        );
+
+
+    ctx.fillText(
+        text,
+        watermarkX,
+        watermarkY
+    );
+
+
+    ctx.restore();
+
+}
+
+
+/* =========================
+   MOUSE / TOUCH POSITION
+========================= */
+
+function getCanvasPosition(event){
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    let clientX;
+    let clientY;
+
+
+    if(
+        event.touches &&
+        event.touches.length
+    ){
+
+        clientX =
+            event.touches[0].clientX;
+
+        clientY =
+            event.touches[0].clientY;
+
+    }
+    else if(
+        event.changedTouches &&
+        event.changedTouches.length
+    ){
+
+        clientX =
+            event.changedTouches[0].clientX;
+
+        clientY =
+            event.changedTouches[0].clientY;
+
+    }
+    else{
+
+        clientX =
+            event.clientX;
+
+        clientY =
+            event.clientY;
+
+    }
+
+
+    /*
+       Convert displayed canvas
+       coordinates into original
+       image coordinates.
+    */
+
+    const scaleX =
+        canvas.width /
+        rect.width;
+
+    const scaleY =
+        canvas.height /
+        rect.height;
+
+
+    return {
+
+        x:
+            (clientX - rect.left) *
+            scaleX,
+
+        y:
+            (clientY - rect.top) *
+            scaleY
+
+    };
+
+}
+
+
+/* =========================
+   CHECK WATERMARK HIT
+========================= */
+
+function isOnWatermark(x,y){
+
+    const metrics =
+        getWatermarkMetrics();
+
+
+    const extra =
+        Math.max(
+            20,
+            metrics.fontSize * 0.35
+        );
+
+
+    return (
+
+        x >=
+        watermarkX -
+        metrics.width / 2 -
+        extra
+
+        &&
+
+        x <=
+        watermarkX +
+        metrics.width / 2 +
+        extra
+
+        &&
+
+        y >=
+        watermarkY -
+        metrics.height / 2 -
+        extra
+
+        &&
+
+        y <=
+        watermarkY +
+        metrics.height / 2 +
+        extra
+
+    );
+
+}
+
+
+/* =========================
+   MOUSE DOWN
+========================= */
+
+canvas.addEventListener(
+    "mousedown",
+    function(event){
+
+        if(!image) return;
+
+
+        const pos =
+            getCanvasPosition(event);
+
+
+        if(
+            isOnWatermark(
+                pos.x,
+                pos.y
+            )
+        ){
+
+            dragging = true;
+
+
+            dragOffsetX =
+                pos.x -
+                watermarkX;
+
+            dragOffsetY =
+                pos.y -
+                watermarkY;
+
+
+            canvas.classList.add(
+                "dragging"
+            );
+
+
+            event.preventDefault();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   MOUSE MOVE
+========================= */
+
+canvas.addEventListener(
+    "mousemove",
+    function(event){
+
+        if(!dragging) return;
+
+
+        const pos =
+            getCanvasPosition(event);
+
+
+        watermarkX =
+            pos.x -
+            dragOffsetX;
+
+        watermarkY =
+            pos.y -
+            dragOffsetY;
+
+
+        position =
+            "custom";
+
+
+        document
+        .querySelectorAll(".position-btn")
+        .forEach(function(btn){
+
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
+
+        drawPreview();
+
+        event.preventDefault();
+
+    }
+);
+
+
+/* =========================
+   MOUSE UP
+========================= */
+
+function stopDragging(){
+
+    dragging = false;
+
+    canvas.classList.remove(
+        "dragging"
+    );
+
+}
+
+
+canvas.addEventListener(
+    "mouseup",
+    stopDragging
+);
+
+canvas.addEventListener(
+    "mouseleave",
+    stopDragging
+);
+
+document.addEventListener(
+    "mouseup",
+    stopDragging
+);
+
+
+/* =========================
+   TOUCH START
+========================= */
+
+canvas.addEventListener(
+    "touchstart",
+    function(event){
+
+        if(!image) return;
+
+
+        const pos =
+            getCanvasPosition(event);
+
+
+        if(
+            isOnWatermark(
+                pos.x,
+                pos.y
+            )
+        ){
+
+            dragging = true;
+
+
+            dragOffsetX =
+                pos.x -
+                watermarkX;
+
+            dragOffsetY =
+                pos.y -
+                watermarkY;
+
+
+            canvas.classList.add(
+                "dragging"
+            );
+
+
+            event.preventDefault();
+
+        }
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================
+   TOUCH MOVE
+========================= */
+
+canvas.addEventListener(
+    "touchmove",
+    function(event){
+
+        if(!dragging) return;
+
+
+        const pos =
+            getCanvasPosition(event);
+
+
+        watermarkX =
+            pos.x -
+            dragOffsetX;
+
+        watermarkY =
+            pos.y -
+            dragOffsetY;
+
+
+        position =
+            "custom";
+
+
+        document
+        .querySelectorAll(".position-btn")
+        .forEach(function(btn){
+
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
+
+        drawPreview();
+
+
+        event.preventDefault();
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* =========================
+   TOUCH END
+========================= */
+
+canvas.addEventListener(
+    "touchend",
+    function(){
+
+        stopDragging();
+
+    }
+);
+
+
+/* =========================
+   TEXT CHANGE
+========================= */
+
+watermarkText.addEventListener(
+    "input",
+    function(){
+
+        /*
+           Keep current position
+           when text changes.
+        */
+
+        drawPreview();
+
+    }
+);
+
+
+/* =========================
+   SIZE
+========================= */
+
+textSize.addEventListener(
+    "input",
+    function(){
+
+        sizeValue.textContent =
+            this.value;
+
+
+        drawPreview();
+
+    }
+);
+
+
+/* =========================
+   OPACITY
+========================= */
+
+opacity.addEventListener(
+    "input",
+    function(){
+
+        opacityValue.textContent =
+            this.value;
+
+
+        drawPreview();
+
+    }
+);
+
+
+/* =========================
+   COLOR
+========================= */
+
+textColor.addEventListener(
+    "input",
+    function(){
+
+        colorText.textContent =
+            this.value;
+
+
+        drawPreview();
+
+    }
+);
+
+
+/* =========================
+   POSITION BUTTONS
+========================= */
+
+document
+.querySelectorAll(".position-btn")
+.forEach(function(button){
+
+    button.addEventListener(
+        "click",
+        function(){
+
+            document
+            .querySelectorAll(".position-btn")
+            .forEach(function(btn){
+
+                btn.classList.remove(
+                    "active"
+                );
+
+            });
+
+
+            this.classList.add(
+                "active"
+            );
+
+
+            setPosition(
+                this.dataset.position
+            );
+
+
+            drawPreview();
+
+        }
+    );
+
+});
+
+
+/* =========================
+   ADD WATERMARK
+========================= */
+
+watermarkBtn.addEventListener(
+    "click",
+    function(){
+
+        if(
+            !selectedFile ||
+            !image
+        ){
+
+            alert(
+                "Please choose an image first."
+            );
+
+            return;
+
+        }
+
+
+        if(
+            !watermarkText.value.trim()
+        ){
+
+            alert(
+                "Please enter watermark text."
+            );
+
+            watermarkText.focus();
+
+            return;
+
+        }
+
+
+        drawPreview();
+
+
+        canvas.toBlob(
+            function(blob){
+
+                if(!blob){
+
+                    alert(
+                        "Unable to create watermarked image."
+                    );
+
+                    return;
+
+                }
+
+
+                if(resultUrl){
+
+                    URL.revokeObjectURL(
+                        resultUrl
+                    );
+
+                }
+
+
+                resultUrl =
+                    URL.createObjectURL(blob);
+
+
+                download.href =
+                    resultUrl;
+
+
+                download.download =
+                    "quicktool-watermarked.png";
+
+
+                resultInfo.innerHTML =
+                    `Original: ${formatSize(selectedFile.size)} &nbsp; • &nbsp; Output: ${formatSize(blob.size)}`;
+
+
+                result.style.display =
+                    "block";
+
+
+                result.scrollIntoView({
+                    behavior:"smooth",
+                    block:"center"
+                });
+
+            },
+            "image/png"
+        );
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function(){
+
+        if(resultUrl){
+
+            URL.revokeObjectURL(
+                resultUrl
+            );
+
+        }
+
+
+        resultUrl = null;
+        selectedFile = null;
+        image = null;
+
+        dragging = false;
+
+
+        fileInput.value = "";
+
+
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        preview.style.display =
+            "none";
+
+        controls.style.display =
+            "none";
+
+        result.style.display =
+            "none";
+
+
+        watermarkText.value =
+            "Quick Tool";
+
+        textSize.value =
+            "32";
+
+        opacity.value =
+            "50";
+
+        textColor.value =
+            "#ffffff";
+
+
+        sizeValue.textContent =
+            "32";
+
+        opacityValue.textContent =
+            "50";
+
+        colorText.textContent =
+            "#ffffff";
+
+
+        position =
+            "center";
+
+
+        document
+        .querySelectorAll(".position-btn")
+        .forEach(function(btn){
+
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
+
+        const centerButton =
+            document.querySelector(
+                '.position-btn[data-position="center"]'
+            );
+
+
+        if(centerButton){
+
+            centerButton.classList.add(
+                "active"
+            );
+
+        }
+
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }
+);
+
+
+/* =========================
+   FILE SIZE
+========================= */
+
+function formatSize(bytes){
+
+    if(bytes < 1024){
+
+        return bytes + " B";
+
+    }
+
+
+    if(
+        bytes <
+        1024 * 1024
+    ){
+
+        return (
+            bytes / 1024
+        ).toFixed(1) + " KB";
+
+    }
+
+
+    return (
+        bytes /
+        (1024 * 1024)
+    ).toFixed(2) + " MB";
+
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+function goHome(){
+
+    window.location.href =
+        "tool.html";
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+if(
+    localStorage.getItem("theme") === "dark"
+){
+
+    document.body.classList.add(
+        "dark"
+    );
+
+}
+
+</script>
+
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

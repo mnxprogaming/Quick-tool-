@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EMI Calculator - Quick Tool</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+    font-family:Arial,sans-serif;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.field{
+    margin-bottom:18px;
+}
+
+.field label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:9px;
+}
+
+.field input{
+    width:100%;
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:15px;
+    font-size:16px;
+    outline:none;
+}
+
+.field input:focus{
+    border-color:#6c5ce7;
+}
+
+.calculate-btn{
+    width:100%;
+    border:none;
+    margin-top:5px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+}
+
+.result h2{
+    text-align:center;
+    color:#00a77d;
+    font-size:20px;
+    margin-bottom:18px;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.result-item{
+    background:white;
+    border-radius:15px;
+    padding:15px 10px;
+    text-align:center;
+}
+
+.result-item strong{
+    display:block;
+    color:#6c5ce7;
+    font-size:20px;
+    margin-bottom:6px;
+}
+
+.result-item span{
+    color:#777;
+    font-size:12px;
+}
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+}
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .field input{
+    background:#15192a;
+    color:white;
+    border-color:#444;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+body.dark .result-item{
+    background:#191d2d;
+}
+
+body.dark .result-item span{
+    color:#aaa;
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+/* ================================= */
+/* QUICK TOOL INTRO SECTION */
+/* ================================= */
+
+.web-intro{
+    width:100%;
+    max-width:1100px;
+    margin:40px auto 30px;
+    padding:35px 40px;
+
+    background:white;
+
+    border-radius:28px;
+
+    text-align:center;
+
+    box-shadow:0 8px 30px rgba(0,0,0,.07);
+}
+
+/* ICON */
+
+.web-intro-icon{
+    width:70px;
+    height:70px;
+
+    margin:0 auto 15px;
+
+    border-radius:22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:34px;
+
+    background:#eeeaff;
+}
+
+
+/* TITLE */
+
+.web-intro h2{
+    margin:0 0 10px;
+
+    font-size:28px;
+
+    color:#172033;
+}
+
+
+/* TEXT */
+
+.web-intro p{
+    max-width:650px;
+
+    margin:0 auto 12px;
+
+    color:#777;
+
+    font-size:15px;
+
+    line-height:1.7;
+}
+
+.web-intro .intro-main{
+    color:#555;
+
+    font-size:16px;
+
+    font-weight:600;
+}
+
+
+/* ================================= */
+/* FEATURES */
+/* ================================= */
+
+.intro-features{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:12px;
+
+    margin-top:25px;
+}
+
+
+.intro-feature{
+    padding:16px 8px;
+
+    background:#f5f3ff;
+
+    border-radius:14px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-height:105px;
+}
+
+
+.intro-feature span{
+    font-size:27px;
+
+    margin-bottom:7px;
+}
+
+
+.intro-feature strong{
+    font-size:13px;
+
+    color:#172033;
+}
+
+
+.intro-feature small{
+    margin-top:4px;
+
+    font-size:11px;
+
+    color:#888;
+
+    line-height:1.3;
+}
+
+
+/* ================================= */
+/* EXPLORE BUTTON */
+/* ================================= */
+
+.explore-btn{
+    margin-top:25px;
+
+    border:0;
+
+    padding:14px 54px;
+
+    border-radius:15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6c5ce7,
+            #00b894
+        );
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+
+.explore-btn:hover{
+    opacity:.9;
+}
+
+
+/* ================================= */
+/* DARK MODE */
+/* ================================= */
+
+body.dark .web-intro{
+    background:#191d2d;
+}
+
+body.dark .web-intro h2{
+    color:#f4f5ff;
+}
+
+body.dark .web-intro p{
+    color:#aeb4c8;
+}
+
+body.dark .web-intro .intro-main{
+    color:#c5c9d5;
+}
+
+body.dark .web-intro-icon{
+    background:#242039;
+}
+
+body.dark .intro-feature{
+    background:#242039;
+}
+
+body.dark .intro-feature strong{
+    color:#f4f5ff;
+}
+
+body.dark .intro-feature small{
+    color:#9fa5b8;
+}
+
+
+/* ================================= */
+/* MOBILE */
+/* ================================= */
+
+@media(max-width:600px){
+
+    .web-intro{
+        margin:20px 0px 25px;
+
+        padding:28px 18px;
+
+        border-radius:18px;
+    }
+
+    .web-intro h2{
+        font-size:25px;
+    }
+
+    .web-intro p{
+        font-size:14px;
+    }
+
+    .web-intro .intro-main{
+        font-size:15px;
+    }
+
+    .intro-features{
+        grid-template-columns:1fr 1fr;
+
+        gap:10px;
+    }
+
+    .intro-feature{
+        min-height:100px;
+
+        padding:14px 6px;
+    }
+
+    .intro-feature span{
+        font-size:25px;
+    }
+
+    .intro-feature strong{
+        font-size:12px;
+    }
+
+    .intro-feature small{
+        font-size:10px;
+    }
+
+}
+/* =========================================
+   DESKTOP INTRO WIDTH FIX
+   ========================================= */
+
+@media (min-width:901px){
+
+    .web-intro{
+        width:100%;
+        max-width:1100px;
+        margin:40px auto 30px;
+        padding:35px 40px;
+    }
+
+    .web-intro p{
+        max-width:850px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .intro-features{
+        width:100%;
+        max-width:1000px;
+        margin:25px auto 0;
+        grid-template-columns:repeat(4,1fr);
+        gap:16px;
+    }
+
+    .intro-feature{
+        min-height:115px;
+        padding:18px 10px;
+    }
+
+    .explore-btn{
+        margin-top:28px;
+    }
+}
+/* =========================================
+   DESKTOP EXPLORE BUTTON
+   ========================================= */
+
+@media (min-width:901px){
+
+    .explore-btn{
+        padding:14px 75px;
+        min-width:330px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">⚡ Quick Tool</div>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+<div class="box">
+
+    <div class="title">
+
+        <div class="title-icon">💰</div>
+
+        <h1>EMI Calculator</h1>
+
+        <p>Calculate your monthly EMI, total interest and total payment.</p>
+
+    </div>
+
+
+    <div class="field">
+
+        <label for="amount">Loan Amount (₹)</label>
+
+        <input
+            type="number"
+            id="amount"
+            placeholder="Example: 500000"
+            min="0"
+        >
+
+    </div>
+
+
+    <div class="field">
+
+        <label for="rate">Interest Rate (% per year)</label>
+
+        <input
+            type="number"
+            id="rate"
+            placeholder="Example: 8.5"
+            min="0"
+            step="0.01"
+        >
+
+    </div>
+
+
+    <div class="field">
+
+        <label for="years">Loan Tenure (Years)</label>
+
+        <input
+            type="number"
+            id="years"
+            placeholder="Example: 5"
+            min="1"
+            step="0.5"
+        >
+
+    </div>
+
+
+    <button
+        class="calculate-btn"
+        onclick="calculateEMI()"
+    >
+        Calculate EMI
+    </button>
+
+
+    <div class="result" id="result">
+
+        <h2>EMI Result</h2>
+
+        <div class="result-grid">
+
+            <div class="result-item">
+
+                <strong id="emi">₹0</strong>
+
+                <span>Monthly EMI</span>
+
+            </div>
+
+
+            <div class="result-item">
+
+                <strong id="interest">₹0</strong>
+
+                <span>Total Interest</span>
+
+            </div>
+
+
+            <div class="result-item">
+
+                <strong id="total">₹0</strong>
+
+                <span>Total Payment</span>
+
+            </div>
+
+
+            <div class="result-item">
+
+                <strong id="months">0</strong>
+
+                <span>Total Months</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+<script>
+
+function goHome(){
+
+    window.location.href="tool.html";
+
+}
+
+
+function formatRupee(number){
+
+    return "₹" + Math.round(number).toLocaleString("en-IN");
+
+}
+
+
+function calculateEMI(){
+
+    const P =
+        parseFloat(
+            document.getElementById("amount").value
+        );
+
+    const annualRate =
+        parseFloat(
+            document.getElementById("rate").value
+        );
+
+    const years =
+        parseFloat(
+            document.getElementById("years").value
+        );
+
+
+    if(
+        !P ||
+        P <= 0 ||
+        isNaN(annualRate) ||
+        annualRate < 0 ||
+        !years ||
+        years <= 0
+    ){
+
+        alert("Please enter valid loan details.");
+
+        return;
+
+    }
+
+
+    const months =
+        Math.round(years * 12);
+
+    const monthlyRate =
+        annualRate / 12 / 100;
+
+
+    let emi;
+
+
+    if(monthlyRate === 0){
+
+        emi = P / months;
+
+    }else{
+
+        emi =
+            P *
+            monthlyRate *
+            Math.pow(
+                1 + monthlyRate,
+                months
+            ) /
+            (
+                Math.pow(
+                    1 + monthlyRate,
+                    months
+                ) - 1
+            );
+
+    }
+
+
+    const totalPayment =
+        emi * months;
+
+    const totalInterest =
+        totalPayment - P;
+
+
+    document.getElementById("emi").innerText =
+        formatRupee(emi);
+
+    document.getElementById("interest").innerText =
+        formatRupee(totalInterest);
+
+    document.getElementById("total").innerText =
+        formatRupee(totalPayment);
+
+    document.getElementById("months").innerText =
+        months;
+
+
+    document.getElementById("result").style.display =
+        "block";
+
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit Converter - Quick Tool</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+    font-family:Arial,sans-serif;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.settings{
+    margin-top:20px;
+}
+
+.settings label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+select,
+input{
+    width:100%;
+    padding:14px;
+    border:2px solid #e2e2ed;
+    border-radius:15px;
+    font-size:16px;
+    outline:none;
+    margin-bottom:16px;
+    background:white;
+    color:#172033;
+}
+
+select:focus,
+input:focus{
+    border-color:#6c5ce7;
+}
+
+.convert-btn{
+    width:100%;
+    border:none;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+    display:none;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin:0 0 10px;
+}
+
+.result-value{
+    font-size:30px;
+    font-weight:800;
+    margin:12px 0;
+    word-break:break-word;
+}
+
+.result-info{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark select,
+body.dark input{
+    background:#15192a;
+    color:white;
+    border-color:#444;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+body.dark .result-info{
+    color:#ccc;
+}
+
+@media(max-width:500px){
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .result-value{
+        font-size:25px;
+    }
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</div>
+
+<div class="container">
+<div class="box">
+
+    <div class="title">
+        <div class="title-icon">📏</div>
+
+        <h1>Unit Converter</h1>
+
+        <p>Convert length, weight, temperature and data units instantly.</p>
+    </div>
+
+    <div class="settings">
+
+        <label>Category</label>
+
+        <select id="category" onchange="loadUnits()">
+            <option value="length">Length</option>
+            <option value="weight">Weight</option>
+            <option value="temperature">Temperature</option>
+            <option value="data">Data</option>
+        </select>
+
+        <label>Value</label>
+
+        <input type="number" id="value" placeholder="Enter value">
+
+        <label>From</label>
+
+        <select id="fromUnit"></select>
+
+        <label>To</label>
+
+        <select id="toUnit"></select>
+
+        <button class="convert-btn" onclick="convert()">
+            🔄 Convert
+        </button>
+
+    </div>
+
+    <div class="result" id="result">
+
+        <h2>Conversion Result</h2>
+
+        <div class="result-value" id="resultValue"></div>
+
+        <div class="result-info" id="resultInfo"></div>
+
+    </div>
+
+</div>
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+const units={
+
+    length:{
+        meter:1,
+        kilometer:1000,
+        centimeter:0.01,
+        millimeter:0.001,
+        mile:1609.344,
+        yard:0.9144,
+        foot:0.3048,
+        inch:0.0254
+    },
+
+    weight:{
+        kilogram:1,
+        gram:0.001,
+        milligram:0.000001,
+        pound:0.45359237,
+        ounce:0.028349523125
+    },
+
+    data:{
+        byte:1,
+        kilobyte:1024,
+        megabyte:1024*1024,
+        gigabyte:1024*1024*1024,
+        terabyte:1024*1024*1024*1024
+    }
+
+};
+
+const unitNames={
+
+    length:{
+        meter:"Meter",
+        kilometer:"Kilometer",
+        centimeter:"Centimeter",
+        millimeter:"Millimeter",
+        mile:"Mile",
+        yard:"Yard",
+        foot:"Foot",
+        inch:"Inch"
+    },
+
+    weight:{
+        kilogram:"Kilogram",
+        gram:"Gram",
+        milligram:"Milligram",
+        pound:"Pound",
+        ounce:"Ounce"
+    },
+
+    data:{
+        byte:"Byte",
+        kilobyte:"Kilobyte",
+        megabyte:"Megabyte",
+        gigabyte:"Gigabyte",
+        terabyte:"Terabyte"
+    }
+
+};
+
+function loadUnits(){
+
+    const category=document.getElementById("category").value;
+
+    const from=document.getElementById("fromUnit");
+    const to=document.getElementById("toUnit");
+
+    from.innerHTML="";
+    to.innerHTML="";
+
+    if(category==="temperature"){
+
+        const tempUnits={
+            celsius:"Celsius",
+            fahrenheit:"Fahrenheit",
+            kelvin:"Kelvin"
+        };
+
+        for(const key in tempUnits){
+
+            from.innerHTML+=
+                `<option value="${key}">${tempUnits[key]}</option>`;
+
+            to.innerHTML+=
+                `<option value="${key}">${tempUnits[key]}</option>`;
+        }
+
+    }else{
+
+        for(const key in units[category]){
+
+            from.innerHTML+=
+                `<option value="${key}">${unitNames[category][key]}</option>`;
+
+            to.innerHTML+=
+                `<option value="${key}">${unitNames[category][key]}</option>`;
+        }
+    }
+
+    to.selectedIndex=1;
+}
+
+function convert(){
+
+    const category=document.getElementById("category").value;
+    const value=Number(document.getElementById("value").value);
+    const from=document.getElementById("fromUnit").value;
+    const to=document.getElementById("toUnit").value;
+
+    if(!Number.isFinite(value)){
+        alert("Please enter a value.");
+        return;
+    }
+
+    let result;
+
+    if(category==="temperature"){
+
+        result=convertTemperature(value,from,to);
+
+    }else{
+
+        result=value*units[category][from]/units[category][to];
+
+    }
+
+    if(!Number.isFinite(result)){
+        alert("Unable to convert this value.");
+        return;
+    }
+
+    document.getElementById("resultValue").textContent=
+        formatNumber(result)+" "+getUnitName(category,to);
+
+    document.getElementById("resultInfo").innerHTML=
+        formatNumber(value)+" "+getUnitName(category,from)+
+        " = "+
+        formatNumber(result)+" "+getUnitName(category,to);
+
+    document.getElementById("result").style.display="block";
+}
+
+function convertTemperature(value,from,to){
+
+    let celsius;
+
+    if(from==="celsius"){
+        celsius=value;
+    }
+    else if(from==="fahrenheit"){
+        celsius=(value-32)*5/9;
+    }
+    else{
+        celsius=value-273.15;
+    }
+
+    if(to==="celsius"){
+        return celsius;
+    }
+
+    if(to==="fahrenheit"){
+        return celsius*9/5+32;
+    }
+
+    return celsius+273.15;
+}
+
+function getUnitName(category,key){
+
+    if(category==="temperature"){
+
+        const names={
+            celsius:"Celsius",
+            fahrenheit:"Fahrenheit",
+            kelvin:"Kelvin"
+        };
+
+        return names[key];
+    }
+
+    return unitNames[category][key];
+}
+
+function formatNumber(number){
+
+    if(Math.abs(number)>=1000000000){
+        return number.toExponential(6);
+    }
+
+    return Number(number.toFixed(8)).toLocaleString("en-IN");
+}
+
+loadUnits();
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Compressor - Quick Tool</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; font-family:Arial,Helvetica,sans-serif; }
+body{ min-height:100vh; background:#f4f6ff; color:#172033; padding-bottom:30px; }
+.header{ background:linear-gradient(135deg,#6c5ce7,#00b894); color:white; padding:18px 16px 30px; border-radius:0 0 30px 30px; box-shadow:0 8px 25px rgba(0,0,0,.12); }
+.header-inner{ max-width:750px; margin:auto; display:flex; align-items:center; gap:14px; }
+.back{ width:44px; height:44px; border:none; border-radius:14px; background:rgba(255,255,255,.2); color:white; font-size:28px; cursor:pointer; }
+.logo{ font-size:22px; font-weight:800; }
+.container{ max-width:750px; margin:-15px auto 0; padding:0 15px; }
+.box{ background:white; border-radius:16px; padding:25px 20px; box-shadow:0 10px 30px rgba(40,50,100,.10); }
+.title{ text-align:center; margin-bottom:25px; }
+.title-icon{ width:70px; height:70px; margin:0 auto 14px; border-radius:22px; display:flex; align-items:center; justify-content:center; font-size:34px; background:#eeeaff; }
+.title h1{ font-size:27px; margin-bottom:8px; }
+.title p{ color:#777; font-size:14px; line-height:1.5; }
+.upload{ display:block; text-align:center; border:2px dashed #6c5ce7; border-radius:10px; padding:35px 15px; background:#faf9ff; cursor:pointer; }
+.upload:hover{ background:#f1efff; }
+.upload-icon{ font-size:45px; margin-bottom:10px; }
+.upload strong{ display:block; font-size:17px; margin-bottom:7px; }
+.upload small{ color:#888; font-size:12px; }
+#file{ display:none; }
+.info{ display:none; margin-top:18px; padding:15px; border-radius:10px; background:#f5f3ff; text-align:center; font-size:14px; line-height:1.8; }
+.settings{ display:none; margin-top:20px; }
+.settings label{ display:block; font-weight:bold; margin-bottom:10px; }
+#quality{ width:100%; accent-color:#6c5ce7; }
+.quality-value{ color:#6c5ce7; }
+.manual-title{ font-weight:bold; margin-top:20px; margin-bottom:10px; }
+.manual-row{ display:flex; gap:10px; }
+.manual-row input{ flex:1; min-width:0; padding:14px; border:1px solid #ddd; border-radius:8px; font-size:16px; outline:none; background:white; color:#172033; }
+.manual-row input:focus{ border-color:#6c5ce7; }
+.manual-row select{ width:100px; padding:14px 10px; border:1px solid #ddd; border-radius:8px; font-size:16px; background:white; color:#172033; outline:none; }
+.manual-help{ margin-top:8px; color:#888; font-size:12px; line-height:1.5; }
+.compress-btn{ display:none; width:100%; border:none; margin-top:20px; padding:16px; border-radius:17px; background:linear-gradient(135deg,#6c5ce7,#00b894); color:white; font-size:16px; font-weight:bold; cursor:pointer; }
+.result{ display:none; margin-top:25px; padding:20px; border-radius:20px; background:#eafff7; text-align:center; }
+.result h2{ color:#00a77d; font-size:20px; margin-bottom:10px; }
+.result-info{ color:#555; font-size:14px; line-height:1.8; }
+.download{ display:inline-block; margin-top:15px; padding:14px 25px; border-radius:15px; background:#00b894; color:white; text-decoration:none; font-weight:bold; }
+body.dark{ background:#101321; color:white; }
+body.dark .box{ background:#191d2d; }
+body.dark .title p{ color:#aaa; }
+body.dark .upload{ background:#15192a; border-color:#8075ef; }
+body.dark .upload small{ color:#aaa; }
+body.dark .info{ background:#242039; }
+body.dark .manual-row input, body.dark .manual-row select{ background:#15192a; color:white; border-color:#33384d; }
+body.dark .manual-help{ color:#aaa; }
+body.dark .result{ background:#102b25; }
+body.dark .result-info{ color:#ccc; }
+@media(max-width:500px){ .header{ padding-bottom:28px; } .box{ padding:22px 16px; } .title h1{ font-size:23px; } .upload{ padding:30px 10px; } .manual-row{ gap:8px; } .manual-row select{ width:90px; } }
+@media (min-width: 900px){ body{ padding-bottom:50px; } .header{ padding:24px 30px 40px; border-radius:0 0 40px 40px; } .header-inner{ max-width:1200px; gap:20px; } .back{ width:56px; height:56px; font-size:34px; } .logo{ font-size:30px; } .container{ max-width:1200px; padding:0 25px; margin:-20px auto 0; } .box{ width:100%; padding:40px; border-radius:30px; } .title h1{ font-size:38px; } .title p{ font-size:18px; } .input-group, .tool-content, .tool-area, .form-container, .generator, .converter, .result-box, .values{ width:100%; } .color-square, .hue-slider{ max-width:850px; } .color-square{ height:350px; } }
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+<header class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</header>
+
+<main class="container">
+<div class="box">
+    <div class="title">
+        <div class="title-icon">📄</div>
+        <h1>PDF Compressor</h1>
+        <p>Reduce PDF size directly in your browser.</p>
+    </div>
+
+    <label class="upload" for="file">
+        <div class="upload-icon">📄</div>
+        <strong>Choose PDF</strong>
+        <small>PDF file • Max recommended 20MB</small>
+    </label>
+    <input type="file" id="file" accept="application/pdf">
+
+    <div class="info" id="info"></div>
+
+    <div class="settings" id="settings">
+        <label>Compression Level: <span id="qualityValue" class="quality-value">60%</span></label>
+        <input type="range" id="quality" min="20" max="90" value="60">
+
+        <div class="manual-title">📦 Manual Target Size</div>
+        <div class="manual-row">
+            <input type="number" id="targetSize" min="1" step="1" placeholder="Example: 500">
+            <select id="targetUnit">
+                <option value="KB">KB</option>
+                <option value="MB">MB</option>
+            </select>
+        </div>
+        <div class="manual-help">Enter target size if you want a specific output size. Leave empty to use the quality slider.</div>
+    </div>
+
+    <button class="compress-btn" id="compressBtn" onclick="compressPDF()">Compress PDF</button>
+
+    <div class="result" id="result">
+        <h2>✅ Compression Complete</h2>
+        <div class="result-info" id="resultInfo"></div>
+        <a id="download" class="download" download="quicktool-compressed.pdf">⬇️ Download PDF</a>
+    </div>
+</div>
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+<script>
+let selectedFile = null;
+let downloadUrl = null;
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+/* FORMAT FILE NAME FUNCTION */
+function formatFileName(name, maxLength = 25) {
+    if (name.length <= maxLength) return name;
+    const ext = name.substring(name.lastIndexOf("."));
+    const baseName = name.substring(0, name.lastIndexOf("."));
+    return baseName.substring(0, maxLength - ext.length - 3) + "..." + ext;
+}
+
+/* FILE SELECT */
+document.getElementById("file").addEventListener("change", function(){
+    const file = this.files[0];
+    if(!file) return;
+    if(file.type !== "application/pdf"){
+        alert("Please choose a PDF file.");
+        this.value = "";
+        return;
+    }
+    if(file.size > 20 * 1024 * 1024){
+        alert("Please choose a PDF smaller than 20MB.");
+        this.value = "";
+        return;
+    }
+
+    selectedFile = file;
+    const shortName = formatFileName(file.name, 25);
+
+    document.getElementById("info").innerHTML = 
+        "📄 File: <b>" + shortName + "</b><br>" +
+        "📦 Original Size: <b>" + formatSize(file.size) + "</b>";
+
+    document.getElementById("info").style.display = "block";
+    document.getElementById("settings").style.display = "block";
+    document.getElementById("compressBtn").style.display = "block";
+    document.getElementById("result").style.display = "none";
+});
+
+/* SLIDER */
+document.getElementById("quality").addEventListener("input", function(){
+    document.getElementById("qualityValue").innerText = this.value + "%";
+});
+
+/* COMPRESS */
+async function compressPDF(){
+    if(!selectedFile){
+        alert("Please select a PDF first.");
+        return;
+    }
+
+    const button = document.getElementById("compressBtn");
+    button.innerText = "⏳ Compressing...";
+    button.disabled = true;
+
+    try {
+        const arrayBuffer = await selectedFile.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({data:arrayBuffer}).promise;
+        const quality = parseInt(document.getElementById("quality").value) / 100;
+        const targetInput = document.getElementById("targetSize").value.trim();
+        let blob;
+
+        if(targetInput){
+            const targetNumber = parseFloat(targetInput);
+            if(!targetNumber || targetNumber <= 0){
+                alert("Please enter a valid target size.");
+                return;
+            }
+            const targetUnit = document.getElementById("targetUnit").value;
+            const targetBytes = targetUnit === "MB" ? targetNumber * 1024 * 1024 : targetNumber * 1024;
+            blob = await compressToTarget(pdf, targetBytes, quality);
+        } else {
+            blob = await buildCompressedPDF(pdf, quality, 1.5);
+        }
+
+        if(!blob) throw new Error("No compressed PDF created.");
+        if(downloadUrl) URL.revokeObjectURL(downloadUrl);
+
+        downloadUrl = URL.createObjectURL(blob);
+        const download = document.getElementById("download");
+        download.href = downloadUrl;
+        download.download = "quicktool-compressed.pdf";
+
+        const saving = selectedFile.size > blob.size ? ((selectedFile.size - blob.size) / selectedFile.size * 100).toFixed(1) : 0;
+
+        document.getElementById("resultInfo").innerHTML =
+            "Original Size: <b>" + formatSize(selectedFile.size) + "</b><br>" +
+            "Compressed Size: <b>" + formatSize(blob.size) + "</b><br>" +
+            "Pages: <b>" + pdf.numPages + "</b><br>" +
+            "Size Saved: <b>" + saving + "%</b>";
+
+        document.getElementById("result").style.display = "block";
+        document.getElementById("result").scrollIntoView({behavior:"smooth"});
+    } catch(error) {
+        console.error(error);
+        alert("PDF compression failed. Please try another PDF.");
+    } finally {
+        button.innerText = " Compress PDF";
+        button.disabled = false;
+    }
+}
+
+/* BUILD COMPRESSED PDF */
+async function buildCompressedPDF(pdf, quality, scale){
+    const pages = [];
+    for(let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++){
+        const page = await pdf.getPage(pageNumber);
+        const viewport = page.getViewport({scale:scale});
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(viewport.width));
+        canvas.height = Math.max(1, Math.round(viewport.height));
+        const ctx = canvas.getContext("2d");
+        await page.render({canvasContext:ctx, viewport:viewport}).promise;
+        const imageData = canvas.toDataURL("image/jpeg", quality);
+        pages.push({image:imageData, width:canvas.width, height:canvas.height});
+    }
+    const pdfBytes = createPDF(pages);
+    return new Blob([pdfBytes], {type:"application/pdf"});
+}
+
+/* TARGET SIZE COMPRESSION */
+async function compressToTarget(pdf, targetBytes, startingQuality){
+    const scales = [1.5, 1.3, 1.15, 1.0, 0.9, 0.8, 0.7, 0.6];
+    const qualities = [startingQuality, 0.80, 0.70, 0.60, 0.50, 0.40, 0.30, 0.20, 0.10, 0.05];
+    let bestUnder = null;
+    let smallest = null;
+
+    for(const scale of scales){
+        for(const q of qualities){
+            const quality = Math.min(startingQuality, q);
+            const blob = await buildCompressedPDF(pdf, quality, scale);
+            if(!smallest || blob.size < smallest.size) smallest = blob;
+            if(blob.size <= targetBytes){
+                if(!bestUnder || blob.size > bestUnder.size) bestUnder = blob;
+            }
+        }
+    }
+    return bestUnder || smallest;
+}
+
+/* PDF CREATOR */
+function createPDF(pages){
+    const objects = [];
+    const offsets = [];
+    let pdf = "%PDF-1.4\n";
+
+    function addObject(content){
+        const number = objects.length + 1;
+        objects.push(number + " 0 obj\n" + content + "\nendobj\n");
+        return number;
+    }
+
+    const pageObjects = [];
+    const imageObjects = [];
+
+    pages.forEach(function(page){
+        const base64 = page.image.split(",")[1];
+        const binary = atob(base64);
+        const imageBytes = new Uint8Array(binary.length);
+        for(let i = 0; i < binary.length; i++) imageBytes[i] = binary.charCodeAt(i);
+        const imageNumber = objects.length + 1;
+        objects.push({type:"image", number:imageNumber, bytes:imageBytes, width:page.width, height:page.height});
+        imageObjects.push(imageNumber);
+    });
+
+    const pagesNumber = objects.length + pages.length + 2;
+
+    pages.forEach(function(page,index){
+        const imageNumber = imageObjects[index];
+        const contentText = "q\n" + page.width + " 0 0 " + page.height + " 0 0 cm\n/Im" + index + " Do\nQ\n";
+        const contentNumber = objects.length + 1;
+        objects.push({type:"content", number:contentNumber, content:contentText});
+        const pageNumber = objects.length + 1;
+        objects.push({type:"page", number:pageNumber, contentNumber:contentNumber, imageNumber:imageNumber, width:page.width, height:page.height, pagesNumber:pagesNumber, index:index});
+        pageObjects.push(pageNumber);
+    });
+
+    const catalogNumber = objects.length + 1;
+    objects.push({type:"catalog", number:catalogNumber, pagesNumber:pagesNumber});
+    objects.push({type:"pages", number:pagesNumber, kids:pageObjects});
+
+    let output = "%PDF-1.4\n";
+    const objectPositions = {};
+
+    objects.forEach(function(obj){
+        objectPositions[obj.number] = output.length;
+        if(typeof obj === "string"){
+            output += obj;
+            return;
+        }
+        if(obj.type === "image"){
+            output += obj.number + " 0 obj\n<< /Type /XObject /Subtype /Image /Width " + Math.round(obj.width) + " /Height " + Math.round(obj.height) + " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " + obj.bytes.length + " >>\nstream\n";
+            for(let i=0; i<obj.bytes.length; i++) output += String.fromCharCode(obj.bytes[i]);
+            output += "\nendstream\nendobj\n";
+        }
+        if(obj.type === "content"){
+            output += obj.number + " 0 obj\n<< /Length " + obj.content.length + " >>\nstream\n" + obj.content + "endstream\nendobj\n";
+        }
+        if(obj.type === "page"){
+            output += obj.number + " 0 obj\n<< /Type /Page /Parent " + obj.pagesNumber + " 0 R /MediaBox [0 0 " + Math.round(obj.width) + " " + Math.round(obj.height) + "] /Resources << /XObject << /Im" + obj.index + " " + obj.imageNumber + " 0 R >> >> /Contents " + obj.contentNumber + " 0 R >>\nendobj\n";
+        }
+        if(obj.type === "catalog"){
+            output += obj.number + " 0 obj\n<< /Type /Catalog /Pages " + obj.pagesNumber + " 0 R >>\nendobj\n";
+        }
+        if(obj.type === "pages"){
+            output += obj.number + " 0 obj\n<< /Type /Pages /Kids [" + obj.kids.map(n => n + " 0 R").join(" ") + "] /Count " + obj.kids.length + " >>\nendobj\n";
+        }
+    });
+
+    const xref = output.length;
+    output += "xref\n0 " + (objects.length + 1) + "\n0000000000 65535 f \n";
+    
+    objects.forEach(function(obj){
+        const pos = objectPositions[obj.number] || 0;
+        output += String(pos).padStart(10,"0") + " 00000 n \n";
+    });
+
+    output += "trailer\n<< /Size " + (objects.length + 1) + " /Root " + catalogNumber + " 0 R >>\nstartxref\n" + xref + "\n%%EOF";
+    
+    const bytes = new Uint8Array(output.length);
+    for(let i=0; i<output.length; i++) bytes[i] = output.charCodeAt(i) & 255;
+    return bytes;
+}
+
+/* SIZE */
+function formatSize(bytes){
+    if(bytes < 1024) return bytes + " B";
+    if(bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+}
+
+/* HOME */
+function goHome(){
+    window.location.href = "tool.html";
+}
+
+/* DARK MODE */
+if(localStorage.getItem("theme") === "dark"){
+    document.body.classList.add("dark");
+}
+</script>
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

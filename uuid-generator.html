@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>UUID Generator - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+    font-family:Arial,sans-serif;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.uuid-box{
+    margin-top:20px;
+    padding:25px 15px;
+    border-radius:10px;
+    background:#faf9ff;
+    border:2px dashed #6c5ce7;
+    text-align:center;
+}
+
+.uuid{
+    font-family:monospace;
+    font-size:18px;
+    font-weight:bold;
+    word-break:break-all;
+    line-height:1.6;
+}
+
+.generate{
+    width:100%;
+    margin-top:20px;
+    padding:16px;
+    border:0;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.copy{
+    width:100%;
+    margin-top:12px;
+    padding:14px;
+    border:0;
+    border-radius:15px;
+    background:#00b894;
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.info{
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.6;
+}
+
+.dark{
+    background:#101321;
+    color:white;
+}
+
+.dark .box{
+    background:#191d2d;
+}
+
+.dark .title p{
+    color:#aaa;
+}
+
+.dark .uuid-box{
+    background:#15192a;
+    border-color:#8075ef;
+}
+
+.dark .info{
+    background:#242039;
+}
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .uuid{
+        font-size:15px;
+    }
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<div class="header">
+
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">⚡ Quick Tool</div>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+<div class="box">
+
+    <div class="title">
+
+        <div class="title-icon">🆔</div>
+
+        <h1>UUID Generator</h1>
+
+        <p>
+            Generate unique UUIDs instantly in your browser.
+        </p>
+
+    </div>
+
+
+    <div class="uuid-box">
+
+        <div class="uuid" id="uuid">
+            Click Generate UUID
+        </div>
+
+    </div>
+
+
+    <button class="generate"
+            onclick="generateUUID()">
+        🆔 Generate UUID
+    </button>
+
+
+    <button class="copy"
+            onclick="copyUUID()">
+        📋 Copy UUID
+    </button>
+
+
+    <div class="info">
+
+        🔒 UUIDs are generated locally in your browser.
+
+    </div>
+
+</div>
+
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+
+<script>
+
+function generateUUID(){
+
+    let uuid;
+
+    if(window.crypto && crypto.randomUUID){
+
+        uuid = crypto.randomUUID();
+
+    }
+    else{
+
+        uuid =
+            "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
+            .replace(/[xy]/g,function(c){
+
+                const r =
+                    Math.random() * 16 | 0;
+
+                const v =
+                    c === "x"
+                    ? r
+                    : (r & 0x3 | 0x8);
+
+                return v.toString(16);
+
+            });
+
+    }
+
+    document.getElementById("uuid").textContent =
+        uuid;
+
+}
+
+
+function copyUUID(){
+
+    const uuid =
+        document.getElementById("uuid").textContent;
+
+    if(uuid === "Click Generate UUID"){
+
+        alert("First generate a UUID.");
+
+        return;
+    }
+
+    navigator.clipboard.writeText(uuid)
+        .then(() => {
+
+            alert("UUID copied!");
+
+        })
+        .catch(() => {
+
+            const temp =
+                document.createElement("textarea");
+
+            temp.value = uuid;
+
+            document.body.appendChild(temp);
+
+            temp.select();
+
+            document.execCommand("copy");
+
+            temp.remove();
+
+            alert("UUID copied!");
+
+        });
+
+}
+
+
+function goHome(){
+
+    window.location.href = "tool.html";
+
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

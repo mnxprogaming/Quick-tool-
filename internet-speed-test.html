@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internet Speed Test - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    font-family:Arial,sans-serif;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.speed-box{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-top:20px;
+}
+
+.speed-card{
+    background:#f5f3ff;
+    border-radius:20px;
+    padding:22px 15px;
+    text-align:center;
+}
+
+.speed-card .icon{
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.speed-card h3{
+    margin:0 0 8px;
+    font-size:14px;
+    color:#777;
+}
+
+.speed{
+    font-size:27px;
+    font-weight:800;
+}
+
+.unit{
+    font-size:12px;
+    color:#888;
+    margin-top:4px;
+}
+
+.action-btn{
+    display:block;
+    width:100%;
+    border:0;
+    margin-top:22px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.action-btn:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+}
+
+.status{
+    display:none;
+    margin-top:18px;
+    padding:14px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    color:#666;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin:0 0 10px;
+}
+
+.result-info{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.note{
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    color:#666;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.dark{
+    background:#101321;
+    color:white;
+}
+
+.dark .box{
+    background:#191d2d;
+}
+
+.dark .title p{
+    color:#aaa;
+}
+
+.dark .speed-card,
+.dark .status,
+.dark .note{
+    background:#242039;
+}
+
+.dark .speed-card h3,
+.dark .unit,
+.dark .status,
+.dark .note{
+    color:#aaa;
+}
+
+.dark .result{
+    background:#102b25;
+}
+
+.dark .result-info{
+    color:#ccc;
+}
+
+@media(max-width:500px){
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .speed-box{
+        grid-template-columns:1fr;
+    }
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+
+        <div class="title">
+            <div class="title-icon">🚀</div>
+            <h1>Internet Speed Test</h1>
+            <p>Check your approximate download and upload internet speed.</p>
+        </div>
+
+        <div class="speed-box">
+
+            <div class="speed-card">
+                <div class="icon">⬇️</div>
+                <h3>Download</h3>
+                <div class="speed" id="downloadSpeed">--</div>
+                <div class="unit">Mbps</div>
+            </div>
+
+            <div class="speed-card">
+                <div class="icon">⬆️</div>
+                <h3>Upload</h3>
+                <div class="speed" id="uploadSpeed">--</div>
+                <div class="unit">Mbps</div>
+            </div>
+
+        </div>
+
+        <button class="action-btn" id="startBtn" onclick="startTest()">
+            🚀 Start Speed Test
+        </button>
+
+        <div class="status" id="status">
+            Preparing speed test...
+        </div>
+
+        <div class="result" id="result">
+            <h2>Speed Test Complete</h2>
+            <div class="result-info" id="resultInfo"></div>
+        </div>
+
+        <div class="note">
+            Speed results are approximate and can vary depending on
+            your network, device, server and current internet traffic.
+        </div>
+
+    </div>
+    <div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+const TEST_FILE =
+"https://speed.cloudflare.com/__down?bytes=10000000";
+
+function setStatus(text){
+    const status=document.getElementById("status");
+    status.textContent=text;
+    status.style.display="block";
+}
+
+async function testDownload(){
+
+    const start=performance.now();
+
+    const response=await fetch(
+        TEST_FILE + "&cache=" + Date.now(),
+        {
+            cache:"no-store"
+        }
+    );
+
+    if(!response.ok){
+        throw new Error("Download test failed.");
+    }
+
+    const data=await response.arrayBuffer();
+
+    const end=performance.now();
+
+    const seconds=(end-start)/1000;
+    const bits=data.byteLength*8;
+
+    return (bits/seconds/1000000);
+}
+
+async function testUpload(){
+
+    const size=3000000;
+
+    const data=new Uint8Array(size);
+
+    if(window.crypto && crypto.getRandomValues){
+
+        for(let i=0;i<size;i+=65536){
+
+            const chunk=data.subarray(
+                i,
+                Math.min(i+65536,size)
+            );
+
+            crypto.getRandomValues(chunk);
+        }
+    }
+
+    const start=performance.now();
+
+    const response=await fetch(
+        "https://speed.cloudflare.com/__up",
+        {
+            method:"POST",
+            body:data,
+            cache:"no-store"
+        }
+    );
+
+    const end=performance.now();
+
+    if(!response.ok){
+        throw new Error("Upload test failed.");
+    }
+
+    const seconds=(end-start)/1000;
+    const bits=size*8;
+
+    return (bits/seconds/1000000);
+}
+
+async function startTest(){
+
+    const btn=document.getElementById("startBtn");
+    const result=document.getElementById("result");
+
+    btn.disabled=true;
+    btn.textContent="⏳ Testing...";
+
+    result.style.display="none";
+
+    document.getElementById("downloadSpeed").textContent="--";
+    document.getElementById("uploadSpeed").textContent="--";
+
+    try{
+
+        setStatus("⬇️ Testing download speed...");
+
+        const download=await testDownload();
+
+        document.getElementById("downloadSpeed").textContent=
+            download.toFixed(2);
+
+        setStatus("⬆️ Testing upload speed...");
+
+        const upload=await testUpload();
+
+        document.getElementById("uploadSpeed").textContent=
+            upload.toFixed(2);
+
+        document.getElementById("resultInfo").innerHTML=
+            "Download Speed: <b>"+
+            download.toFixed(2)+
+            " Mbps</b><br>"+
+            "Upload Speed: <b>"+
+            upload.toFixed(2)+
+            " Mbps</b>";
+
+        result.style.display="block";
+
+        setStatus("✅ Test completed successfully.");
+
+    }catch(error){
+
+        setStatus(
+            "❌ Speed test could not be completed. Please try again."
+        );
+
+        document.getElementById("resultInfo").textContent=
+            error.message;
+
+        result.style.display="block";
+
+    }finally{
+
+        btn.disabled=false;
+        btn.textContent="🚀 Start Speed Test";
+    }
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

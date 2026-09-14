@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Resizer - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f6ff;
+    color:#172033;
+    min-height:100vh;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 30px;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 10px 30px rgba(40,50,100,.1);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:auto;
+    margin-bottom:14px;
+    border-radius:22px;
+    background:#e7f2ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:35px;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+}
+
+.upload{
+    display:block;
+    text-align:center;
+    border:2px dashed #6c5ce7;
+    border-radius:10px;
+    padding:35px 15px;
+    background:#faf9ff;
+    cursor:pointer;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.upload strong{
+    display:block;
+    margin-bottom:7px;
+}
+
+.upload small{
+    color:#888;
+}
+
+#file{
+    display:none;
+}
+
+.preview{
+    display:none;
+    margin-top:22px;
+    text-align:center;
+}
+
+.preview img{
+    max-width:100%;
+    max-height:300px;
+    border-radius:10px;
+}
+
+.info{
+    display:none;
+    margin-top:18px;
+    padding:15px;
+    border-radius:10px;
+    background:#f3f1ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.controls{
+    display:none;
+    margin-top:20px;
+}
+
+.input-row{
+    display:flex;
+    gap:12px;
+}
+
+.input-group{
+    flex:1;
+}
+
+.input-group label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:13px;
+    outline:none;
+    font-size:15px;
+}
+
+.lock{
+    margin-top:28px;
+    width:45px;
+    height:45px;
+    border:0;
+    border-radius:13px;
+    background:#eeeaff;
+    color:#6c5ce7;
+    font-size:20px;
+}
+
+.resize-btn{
+    display:none;
+    width:100%;
+    border:0;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+}
+
+.download{
+    display:inline-block;
+    margin-top:15px;
+    padding:14px 25px;
+    border-radius:15px;
+    background:#00b894;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+@media(max-width:500px){
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .input-row{
+        gap:8px;
+    }
+}
+/* ========================= */
+/* DARK MODE */
+/* ========================= */
+
+body.dark{
+    background:#101321;
+    color:#f4f5ff;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .upload{
+    background:#15192a;
+    border-color:#8075ef;
+}
+
+body.dark .upload small{
+    color:#aaa;
+}
+
+body.dark .info{
+    background:#242039;
+    color:#f4f5ff;
+}
+
+body.dark .input-group input{
+    background:#15192a;
+    color:#fff;
+    border-color:#3b4055;
+}
+
+body.dark .input-group label{
+    color:#f4f5ff;
+}
+
+body.dark .lock{
+    background:#242039;
+    color:#aaa0ff;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+body.dark .result p{
+    color:#ccc;
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</header>
+
+<main class="container">
+
+<div class="box">
+
+<div class="title">
+
+    <div class="title-icon">📐</div>
+
+    <h1>Image Resizer</h1>
+
+    <p>Resize your image to the exact width and height.</p>
+
+</div>
+
+<label class="upload" for="file">
+
+    <div class="upload-icon">🖼️</div>
+
+    <strong>Choose Image</strong>
+
+    <small>JPG, JPEG or PNG</small>
+
+</label>
+
+<input
+    type="file"
+    id="file"
+    accept="image/jpeg,image/png"
+>
+
+<div class="preview" id="preview">
+    <img id="previewImg">
+</div>
+
+<div class="info" id="info"></div>
+
+<div class="controls" id="controls">
+
+    <div class="input-row">
+
+        <div class="input-group">
+            <label>Width (px)</label>
+            <input type="number" id="width">
+        </div>
+
+        <div class="input-group">
+            <label>Height (px)</label>
+            <input type="number" id="height">
+        </div>
+
+    </div>
+
+    <button class="lock" id="lock" onclick="toggleLock()">
+        🔒
+    </button>
+
+</div>
+
+<button
+    class="resize-btn"
+    id="resizeBtn"
+    onclick="resizeImage()">
+    📐 Resize Image
+</button>
+
+<div class="result" id="result">
+
+    <h2>✅ Image Resized</h2>
+
+    <p id="resultInfo"></p>
+
+    <a
+        id="download"
+        class="download"
+        download="resized-image.jpg">
+        ⬇️ Download Image
+    </a>
+
+</div>
+
+</div>
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</main>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+<script>
+
+let selectedFile=null;
+let originalWidth=0;
+let originalHeight=0;
+let locked=true;
+
+const fileInput=document.getElementById("file");
+
+/* FILE SIZE FORMATTER */
+function formatFileSize(bytes){
+    if(bytes < 1024){
+        return bytes + " B";
+    }else if(bytes < 1048576){
+        return (bytes / 1024).toFixed(1) + " KB";
+    }else{
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+    }
+}
+
+fileInput.addEventListener("change",function(){
+
+    const file=this.files[0];
+
+    if(!file) return;
+
+    selectedFile=file;
+
+    const img=new Image();
+
+    img.onload=function(){
+
+        originalWidth=img.width;
+        originalHeight=img.height;
+
+        document.getElementById("previewImg").src=
+            URL.createObjectURL(file);
+
+        document.getElementById("preview").style.display="block";
+
+        document.getElementById("controls").style.display="block";
+
+        document.getElementById("resizeBtn").style.display="block";
+
+        document.getElementById("width").value=originalWidth;
+
+        document.getElementById("height").value=originalHeight;
+
+        /* IMAGE COMPRESSOR JAISA EXACT INFO BOX */
+        document.getElementById("info").innerHTML=
+            "📄 File: <b>" + file.name + "</b><br>" +
+            "📦 Original Size: <b>" + formatFileSize(file.size) + "</b>";
+
+        document.getElementById("info").style.display="block";
+
+    };
+
+    img.src=URL.createObjectURL(file);
+
+});
+
+document.getElementById("width").addEventListener("input",function(){
+
+    if(!locked || !originalWidth) return;
+
+    const newWidth=parseInt(this.value);
+
+    document.getElementById("height").value=
+        Math.round(newWidth*originalHeight/originalWidth);
+
+});
+
+document.getElementById("height").addEventListener("input",function(){
+
+    if(!locked || !originalHeight) return;
+
+    const newHeight=parseInt(this.value);
+
+    document.getElementById("width").value=
+        Math.round(newHeight*originalWidth/originalHeight);
+
+});
+
+function toggleLock(){
+
+    locked=!locked;
+
+    document.getElementById("lock").innerText=
+        locked ? "🔒" : "🔓";
+
+}
+
+function resizeImage(){
+
+    if(!selectedFile){
+        alert("Please choose an image first.");
+        return;
+    }
+
+    const width=parseInt(document.getElementById("width").value);
+    const height=parseInt(document.getElementById("height").value);
+
+    if(!width || !height || width<1 || height<1){
+        alert("Please enter valid width and height.");
+        return;
+    }
+
+    const img=new Image();
+
+    img.onload=function(){
+
+        const canvas=document.createElement("canvas");
+
+        canvas.width=width;
+        canvas.height=height;
+
+        const ctx=canvas.getContext("2d");
+
+        ctx.drawImage(
+            img,
+            0,
+            0,
+            width,
+            height
+        );
+
+        canvas.toBlob(function(blob){
+
+            const url=URL.createObjectURL(blob);
+
+            document.getElementById("download").href=url;
+
+            document.getElementById("resultInfo").innerHTML=
+                "<br>New Size: <b>"+
+                width+" × "+height+
+                " px</b> (" + formatFileSize(blob.size) + ")";
+
+            document.getElementById("result").style.display="block";
+
+            document.getElementById("result").scrollIntoView({
+                behavior:"smooth"
+            });
+
+        },"image/jpeg",0.9);
+
+    };
+
+    img.src=URL.createObjectURL(selectedFile);
+
+}
+
+function goHome(){
+
+    window.location.href="tool.html";
+
+}
+
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

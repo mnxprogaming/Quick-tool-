@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Percentage Calculator - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+    font-family:Arial,sans-serif;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.calculation{
+    padding:18px;
+    border-radius:20px;
+    background:#faf9ff;
+    margin-bottom:15px;
+}
+
+.calculation h3{
+    font-size:16px;
+    margin-bottom:15px;
+    color:#6c5ce7;
+}
+
+.field{
+    margin-bottom:12px;
+}
+
+.field label{
+    display:block;
+    font-weight:bold;
+    font-size:13px;
+    margin-bottom:7px;
+}
+
+.field input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:14px;
+    font-size:16px;
+    outline:none;
+}
+
+.field input:focus{
+    border-color:#6c5ce7;
+}
+
+.calculate-btn{
+    width:100%;
+    border:none;
+    margin-top:5px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.answer{
+    font-size:24px;
+    font-weight:bold;
+    color:#6c5ce7;
+    line-height:1.5;
+}
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+}
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .calculation{
+    background:#15192a;
+}
+
+body.dark .field input{
+    background:#101321;
+    color:white;
+    border-color:#444;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">⚡ Quick Tool</div>
+
+    </div>
+</header>
+
+<div class="container">
+
+<div class="box">
+
+    <div class="title">
+
+        <div class="title-icon">%</div>
+
+        <h1>Percentage Calculator</h1>
+
+        <p>Calculate percentages quickly and easily.</p>
+
+    </div>
+
+
+    <div class="calculation">
+
+        <h3>What is X% of Y?</h3>
+
+        <div class="field">
+
+            <label>Percentage (%)</label>
+
+            <input
+                type="number"
+                id="percent1"
+                placeholder="Example: 20"
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label>Number</label>
+
+            <input
+                type="number"
+                id="number1"
+                placeholder="Example: 500"
+            >
+
+        </div>
+
+    </div>
+
+
+    <div class="calculation">
+
+        <h3>X is what % of Y?</h3>
+
+        <div class="field">
+
+            <label>X</label>
+
+            <input
+                type="number"
+                id="x"
+                placeholder="Example: 50"
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label>Y</label>
+
+            <input
+                type="number"
+                id="y"
+                placeholder="Example: 200"
+            >
+
+        </div>
+
+    </div>
+
+
+    <div class="calculation">
+
+        <h3>Percentage Increase / Decrease</h3>
+
+        <div class="field">
+
+            <label>Original Value</label>
+
+            <input
+                type="number"
+                id="oldValue"
+                placeholder="Example: 100"
+            >
+
+        </div>
+
+        <div class="field">
+
+            <label>New Value</label>
+
+            <input
+                type="number"
+                id="newValue"
+                placeholder="Example: 120"
+            >
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="calculate-btn"
+        onclick="calculatePercentage()"
+    >
+        Calculate Percentage
+    </button>
+
+
+    <div class="result" id="result">
+
+        <h2>Result</h2>
+
+        <div
+            class="answer"
+            id="answer"
+        ></div>
+
+    </div>
+
+</div>
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+<script>
+
+function goHome(){
+
+    window.location.href="tool.html";
+
+}
+
+
+function getNumber(id){
+
+    return parseFloat(
+        document.getElementById(id).value
+    );
+
+}
+
+
+function calculatePercentage(){
+
+    const p =
+        getNumber("percent1");
+
+    const n =
+        getNumber("number1");
+
+    const x =
+        getNumber("x");
+
+    const y =
+        getNumber("y");
+
+    const oldValue =
+        getNumber("oldValue");
+
+    const newValue =
+        getNumber("newValue");
+
+
+    let results = [];
+
+
+    /* X% OF Y */
+
+    if(
+        !isNaN(p) &&
+        !isNaN(n)
+    ){
+
+        const answer1 =
+            (p / 100) * n;
+
+        results.push(
+            p + "% of " +
+            n +
+            " = " +
+            answer1
+        );
+
+    }
+
+
+    /* X IS WHAT % OF Y */
+
+    if(
+        !isNaN(x) &&
+        !isNaN(y)
+    ){
+
+        if(y !== 0){
+
+            const answer2 =
+                (x / y) * 100;
+
+            results.push(
+                x +
+                " is " +
+                answer2.toFixed(2) +
+                "% of " +
+                y
+            );
+
+        }
+
+    }
+
+
+    /* INCREASE / DECREASE */
+
+    if(
+        !isNaN(oldValue) &&
+        !isNaN(newValue)
+    ){
+
+        if(oldValue !== 0){
+
+            const change =
+                ((newValue - oldValue) /
+                oldValue) * 100;
+
+            if(change > 0){
+
+                results.push(
+                    "Increase = " +
+                    change.toFixed(2) +
+                    "%"
+                );
+
+            }else if(change < 0){
+
+                results.push(
+                    "Decrease = " +
+                    Math.abs(change).toFixed(2) +
+                    "%"
+                );
+
+            }else{
+
+                results.push(
+                    "No percentage change"
+                );
+
+            }
+
+        }
+
+    }
+
+
+    if(results.length === 0){
+
+        alert("Please enter at least one valid calculation.");
+
+        return;
+
+    }
+
+
+    document.getElementById("answer").innerHTML =
+        results.join("<br><br>");
+
+    document.getElementById("result").style.display =
+        "block";
+
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

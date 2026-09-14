@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>IP Address Info - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    font-family:Arial,sans-serif;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(30,40,80,.10);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.ip-card{
+    padding:20px;
+    border-radius:20px;
+    background:#f5f3ff;
+    text-align:center;
+}
+
+.ip-label{
+    color:#777;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.ip-value{
+    font-size:25px;
+    font-weight:800;
+    word-break:break-word;
+}
+
+.action{
+    width:100%;
+    border:0;
+    margin-top:18px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.info{
+    display:none;
+    margin-top:20px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    font-size:14px;
+}
+
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:10px 0;
+    border-bottom:1px solid rgba(100,90,180,.12);
+}
+
+.info-row:last-child{
+    border-bottom:0;
+}
+
+.info-row strong{
+    color:#5b4dcc;
+}
+
+.info-row span{
+    text-align:right;
+    word-break:break-word;
+}
+
+.note{
+    margin-top:18px;
+    color:#777;
+    text-align:center;
+    font-size:12px;
+    line-height:1.6;
+}
+
+@media(max-width:500px){
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .ip-value{
+        font-size:21px;
+    }
+
+    .info-row{
+        flex-direction:column;
+        gap:4px;
+    }
+
+    .info-row span{
+        text-align:left;
+    }
+}
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .ip-card,
+body.dark .info{
+    background:#242039;
+}
+
+body.dark .ip-label,
+body.dark .note{
+    color:#aaa;
+}
+
+body.dark .info-row strong{
+    color:#9b91ff;
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">⚡ Quick Tool</div>
+
+    </div>
+
+</header>
+
+<div class="container">
+
+<div class="box">
+
+    <div class="title">
+
+        <div class="title-icon">🌐</div>
+
+        <h1>IP Address Info</h1>
+
+        <p>
+            Check your public IP address and basic network information.
+        </p>
+
+    </div>
+
+    <div class="ip-card">
+
+        <div class="ip-label">
+            Your Public IP Address
+        </div>
+
+        <div class="ip-value" id="ip">
+            Checking...
+        </div>
+
+    </div>
+
+    <button class="action" onclick="getIPInfo()">
+        🔄 Check IP Information
+    </button>
+
+    <div class="info" id="info">
+
+        <div class="info-row">
+            <strong>IP Address</strong>
+            <span id="ip2">-</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Country</strong>
+            <span id="country">-</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Region</strong>
+            <span id="region">-</span>
+        </div>
+
+        <div class="info-row">
+            <strong>City</strong>
+            <span id="city">-</span>
+        </div>
+
+        <div class="info-row">
+            <strong>ISP</strong>
+            <span id="isp">-</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Organization</strong>
+            <span id="org">-</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Timezone</strong>
+            <span id="timezone">-</span>
+        </div>
+
+    </div>
+
+    <div class="note">
+        Your IP information is requested from a public IP information service.
+        This page does not store your IP address.
+    </div>
+
+</div>
+
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+async function getIPInfo(){
+
+    const ipElement=document.getElementById("ip");
+
+    ipElement.textContent="Checking...";
+
+    try{
+
+        const response=await fetch(
+            "https://ipapi.co/json/"
+        );
+
+        if(!response.ok){
+            throw new Error("Request failed");
+        }
+
+        const data=await response.json();
+
+        if(!data.ip){
+            throw new Error("IP not found");
+        }
+
+        document.getElementById("ip").textContent=data.ip;
+
+        document.getElementById("ip2").textContent=data.ip || "-";
+
+        document.getElementById("country").textContent=
+            data.country_name || "-";
+
+        document.getElementById("region").textContent=
+            data.region || "-";
+
+        document.getElementById("city").textContent=
+            data.city || "-";
+
+        document.getElementById("isp").textContent=
+            data.org || "-";
+
+        document.getElementById("org").textContent=
+            data.org || "-";
+
+        document.getElementById("timezone").textContent=
+            data.timezone || "-";
+
+        document.getElementById("info").style.display="block";
+
+    }catch(error){
+
+        ipElement.textContent="Unable to detect";
+
+        document.getElementById("info").style.display="block";
+
+        document.getElementById("ip2").textContent="Failed";
+
+        document.getElementById("country").textContent="-";
+        document.getElementById("region").textContent="-";
+        document.getElementById("city").textContent="-";
+        document.getElementById("isp").textContent="-";
+        document.getElementById("org").textContent="-";
+        document.getElementById("timezone").textContent="-";
+    }
+}
+
+getIPInfo();
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

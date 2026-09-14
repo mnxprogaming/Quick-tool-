@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Rotate & Flip - Quick Tool</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+    position:relative;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 10px 30px rgba(40,50,100,.10);
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* =========================
+   UPLOAD
+========================= */
+
+.upload{
+    display:block;
+    text-align:center;
+    border:2px dashed #6c5ce7;
+    border-radius:10px;
+    padding:35px 15px;
+    background:#faf9ff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload:hover{
+    background:#f1efff;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.upload strong{
+    display:block;
+    font-size:17px;
+    margin-bottom:7px;
+}
+
+.upload small{
+    color:#888;
+    font-size:12px;
+}
+
+#file{
+    display:none;
+}
+
+/* =========================
+   PREVIEW
+========================= */
+
+.preview{
+    display:none;
+    margin-top:22px;
+    text-align:center;
+    width:100%;
+}
+
+.preview-title{
+    font-weight:bold;
+    margin-bottom:12px;
+    font-size:18px;
+}
+
+/*
+   IMPORTANT:
+   Canvas normal document flow me rahega.
+   Isse rotate karne par neeche ka content
+   image ke upar nahi aayega.
+*/
+
+.preview-canvas-wrap{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    padding:5px;
+}
+
+#previewCanvas{
+    display:block;
+    max-width:100%;
+    max-height:420px;
+    width:auto;
+    height:auto;
+    border-radius:10px;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+/* =========================
+   INFO
+========================= */
+
+.info{
+    display:none;
+    margin-top:18px;
+    padding:15px;
+    border-radius:10px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.7;
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+.settings{
+    display:none;
+    margin-top:20px;
+}
+
+.settings label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.action-btn{
+    border:none;
+    padding:14px 10px;
+    border-radius:15px;
+    background:#eeeaff;
+    color:#172033;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.action-btn:hover{
+    background:#e2ddff;
+}
+
+.action-btn:active{
+    transform:scale(.98);
+}
+
+/* =========================
+   SAVE BUTTON
+========================= */
+
+.compress-btn{
+    display:none;
+    width:100%;
+    border:none;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.compress-btn:active{
+    transform:scale(.98);
+}
+
+/* =========================
+   RESULT
+========================= */
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.result-info{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.download{
+    display:inline-block;
+    margin-top:15px;
+    padding:14px 25px;
+    border-radius:15px;
+    background:#00b894;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .upload{
+    background:#15192a;
+    border-color:#8075ef;
+}
+
+body.dark .upload small{
+    color:#aaa;
+}
+
+body.dark .info{
+    background:#242039;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+body.dark .result-info{
+    color:#ccc;
+}
+
+body.dark .action-btn{
+    background:#292440;
+    color:white;
+}
+
+body.dark .action-btn:hover{
+    background:#342e50;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .upload{
+        padding:30px 10px;
+    }
+
+    #previewCanvas{
+        max-height:360px;
+    }
+
+}
+
+/* =========================
+   DESKTOP RESPONSIVE FIX
+========================= */
+
+@media (min-width:900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+    #previewCanvas{
+        max-height:550px;
+    }
+}
+
+</style>
+
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">
+            ⚡ Quick Tool
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+<div class="box">
+
+    <!-- TITLE -->
+
+    <div class="title">
+
+        <div class="title-icon">
+            🔄
+        </div>
+
+        <h1>Image Rotate & Flip</h1>
+
+        <p>
+            Rotate or flip your image easily and download it instantly.
+        </p>
+
+    </div>
+
+
+    <!-- UPLOAD -->
+
+    <label class="upload" for="file">
+
+        <div class="upload-icon">
+            🖼️
+        </div>
+
+        <strong>
+            Choose Image
+        </strong>
+
+        <small>
+            JPG, JPEG or PNG • Max recommended 10MB
+        </small>
+
+    </label>
+
+
+    <input
+        type="file"
+        id="file"
+        accept="image/jpeg,image/png,image/webp"
+    >
+
+
+    <!-- PREVIEW -->
+
+    <div class="preview" id="preview">
+
+        <div class="preview-title">
+            Image Preview
+        </div>
+
+        <div class="preview-canvas-wrap">
+
+            <canvas id="previewCanvas"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFO -->
+
+    <div class="info" id="info"></div>
+
+
+    <!-- CONTROLS -->
+
+    <div class="settings" id="settings">
+
+        <label>
+            Image Controls
+        </label>
+
+        <div class="actions">
+
+            <button
+                class="action-btn"
+                onclick="rotateLeft()">
+                ↶ Rotate Left
+            </button>
+
+            <button
+                class="action-btn"
+                onclick="rotateRight()">
+                ↷ Rotate Right
+            </button>
+
+            <button
+                class="action-btn"
+                onclick="flipHorizontal()">
+                ↔️ Flip Horizontal
+            </button>
+
+            <button
+                class="action-btn"
+                onclick="flipVertical()">
+                ↕️ Flip Vertical
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- SAVE -->
+
+    <button
+        class="compress-btn"
+        id="saveBtn"
+        onclick="saveImage()">
+
+        Save Image
+
+    </button>
+
+
+    <!-- RESULT -->
+
+    <div class="result" id="result">
+
+        <h2>
+            ✅ Image Ready
+        </h2>
+
+        <div
+            class="result-info"
+            id="resultInfo">
+        </div>
+
+        <a
+            id="download"
+            class="download"
+            download="quicktool-edited.jpg">
+
+            ⬇️ Download Image
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- TOOL SUGGESTIONS -->
+
+<div
+    id="toolSuggestions"
+    class="tool-suggestions">
+</div>
+
+<div id="introSection"></div>
+</main>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+<script>
+
+let selectedFile = null;
+
+let image = new Image();
+
+let rotation = 0;
+
+let flipX = 1;
+
+let flipY = 1;
+
+
+/* =========================
+   FILE SELECT
+========================= */
+
+document.getElementById("file").addEventListener(
+    "change",
+    function(){
+
+        const file = this.files[0];
+
+        if(!file){
+            return;
+        }
+
+
+        /* FILE SIZE CHECK */
+
+        if(file.size > 10 * 1024 * 1024){
+
+            alert(
+                "Please choose an image smaller than 10MB."
+            );
+
+            this.value = "";
+
+            return;
+        }
+
+
+        /* IMAGE TYPE CHECK */
+
+        if(!file.type.startsWith("image/")){
+
+            alert(
+                "Please choose a valid image."
+            );
+
+            this.value = "";
+
+            return;
+        }
+
+
+        selectedFile = file;
+
+
+        const url =
+            URL.createObjectURL(file);
+
+
+        image.onload = function(){
+
+            /* RESET */
+
+            rotation = 0;
+
+            flipX = 1;
+
+            flipY = 1;
+
+
+            /* DRAW PREVIEW */
+
+            updatePreview();
+
+
+            /* SHOW PREVIEW */
+
+            document.getElementById(
+                "preview"
+            ).style.display = "block";
+
+
+            /* FILE INFO */
+
+            document.getElementById(
+                "info"
+            ).innerHTML =
+
+                "📄 File: <b>" +
+                escapeHtml(file.name) +
+                "</b><br>" +
+
+                "📦 Original Size: <b>" +
+                formatSize(file.size) +
+                "</b><br>" +
+
+                "📐 Dimensions: <b>" +
+                image.width +
+                " × " +
+                image.height +
+                " px</b>";
+
+
+            document.getElementById(
+                "info"
+            ).style.display = "block";
+
+
+            /* SHOW CONTROLS */
+
+            document.getElementById(
+                "settings"
+            ).style.display = "block";
+
+
+            /* SHOW SAVE BUTTON */
+
+            document.getElementById(
+                "saveBtn"
+            ).style.display = "block";
+
+
+            /* HIDE OLD RESULT */
+
+            document.getElementById(
+                "result"
+            ).style.display = "none";
+
+
+            /* RELEASE OLD OBJECT URL */
+
+            setTimeout(function(){
+
+                URL.revokeObjectURL(url);
+
+            },1000);
+
+        };
+
+
+        image.onerror = function(){
+
+            alert(
+                "Unable to load this image."
+            );
+
+            URL.revokeObjectURL(url);
+
+        };
+
+
+        image.src = url;
+
+    }
+);
+
+
+/* =========================
+   UPDATE PREVIEW
+========================= */
+
+function updatePreview(){
+
+    if(
+        !selectedFile ||
+        !image.complete ||
+        !image.naturalWidth
+    ){
+
+        return;
+
+    }
+
+
+    const canvas =
+        document.getElementById(
+            "previewCanvas"
+        );
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    /*
+       Normalize angle.
+
+       Example:
+       90
+       180
+       270
+       -90 → 270
+    */
+
+    const angle =
+        ((rotation % 360) + 360) % 360;
+
+
+    /*
+       IMPORTANT
+
+       90° / 270° par
+       canvas ki width/height swap hogi.
+    */
+
+    if(
+        angle === 90 ||
+        angle === 270
+    ){
+
+        canvas.width =
+            image.naturalHeight;
+
+        canvas.height =
+            image.naturalWidth;
+
+    }
+    else{
+
+        canvas.width =
+            image.naturalWidth;
+
+        canvas.height =
+            image.naturalHeight;
+
+    }
+
+
+    /* CLEAR */
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    /* SAVE STATE */
+
+    ctx.save();
+
+
+    /*
+       Move origin to center
+    */
+
+    ctx.translate(
+        canvas.width / 2,
+        canvas.height / 2
+    );
+
+
+    /*
+       Rotate
+    */
+
+    ctx.rotate(
+        rotation * Math.PI / 180
+    );
+
+
+    /*
+       Flip
+    */
+
+    ctx.scale(
+        flipX,
+        flipY
+    );
+
+
+    /*
+       Draw original image
+       from center
+    */
+
+    ctx.drawImage(
+        image,
+        -image.naturalWidth / 2,
+        -image.naturalHeight / 2,
+        image.naturalWidth,
+        image.naturalHeight
+    );
+
+
+    /* RESTORE */
+
+    ctx.restore();
+
+}
+
+
+/* =========================
+   ROTATE LEFT
+========================= */
+
+function rotateLeft(){
+
+    if(!selectedFile){
+
+        alert(
+            "Please select an image first."
+        );
+
+        return;
+    }
+
+
+    rotation -= 90;
+
+
+    updatePreview();
+
+}
+
+
+/* =========================
+   ROTATE RIGHT
+========================= */
+
+function rotateRight(){
+
+    if(!selectedFile){
+
+        alert(
+            "Please select an image first."
+        );
+
+        return;
+    }
+
+
+    rotation += 90;
+
+
+    updatePreview();
+
+}
+
+
+/* =========================
+   FLIP HORIZONTAL
+========================= */
+
+function flipHorizontal(){
+
+    if(!selectedFile){
+
+        alert(
+            "Please select an image first."
+        );
+
+        return;
+    }
+
+
+    flipX *= -1;
+
+
+    updatePreview();
+
+}
+
+
+/* =========================
+   FLIP VERTICAL
+========================= */
+
+function flipVertical(){
+
+    if(!selectedFile){
+
+        alert(
+            "Please select an image first."
+        );
+
+        return;
+    }
+
+
+    flipY *= -1;
+
+
+    updatePreview();
+
+}
+
+
+/* =========================
+   SAVE IMAGE
+========================= */
+
+function saveImage(){
+
+    if(!selectedFile){
+
+        alert(
+            "Please select an image first."
+        );
+
+        return;
+    }
+
+
+    const canvas =
+        document.createElement("canvas");
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    /*
+       Normalize angle
+    */
+
+    const angle =
+        ((rotation % 360) + 360) % 360;
+
+
+    /*
+       Correct canvas size
+    */
+
+    if(
+        angle === 90 ||
+        angle === 270
+    ){
+
+        canvas.width =
+            image.naturalHeight;
+
+        canvas.height =
+            image.naturalWidth;
+
+    }
+    else{
+
+        canvas.width =
+            image.naturalWidth;
+
+        canvas.height =
+            image.naturalHeight;
+
+    }
+
+
+    /*
+       White background
+
+       JPG transparency problem ko
+       avoid karne ke liye.
+    */
+
+    ctx.fillStyle = "#ffffff";
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    /* SAVE */
+
+    ctx.save();
+
+
+    /*
+       CENTER
+    */
+
+    ctx.translate(
+        canvas.width / 2,
+        canvas.height / 2
+    );
+
+
+    /*
+       ROTATE
+    */
+
+    ctx.rotate(
+        rotation * Math.PI / 180
+    );
+
+
+    /*
+       FLIP
+    */
+
+    ctx.scale(
+        flipX,
+        flipY
+    );
+
+
+    /*
+       DRAW
+    */
+
+    ctx.drawImage(
+        image,
+        -image.naturalWidth / 2,
+        -image.naturalHeight / 2,
+        image.naturalWidth,
+        image.naturalHeight
+    );
+
+
+    /* RESTORE */
+
+    ctx.restore();
+
+
+    /*
+       CREATE JPG
+    */
+
+    canvas.toBlob(
+
+        function(blob){
+
+            if(!blob){
+
+                alert(
+                    "Saving failed."
+                );
+
+                return;
+            }
+
+
+            const downloadUrl =
+                URL.createObjectURL(blob);
+
+
+            /*
+               DOWNLOAD BUTTON
+            */
+
+            const download =
+                document.getElementById(
+                    "download"
+                );
+
+
+            download.href =
+                downloadUrl;
+
+
+            download.download =
+                "quicktool-edited.jpg";
+
+
+            /*
+               RESULT INFO
+            */
+
+            document.getElementById(
+                "resultInfo"
+            ).innerHTML =
+
+                "📦 Original Size: <b>" +
+                formatSize(selectedFile.size) +
+                "</b><br>" +
+
+                "💾 New Size: <b>" +
+                formatSize(blob.size) +
+                "</b><br>" +
+
+                "🔄 Rotation: <b>" +
+                normalizeRotation(rotation) +
+                "°</b><br>" +
+
+                "📐 Output: <b>" +
+                canvas.width +
+                " × " +
+                canvas.height +
+                " px</b>";
+
+
+            /*
+               SHOW RESULT
+            */
+
+            document.getElementById(
+                "result"
+            ).style.display = "block";
+
+
+            /*
+               SCROLL TO RESULT
+
+               Ab result ke liye page
+               naturally neeche scroll karega.
+            */
+
+            setTimeout(function(){
+
+                document.getElementById(
+                    "result"
+                ).scrollIntoView({
+
+                    behavior:"smooth",
+
+                    block:"center"
+
+                });
+
+            },100);
+
+
+        },
+
+        "image/jpeg",
+
+        0.92
+
+    );
+
+}
+
+
+/* =========================
+   FILE SIZE
+========================= */
+
+function formatSize(bytes){
+
+    if(bytes < 1024){
+
+        return bytes + " B";
+
+    }
+
+
+    if(
+        bytes <
+        1024 * 1024
+    ){
+
+        return (
+            bytes / 1024
+        ).toFixed(1) + " KB";
+
+    }
+
+
+    return (
+        bytes /
+        (1024 * 1024)
+    ).toFixed(2) + " MB";
+
+}
+
+
+/* =========================
+   ROTATION DISPLAY
+========================= */
+
+function normalizeRotation(value){
+
+    let angle =
+        value % 360;
+
+
+    if(angle < 0){
+
+        angle += 360;
+
+    }
+
+
+    return angle;
+
+}
+
+
+/* =========================
+   HTML ESCAPE
+========================= */
+
+function escapeHtml(text){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+function goHome(){
+
+    window.location.href =
+        "tool.html";
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+if(
+    localStorage.getItem("theme")
+    ===
+    "dark"
+){
+
+    document.body.classList.add(
+        "dark"
+    );
+
+}
+
+</script>
+
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+
+</body>
+</html>

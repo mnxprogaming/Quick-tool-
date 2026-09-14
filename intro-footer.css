@@ -1,0 +1,342 @@
+/* ================================= */
+/* QUICK TOOL INTRO SECTION */
+/* ================================= */
+
+.web-intro{
+    width:100%;
+    max-width:1100px;
+    margin:40px auto 30px;
+    padding:35px 40px;
+
+    background:white;
+
+    border-radius:28px;
+
+    text-align:center;
+
+    box-shadow:0 8px 30px rgba(0,0,0,.07);
+}
+
+/* ICON */
+
+.web-intro-icon{
+    width:70px;
+    height:70px;
+
+    margin:0 auto 15px;
+
+    border-radius:22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:34px;
+
+    background:#eeeaff;
+}
+
+
+/* TITLE */
+
+.web-intro h2{
+    margin:0 0 10px;
+
+    font-size:28px;
+
+    color:#172033;
+}
+
+
+/* TEXT */
+
+.web-intro p{
+    max-width:650px;
+
+    margin:0 auto 12px;
+
+    color:#777;
+
+    font-size:15px;
+
+    line-height:1.7;
+}
+
+.web-intro .intro-main{
+    color:#555;
+
+    font-size:16px;
+
+    font-weight:600;
+}
+
+
+/* ================================= */
+/* FEATURES */
+/* ================================= */
+
+.intro-features{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:12px;
+
+    margin-top:25px;
+}
+
+
+.intro-feature{
+    padding:16px 8px;
+
+    background:#f5f3ff;
+
+    border-radius:14px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-height:105px;
+}
+
+
+.intro-feature span{
+    font-size:27px;
+
+    margin-bottom:7px;
+}
+
+
+.intro-feature strong{
+    font-size:13px;
+
+    color:#172033;
+}
+
+
+.intro-feature small{
+    margin-top:4px;
+
+    font-size:11px;
+
+    color:#888;
+
+    line-height:1.3;
+}
+
+
+/* ================================= */
+/* EXPLORE BUTTON */
+/* ================================= */
+
+.explore-btn{
+    margin-top:25px;
+
+    border:0;
+
+    padding:14px 54px;
+
+    border-radius:15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6c5ce7,
+            #00b894
+        );
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+
+.explore-btn:hover{
+    opacity:.9;
+}
+
+
+/* ================================= */
+/* DARK MODE */
+/* ================================= */
+
+body.dark .web-intro{
+    background:#191d2d;
+}
+
+body.dark .web-intro h2{
+    color:#f4f5ff;
+}
+
+body.dark .web-intro p{
+    color:#aeb4c8;
+}
+
+body.dark .web-intro .intro-main{
+    color:#c5c9d5;
+}
+
+body.dark .web-intro-icon{
+    background:#242039;
+}
+
+body.dark .intro-feature{
+    background:#242039;
+}
+
+body.dark .intro-feature strong{
+    color:#f4f5ff;
+}
+
+body.dark .intro-feature small{
+    color:#9fa5b8;
+}
+
+
+/* ================================= */
+/* MOBILE */
+/* ================================= */
+
+@media(max-width:600px){
+
+    .web-intro{
+        margin:20px 0px 25px;
+
+        padding:28px 18px;
+
+        border-radius:18px;
+    }
+
+    .web-intro h2{
+        font-size:22px;
+    }
+
+    .web-intro p{
+        font-size:14px;
+    }
+
+    .web-intro .intro-main{
+        font-size:15px;
+    }
+
+    .intro-features{
+        grid-template-columns:1fr 1fr;
+
+        gap:10px;
+    }
+
+    .intro-feature{
+        min-height:100px;
+
+        padding:14px 6px;
+    }
+
+    .intro-feature span{
+        font-size:25px;
+    }
+
+    .intro-feature strong{
+        font-size:12px;
+    }
+
+    .intro-feature small{
+        font-size:10px;
+    }
+
+}
+/* =========================================
+   DESKTOP INTRO WIDTH FIX
+   ========================================= */
+
+@media (min-width:901px){
+
+    .web-intro{
+        width:100%;
+        max-width:1100px;
+        margin:40px auto 30px;
+        padding:35px 40px;
+    }
+
+    .web-intro p{
+        max-width:850px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .intro-features{
+        width:100%;
+        max-width:1000px;
+        margin:25px auto 0;
+        grid-template-columns:repeat(4,1fr);
+        gap:16px;
+    }
+
+    .intro-feature{
+        min-height:115px;
+        padding:18px 10px;
+    }
+
+    .explore-btn{
+        margin-top:28px;
+    }
+}
+/* =========================================
+   DESKTOP EXPLORE BUTTON
+   ========================================= */
+
+@media (min-width:901px){
+
+    .explore-btn{
+        padding:14px 75px;
+        min-width:330px;
+    }
+
+}
+.site-footer{
+    max-width:750px;
+    margin:25px auto 9px;
+    padding:20px 15px;
+    text-align:center;
+    color:#777;
+    font-size:13px;
+}
+
+.footer-links{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:18px;
+    margin-bottom:12px;
+}
+
+.footer-links a{
+    color:#6c5ce7;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.footer-links a:hover{
+    text-decoration:underline;
+}
+
+.site-footer p{
+    margin:0;
+}
+
+.dark .site-footer{
+    color:#aaa;
+}
+
+.dark .footer-links a{
+    color:#9b91ff;
+}

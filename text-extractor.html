@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Text Extractor - Quick Tool</title>
+
+<!-- OCR -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<!-- PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    font-family:Arial,sans-serif;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+
+/* ========================= */
+/* FILE BOX */
+/* ========================= */
+
+.file-box{
+    margin-top:10px;
+}
+
+.file-label{
+    display:block;
+    text-align:center;
+    padding:30px 15px;
+    border:2px dashed #6c5ce7;
+    border-radius:10px;
+    background:#faf9ff;
+    cursor:pointer;
+}
+
+.file-label:hover{
+    background:#f1efff;
+}
+
+.file-icon{
+    font-size:40px;
+    margin-bottom:8px;
+}
+
+.file-label strong{
+    display:block;
+    font-size:17px;
+    margin-bottom:6px;
+}
+
+.file-label small{
+    color:#888;
+    font-size:12px;
+}
+
+#file{
+    display:none;
+}
+
+
+/* ========================= */
+/* TEXTAREA */
+/* ========================= */
+
+textarea{
+    width:100%;
+    min-height:230px;
+    margin-top:18px;
+    border:2px solid #eeeaff;
+    border-radius:10px;
+    padding:16px;
+    font-size:15px;
+    font-family:Arial,sans-serif;
+    resize:vertical;
+    outline:none;
+    color:#172033;
+    background:#faf9ff;
+    line-height:1.6;
+}
+
+textarea:focus{
+    border-color:#6c5ce7;
+}
+
+
+/* ========================= */
+/* BUTTONS */
+/* ========================= */
+
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:20px;
+}
+
+.action-btn{
+    border:0;
+    padding:15px 10px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.secondary{
+    background:#eeeaff;
+    color:#6c5ce7;
+}
+
+.action-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+
+/* ========================= */
+/* PROGRESS */
+/* ========================= */
+
+.progress-box{
+    display:none;
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+}
+
+.progress-text{
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+.progress{
+    width:100%;
+    height:10px;
+    background:#ddd9f5;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    transition:.2s;
+}
+
+
+/* ========================= */
+/* RESULT */
+/* ========================= */
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin:0 0 10px;
+}
+
+.result-info{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+
+/* ========================= */
+/* DARK MODE */
+/* ========================= */
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .file-label{
+    background:#15192a;
+    border-color:#8075ef;
+}
+
+body.dark .file-label small{
+    color:#aaa;
+}
+
+body.dark textarea{
+    background:#15192a;
+    border-color:#302d4d;
+    color:white;
+}
+
+body.dark .secondary{
+    background:#242039;
+    color:#aaa;
+}
+
+body.dark .progress-box{
+    background:#242039;
+}
+
+body.dark .progress{
+    background:#34304d;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+body.dark .result-info{
+    color:#ccc;
+}
+
+
+/* ========================= */
+/* DESKTOP */
+/* ========================= */
+
+@media(min-width:900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+}
+
+
+/* ========================= */
+/* MOBILE */
+/* ========================= */
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    textarea{
+        min-height:200px;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <div class="header-inner">
+
+        <button
+            class="back"
+            onclick="goHome()">
+            ‹
+        </button>
+
+        <div class="logo">
+            ⚡ Quick Tool
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+<div class="box">
+
+
+    <div class="title">
+
+        <div class="title-icon">
+            📝
+        </div>
+
+        <h1>
+            Text Extractor
+        </h1>
+
+        <p>
+            Extract and copy text from images, PDF and TXT files directly in your browser.
+        </p>
+
+    </div>
+
+
+    <!-- FILE -->
+
+    <div class="file-box">
+
+        <label
+            class="file-label"
+            for="file">
+
+            <div class="file-icon">
+                📁
+            </div>
+
+            <strong>
+                Choose File
+            </strong>
+
+            <small>
+                Image, PDF or TXT
+            </small>
+
+        </label>
+
+        <input
+            type="file"
+            id="file"
+            accept="image/*,.pdf,.txt,text/plain">
+
+    </div>
+
+
+    <!-- TEXT -->
+
+    <textarea
+        id="text"
+        placeholder="Extracted text will appear here..."></textarea>
+
+
+    <!-- BUTTONS -->
+
+    <div class="actions">
+
+        <button
+            class="action-btn"
+            id="extractBtn"
+            onclick="extractText()">
+
+            📄 Extract Text
+
+        </button>
+
+
+        <button
+            class="action-btn secondary"
+            onclick="copyText()">
+
+            📋 Copy
+
+        </button>
+
+
+        <button
+            class="action-btn secondary"
+            onclick="downloadText()">
+
+            ⬇️ Download TXT
+
+        </button>
+
+
+        <button
+            class="action-btn secondary"
+            onclick="clearText()">
+
+            🗑️ Clear
+
+        </button>
+
+    </div>
+
+
+    <!-- PROGRESS -->
+
+    <div
+        class="progress-box"
+        id="progressBox">
+
+        <div
+            class="progress-text"
+            id="progressText">
+
+            Processing...
+
+        </div>
+
+        <div class="progress">
+
+            <div
+                class="progress-bar"
+                id="progressBar">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div
+        class="result"
+        id="result">
+
+        <h2>
+            ✅ Text Ready
+        </h2>
+
+        <div
+            class="result-info"
+            id="resultInfo">
+        </div>
+
+    </div>
+
+
+</div>
+
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+
+<script>
+
+
+/* ========================= */
+/* PDF WORKER */
+/* ========================= */
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+/* ========================= */
+/* VARIABLES */
+/* ========================= */
+
+const fileInput =
+    document.getElementById("file");
+
+const textarea =
+    document.getElementById("text");
+
+const extractBtn =
+    document.getElementById("extractBtn");
+
+let selectedFile = null;
+
+
+/* ========================= */
+/* FILE SELECT */
+/* ========================= */
+
+fileInput.addEventListener(
+    "change",
+    function(){
+
+        selectedFile =
+            this.files[0];
+
+        if(!selectedFile){
+            return;
+        }
+
+        textarea.value = "";
+
+        document.getElementById("result")
+            .style.display = "none";
+
+        showMessage(
+            "📄 " + selectedFile.name + " selected.",
+            true
+        );
+
+    }
+);
+
+
+/* ========================= */
+/* EXTRACT TEXT */
+/* ========================= */
+
+async function extractText(){
+
+    if(!selectedFile){
+
+        showMessage(
+            "❌ Please select a file first.",
+            false
+        );
+
+        return;
+    }
+
+
+    extractBtn.disabled = true;
+
+
+    try{
+
+        const name =
+            selectedFile.name.toLowerCase();
+
+        const type =
+            selectedFile.type;
+
+
+        /* IMAGE */
+
+        if(type.startsWith("image/")){
+
+            await extractImage();
+
+        }
+
+
+        /* PDF */
+
+        else if(
+            type === "application/pdf" ||
+            name.endsWith(".pdf")
+        ){
+
+            await extractPDF();
+
+        }
+
+
+        /* TXT */
+
+        else if(
+            type === "text/plain" ||
+            name.endsWith(".txt")
+        ){
+
+            await extractTXT();
+
+        }
+
+
+        else{
+
+            showMessage(
+                "❌ Unsupported file type.",
+                false
+            );
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        hideProgress();
+
+        showMessage(
+            "❌ Text extraction failed.",
+            false
+        );
+
+    }
+
+
+    extractBtn.disabled = false;
+
+}
+
+
+/* ========================= */
+/* IMAGE OCR */
+/* ========================= */
+
+async function extractImage(){
+
+    showProgress(
+        "🔍 Starting OCR...",
+        1
+    );
+
+
+    const result =
+        await Tesseract.recognize(
+
+            selectedFile,
+
+            "eng+hin",
+
+            {
+
+                logger:function(data){
+
+                    if(data.status){
+
+                        let percent =
+                            Math.round(
+                                (data.progress || 0) * 100
+                            );
+
+
+                        if(percent < 1){
+                            percent = 1;
+                        }
+
+
+                        updateProgress(
+
+                            "🔍 " +
+                            data.status +
+                            " " +
+                            percent +
+                            "%",
+
+                            percent
+
+                        );
+
+                    }
+
+                }
+
+            }
+
+        );
+
+
+    textarea.value =
+        result.data.text.trim();
+
+
+    hideProgress();
+
+
+    showResult(
+        "Image text extracted successfully."
+    );
+
+}
+
+
+/* ========================= */
+/* PDF */
+/* ========================= */
+
+async function extractPDF(){
+
+    showProgress(
+        "📄 Reading PDF...",
+        5
+    );
+
+
+    const buffer =
+        await selectedFile.arrayBuffer();
+
+
+    const pdf =
+        await pdfjsLib
+        .getDocument({
+            data:buffer
+        })
+        .promise;
+
+
+    let finalText = "";
+
+
+    for(
+        let pageNumber=1;
+        pageNumber<=pdf.numPages;
+        pageNumber++
+    ){
+
+        const page =
+            await pdf.getPage(
+                pageNumber
+            );
+
+
+        const content =
+            await page.getTextContent();
+
+
+        const pageText =
+            content.items
+            .map(item => item.str)
+            .join(" ");
+
+
+        finalText +=
+            pageText +
+            "\n\n";
+
+
+        const percent =
+            Math.round(
+                (pageNumber /
+                pdf.numPages) * 100
+            );
+
+
+        updateProgress(
+
+            "📄 Page " +
+            pageNumber +
+            " / " +
+            pdf.numPages,
+
+            percent
+
+        );
+
+    }
+
+
+    textarea.value =
+        finalText.trim();
+
+
+    hideProgress();
+
+
+    if(finalText.trim()){
+
+        showResult(
+            "PDF text extracted successfully."
+        );
+
+    }
+    else{
+
+        showMessage(
+            "⚠️ No selectable text found in this PDF. Scanned PDF needs OCR.",
+            false
+        );
+
+    }
+
+}
+
+
+/* ========================= */
+/* TXT */
+/* ========================= */
+
+async function extractTXT(){
+
+    showProgress(
+        "📝 Reading TXT file...",
+        30
+    );
+
+
+    const text =
+        await selectedFile.text();
+
+
+    textarea.value =
+        text;
+
+
+    updateProgress(
+        "📝 Complete",
+        100
+    );
+
+
+    setTimeout(
+        hideProgress,
+        300
+    );
+
+
+    showResult(
+        "TXT file loaded successfully."
+    );
+
+}
+
+
+/* ========================= */
+/* RESULT */
+/* ========================= */
+
+function showResult(message){
+
+    const text =
+        textarea.value;
+
+
+    const words =
+        text.trim()
+        ? text.trim().split(/\s+/).length
+        : 0;
+
+
+    document.getElementById("result")
+        .style.display = "block";
+
+
+    document.getElementById("resultInfo")
+        .innerHTML =
+
+        message +
+        "<br><br>" +
+
+        "Characters: <strong>" +
+        text.length +
+        "</strong><br>" +
+
+        "Words: <strong>" +
+        words +
+        "</strong>";
+
+}
+
+
+/* ========================= */
+/* COPY */
+/* ========================= */
+
+async function copyText(){
+
+    if(!textarea.value.trim()){
+
+        showMessage(
+            "❌ Nothing to copy.",
+            false
+        );
+
+        return;
+    }
+
+
+    try{
+
+        await navigator.clipboard
+            .writeText(textarea.value);
+
+        showMessage(
+            "✅ Text copied successfully!",
+            true
+        );
+
+    }
+
+    catch(error){
+
+        textarea.select();
+
+        document.execCommand("copy");
+
+        showMessage(
+            "✅ Text copied successfully!",
+            true
+        );
+
+    }
+
+}
+
+
+/* ========================= */
+/* DOWNLOAD */
+/* ========================= */
+
+function downloadText(){
+
+    if(!textarea.value.trim()){
+
+        showMessage(
+            "❌ Nothing to download.",
+            false
+        );
+
+        return;
+    }
+
+
+    const blob =
+        new Blob(
+            [textarea.value],
+            {
+                type:
+                "text/plain;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const a =
+        document.createElement("a");
+
+
+    a.href = url;
+
+    a.download =
+        "quick-tool-extracted-text.txt";
+
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+
+    URL.revokeObjectURL(url);
+
+
+    showMessage(
+        "✅ TXT downloaded successfully!",
+        true
+    );
+
+}
+
+
+/* ========================= */
+/* CLEAR */
+/* ========================= */
+
+function clearText(){
+
+    textarea.value = "";
+
+    fileInput.value = "";
+
+    selectedFile = null;
+
+    document.getElementById("result")
+        .style.display = "none";
+
+    hideProgress();
+
+}
+
+
+/* ========================= */
+/* PROGRESS */
+/* ========================= */
+
+function showProgress(text,percent){
+
+    document.getElementById("progressBox")
+        .style.display = "block";
+
+
+    updateProgress(
+        text,
+        percent
+    );
+
+}
+
+
+function updateProgress(text,percent){
+
+    document.getElementById("progressText")
+        .textContent = text;
+
+
+    document.getElementById("progressBar")
+        .style.width =
+        percent + "%";
+
+}
+
+
+function hideProgress(){
+
+    document.getElementById("progressBox")
+        .style.display = "none";
+
+}
+
+
+/* ========================= */
+/* MESSAGE */
+/* ========================= */
+
+function showMessage(text,success){
+
+    const result =
+        document.getElementById("result");
+
+
+    result.style.display =
+        "block";
+
+
+    result.style.background =
+        success
+        ? "#eafff7"
+        : "#fff0f0";
+
+
+    const info =
+        document.getElementById("resultInfo");
+
+
+    info.innerHTML =
+        text;
+
+}
+
+
+/* ========================= */
+/* HOME */
+/* ========================= */
+
+function goHome(){
+
+    window.location.href =
+        "tool.html";
+
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+
+</html>

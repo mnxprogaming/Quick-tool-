@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Word Counter - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+    font-family:Arial,sans-serif;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+textarea{
+    width:100%;
+    min-height:220px;
+    padding:16px;
+    border:2px solid #eee;
+    border-radius:10px;
+    resize:vertical;
+    font-size:16px;
+    line-height:1.6;
+    outline:none;
+    font-family:Arial,sans-serif;
+}
+
+textarea:focus{
+    border-color:#6c5ce7;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin-top:18px;
+}
+
+.stat{
+    background:#f5f3ff;
+    border-radius:17px;
+    padding:18px 10px;
+    text-align:center;
+}
+
+.stat strong{
+    display:block;
+    font-size:24px;
+    color:#6c5ce7;
+    margin-bottom:5px;
+}
+
+.stat span{
+    font-size:13px;
+    color:#777;
+}
+
+.clear-btn{
+    width:100%;
+    border:none;
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#eeeaff;
+    color:#6c5ce7;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    textarea{
+        min-height:190px;
+    }
+}
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark textarea{
+    background:#15192a;
+    color:white;
+    border-color:#444;
+}
+
+body.dark .stat{
+    background:#242039;
+}
+
+body.dark .stat span{
+    color:#aaa;
+}
+
+body.dark .clear-btn{
+    background:#242039;
+    color:#aaa;
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">⚡ Quick Tool</div>
+
+    </div>
+
+</header>
+
+<div class="container">
+
+<div class="box">
+
+    <div class="title">
+
+        <div class="title-icon">📝</div>
+
+        <h1>Word Counter</h1>
+
+        <p>Count words, characters, sentences and paragraphs instantly.</p>
+
+    </div>
+
+    <textarea
+        id="text"
+        placeholder="Start typing or paste your text here..."
+        oninput="countText()"
+    ></textarea>
+
+    <div class="stats">
+
+        <div class="stat">
+            <strong id="words">0</strong>
+            <span>Words</span>
+        </div>
+
+        <div class="stat">
+            <strong id="characters">0</strong>
+            <span>Characters</span>
+        </div>
+
+        <div class="stat">
+            <strong id="sentences">0</strong>
+            <span>Sentences</span>
+        </div>
+
+        <div class="stat">
+            <strong id="paragraphs">0</strong>
+            <span>Paragraphs</span>
+        </div>
+
+    </div>
+
+    <button
+        class="clear-btn"
+        onclick="clearText()"
+    >
+        Clear Text
+    </button>
+
+</div>
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+function goHome(){
+
+    window.location.href="tool.html";
+
+}
+
+function countText(){
+
+    const text =
+        document.getElementById("text").value;
+
+    const words =
+        text.trim()
+        ? text.trim().split(/\s+/).length
+        : 0;
+
+    const characters =
+        text.length;
+
+    const sentences =
+        text.trim()
+        ? text.split(/[.!?]+/)
+              .filter(s => s.trim().length > 0)
+              .length
+        : 0;
+
+    const paragraphs =
+        text.trim()
+        ? text.split(/\n\s*\n/)
+              .filter(p => p.trim().length > 0)
+              .length
+        : 0;
+
+    document.getElementById("words").innerText =
+        words;
+
+    document.getElementById("characters").innerText =
+        characters;
+
+    document.getElementById("sentences").innerText =
+        sentences;
+
+    document.getElementById("paragraphs").innerText =
+        paragraphs;
+
+}
+
+function clearText(){
+
+    document.getElementById("text").value="";
+
+    countText();
+
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

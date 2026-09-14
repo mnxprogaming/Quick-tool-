@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF to JPG - Quick Tool</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+    position:relative;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 10px 30px rgba(40,50,100,.10);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.upload{
+    display:block;
+    text-align:center;
+    border:2px dashed #6c5ce7;
+    border-radius:10px;
+    padding:35px 15px;
+    background:#faf9ff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload:hover{
+    background:#f1efff;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.upload strong{
+    display:block;
+    font-size:17px;
+    margin-bottom:7px;
+}
+
+.upload small{
+    color:#888;
+    font-size:12px;
+}
+
+#file{
+    display:none;
+}
+
+.preview{
+    display:none;
+    margin-top:22px;
+    text-align:center;
+}
+
+.preview-title{
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.preview canvas{
+    max-width:100%;
+    max-height:300px;
+    border-radius:10px;
+    display:block;
+    margin:auto;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+.info{
+    display:none;
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+}
+
+.settings{
+    display:none;
+    margin-top:20px;
+}
+
+.settings label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+#quality{
+    width:100%;
+    accent-color:#6c5ce7;
+}
+
+.convert-btn{
+    display:none;
+    width:100%;
+    border:none;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.convert-btn:active{
+    transform:scale(.98);
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.result-info{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.download{
+    display:inline-block;
+    margin-top:15px;
+    padding:14px 25px;
+    border-radius:15px;
+    background:#00b894;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .upload{
+    background:#15192a;
+    border-color:#8075ef;
+}
+
+body.dark .upload small{
+    color:#aaa;
+}
+
+body.dark .info{
+    background:#242039;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+body.dark .result-info{
+    color:#ccc;
+}
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .upload{
+        padding:30px 10px;
+    }
+
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">
+            ⚡ Quick Tool
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+<div class="box">
+
+    <div class="title">
+
+        <div class="title-icon">
+            📑
+        </div>
+
+        <h1>PDF to JPG</h1>
+
+        <p>
+            Convert PDF pages into JPG images quickly and easily.
+        </p>
+
+    </div>
+
+
+    <label class="upload" for="file">
+
+        <div class="upload-icon">
+            📄
+        </div>
+
+        <strong>
+            Choose PDF
+        </strong>
+
+        <small>
+            PDF files • Convert pages to JPG
+        </small>
+
+    </label>
+
+    <input
+        type="file"
+        id="file"
+        accept="application/pdf"
+    >
+
+
+    <div class="preview" id="preview">
+
+        <div class="preview-title">
+            PDF Page Preview
+        </div>
+
+        <canvas id="previewCanvas"></canvas>
+
+    </div>
+
+
+    <div class="info" id="info"></div>
+
+
+    <div class="settings" id="settings">
+
+        <label>
+            JPG Quality:
+            <span id="qualityValue">90%</span>
+        </label>
+
+        <input
+            type="range"
+            id="quality"
+            min="50"
+            max="100"
+            value="90"
+        >
+
+    </div>
+
+
+    <button
+        class="convert-btn"
+        id="convertBtn"
+        onclick="convertPDF()">
+
+         Convert PDF to JPG
+
+    </button>
+
+
+    <div class="result" id="result">
+
+        <h2>
+            ✅ Conversion Complete
+        </h2>
+
+        <div
+            class="result-info"
+            id="resultInfo">
+        </div>
+
+        <a
+            id="download"
+            class="download"
+            download="quicktool-page.jpg">
+
+            ⬇️ Download JPG
+
+        </a>
+
+    </div>
+
+</div>
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</main>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+let selectedFile = null;
+let pdfDocument = null;
+let firstPageCanvas = null;
+
+
+/* FILE SELECT */
+
+document.getElementById("file").addEventListener("change", async function(){
+
+    const file = this.files[0];
+
+    if(!file){
+        return;
+    }
+
+    selectedFile = file;
+
+    if(file.size > 20 * 1024 * 1024){
+
+        alert("Please choose a PDF smaller than 20MB.");
+
+        this.value = "";
+
+        return;
+    }
+
+    try{
+
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+        pdfDocument =
+            await pdfjsLib.getDocument({
+                data:arrayBuffer
+            }).promise;
+
+
+        document.getElementById("info").innerHTML =
+
+            "📄 File: <b>" +
+            file.name +
+            "</b><br>" +
+
+            "📦 PDF Size: <b>" +
+            formatSize(file.size) +
+            "</b><br>" +
+
+            "📑 Pages: <b>" +
+            pdfDocument.numPages +
+            "</b>";
+
+
+        document.getElementById("info").style.display =
+            "block";
+
+
+        document.getElementById("settings").style.display =
+            "block";
+
+
+        document.getElementById("convertBtn").style.display =
+            "block";
+
+
+        document.getElementById("result").style.display =
+            "none";
+
+
+        await showPreview();
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("Could not read this PDF. Please try another PDF.");
+
+        this.value = "";
+
+    }
+
+});
+
+
+/* QUALITY */
+
+document.getElementById("quality").addEventListener("input",function(){
+
+    document.getElementById("qualityValue").innerText =
+        this.value + "%";
+
+});
+
+
+/* PREVIEW */
+
+async function showPreview(){
+
+    const page =
+        await pdfDocument.getPage(1);
+
+    const viewport =
+        page.getViewport({
+            scale:1.3
+        });
+
+
+    const canvas =
+        document.getElementById("previewCanvas");
+
+    const context =
+        canvas.getContext("2d");
+
+
+    canvas.width =
+        viewport.width;
+
+    canvas.height =
+        viewport.height;
+
+
+    await page.render({
+
+        canvasContext:context,
+        viewport:viewport
+
+    }).promise;
+
+
+    document.getElementById("preview").style.display =
+        "block";
+
+
+    firstPageCanvas =
+        canvas;
+
+}
+
+
+/* CONVERT */
+
+async function convertPDF(){
+
+    if(!pdfDocument){
+
+        alert("Please choose a PDF first.");
+
+        return;
+    }
+
+
+    const quality =
+        parseInt(
+            document.getElementById("quality").value
+        ) / 100;
+
+
+    const page =
+        await pdfDocument.getPage(1);
+
+
+    const viewport =
+        page.getViewport({
+            scale:2
+        });
+
+
+    const canvas =
+        document.createElement("canvas");
+
+
+    const context =
+        canvas.getContext("2d");
+
+
+    canvas.width =
+        viewport.width;
+
+    canvas.height =
+        viewport.height;
+
+
+    context.fillStyle =
+        "white";
+
+    context.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    await page.render({
+
+        canvasContext:context,
+        viewport:viewport
+
+    }).promise;
+
+
+    canvas.toBlob(function(blob){
+
+        if(!blob){
+
+            alert("Conversion failed.");
+
+            return;
+        }
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const download =
+            document.getElementById("download");
+
+
+        download.href =
+            url;
+
+
+        download.download =
+            "quicktool-page-1.jpg";
+
+
+        document.getElementById("resultInfo").innerHTML =
+
+            "PDF Pages: <b>" +
+            pdfDocument.numPages +
+            "</b><br>" +
+
+            "Converted Page: <b>1</b><br>" +
+
+            "JPG Size: <b>" +
+            formatSize(blob.size) +
+            "</b>";
+
+
+        document.getElementById("result").style.display =
+            "block";
+
+
+        document.getElementById("result").scrollIntoView({
+
+            behavior:"smooth"
+
+        });
+
+
+    },"image/jpeg",quality);
+
+}
+
+
+/* FILE SIZE */
+
+function formatSize(bytes){
+
+    if(bytes < 1024){
+
+        return bytes + " B";
+
+    }
+
+    if(bytes < 1024 * 1024){
+
+        return (
+            bytes / 1024
+        ).toFixed(1) + " KB";
+
+    }
+
+    return (
+        bytes / (1024 * 1024)
+    ).toFixed(2) + " MB";
+
+}
+
+
+/* HOME */
+
+function goHome(){
+
+    window.location.href =
+        "tool.html";
+
+}
+
+
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

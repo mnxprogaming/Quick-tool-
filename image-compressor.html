@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Compressor - Quick Tool</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+}
+
+
+/* ============================= */
+/* HEADER */
+/* ============================= */
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+
+/* ============================= */
+/* MAIN */
+/* ============================= */
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+    position:relative;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 10px 30px rgba(40,50,100,.10);
+}
+
+
+/* ============================= */
+/* TITLE */
+/* ============================= */
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+
+/* ============================= */
+/* UPLOAD */
+/* ============================= */
+
+.upload{
+    display:block;
+    text-align:center;
+    border:2px dashed #6c5ce7;
+    border-radius:10px;
+    padding:35px 15px;
+    background:#faf9ff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload:hover{
+    background:#f1efff;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:14px;
+}
+
+.upload strong{
+    display:block;
+    font-size:17px;
+    margin-bottom:7px;
+}
+
+.upload small{
+    color:#888;
+    font-size:12px;
+}
+
+#file{
+    display:none;
+}
+
+
+/* ============================= */
+/* PREVIEW */
+/* ============================= */
+
+.preview{
+    display:none;
+    margin-top:22px;
+    text-align:center;
+}
+
+.preview-title{
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.preview img{
+    max-width:100%;
+    max-height:300px;
+    border-radius:10px;
+    display:block;
+    margin:auto;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+
+/* ============================= */
+/* INFO */
+/* ============================= */
+
+.info{
+    display:none;
+    margin-top:18px;
+    padding:15px;
+    border-radius:10px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.7;
+}
+
+
+/* ============================= */
+/* ADJUST BUTTON */
+/* ============================= */
+
+.adjust-btn{
+    display:none;
+    width:100%;
+    border:none;
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#eeeaff;
+    color:#5547c7;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.adjust-btn:active{
+    transform:scale(.98);
+}
+
+
+/* ============================= */
+/* SETTINGS */
+/* ============================= */
+
+.settings{
+    display:none;
+    margin-top:18px;
+    padding:18px;
+    border-radius:10px;
+    background:#f7f5ff;
+}
+
+
+/* ============================= */
+/* QUALITY */
+/* ============================= */
+
+.quality-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+#qualityValue{
+    color:#6c5ce7;
+}
+
+#quality{
+    width:100%;
+    accent-color:#6c5ce7;
+}
+
+
+/* ============================= */
+/* MANUAL SIZE */
+/* ============================= */
+
+.manual-title{
+    font-weight:bold;
+    margin-top:20px;
+    margin-bottom:10px;
+}
+
+.manual-row{
+    display:flex;
+    gap:10px;
+}
+
+.manual-row input{
+    flex:1;
+    min-width:0;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:16px;
+    outline:none;
+    background:white;
+    color:#172033;
+}
+
+.manual-row input:focus{
+    border-color:#6c5ce7;
+}
+
+.manual-row select{
+    width:100px;
+    padding:14px 10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:16px;
+    background:white;
+    color:#172033;
+    outline:none;
+}
+
+.manual-help{
+    margin-top:8px;
+    color:#888;
+    font-size:12px;
+    line-height:1.5;
+}
+
+
+/* ============================= */
+/* COMPRESS BUTTON */
+/* ============================= */
+
+.compress-btn{
+    display:none;
+    width:100%;
+    border:none;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.compress-btn:active{
+    transform:scale(.98);
+}
+
+
+/* ============================= */
+/* RESULT */
+/* ============================= */
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.result-info{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.download{
+    display:inline-block;
+    margin-top:15px;
+    padding:14px 25px;
+    border-radius:15px;
+    background:#00b894;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+
+/* ============================= */
+/* DARK MODE */
+/* ============================= */
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .upload{
+    background:#15192a;
+    border-color:#8075ef;
+}
+
+body.dark .upload small{
+    color:#aaa;
+}
+
+body.dark .info{
+    background:#242039;
+}
+
+body.dark .adjust-btn{
+    background:#242039;
+    color:#aaa5ff;
+}
+
+body.dark .settings{
+    background:#242039;
+}
+
+body.dark .manual-row input,
+body.dark .manual-row select{
+    background:#15192a;
+    color:white;
+    border-color:#33384d;
+}
+
+body.dark .manual-help{
+    color:#aaa;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+body.dark .result-info{
+    color:#ccc;
+}
+
+
+/* ============================= */
+/* MOBILE */
+/* ============================= */
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .upload{
+        padding:30px 10px;
+    }
+
+    .manual-row{
+        gap:8px;
+    }
+
+    .manual-row select{
+        width:90px;
+    }
+
+}
+
+
+/* ============================= */
+/* DESKTOP RESPONSIVE */
+/* ============================= */
+
+@media(min-width:900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+}
+
+
+/* ============================= */
+/* TOOL SUGGESTIONS */
+/* ============================= */
+
+.tool-suggestions{
+    margin-top:25px;
+}
+
+.suggestions-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+}
+
+.suggestions-title span{
+    font-size:22px;
+}
+
+.suggestions-title h2{
+    margin:0;
+    font-size:20px;
+    color:#172033;
+}
+
+.suggestions-grid{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.suggestion-card{
+    background:#fff;
+    border-radius:18px;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    box-shadow:0 5px 18px rgba(0,0,0,.07);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.suggestion-card:hover{
+    transform:translateY(-2px);
+}
+
+.suggestion-icon{
+    width:48px;
+    height:48px;
+    flex-shrink:0;
+    border-radius:15px;
+    background:#eeeaff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+}
+
+.suggestion-content{
+    flex:1;
+    min-width:0;
+}
+
+.suggestion-content h3{
+    margin:0 0 4px;
+    font-size:16px;
+    color:#172033;
+}
+
+.suggestion-content p{
+    margin:0;
+    font-size:12px;
+    color:#777;
+    line-height:1.4;
+}
+
+.suggestion-arrow{
+    font-size:24px;
+    color:#6c5ce7;
+}
+
+body.dark .suggestions-title h2{
+    color:#f4f5ff;
+}
+
+body.dark .suggestion-card{
+    background:#191d2d;
+}
+
+body.dark .suggestion-content h3{
+    color:#f4f5ff;
+}
+
+body.dark .suggestion-content p{
+    color:#aeb4c8;
+}
+
+body.dark .suggestion-icon{
+    background:#242039;
+}
+
+@media(max-width:500px){
+
+    .suggestions-title h2{
+        font-size:18px;
+    }
+
+    .suggestion-card{
+        padding:13px;
+        border-radius:16px;
+    }
+
+    .suggestion-icon{
+        width:44px;
+        height:44px;
+        font-size:22px;
+    }
+
+    .suggestion-content h3{
+        font-size:15px;
+    }
+
+}
+
+</style>
+<link rel="stylesheet" href="intro-footer.css">
+<link rel="stylesheet" href="tool-suggestions.css">
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <button
+            class="back"
+            type="button"
+            onclick="goHome()">
+            ‹
+        </button>
+
+        <div class="logo">
+            ⚡ Quick Tool
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+
+<div class="box">
+
+
+    <div class="title">
+
+        <div class="title-icon">
+            🗜️
+        </div>
+
+        <h1>
+            Image Compressor
+        </h1>
+
+        <p>
+            Reduce image file size quickly while keeping good quality.
+        </p>
+
+    </div>
+
+
+    <!-- UPLOAD -->
+
+    <label
+        class="upload"
+        for="file">
+
+        <div class="upload-icon">
+            🖼️
+        </div>
+
+        <strong>
+            Choose Image
+        </strong>
+
+        <small>
+            JPG, JPEG or PNG • Max recommended 10MB
+        </small>
+
+    </label>
+
+
+    <input
+        type="file"
+        id="file"
+        accept="image/jpeg,image/png"
+    >
+
+
+    <!-- PREVIEW -->
+
+    <div
+        class="preview"
+        id="preview">
+
+        <div class="preview-title">
+            Image Preview
+        </div>
+
+        <img
+            id="previewImg"
+            alt="Preview">
+
+    </div>
+
+
+    <!-- INFO -->
+
+    <div
+        class="info"
+        id="info">
+    </div>
+
+
+    <!-- ADJUST -->
+
+    <button
+        class="adjust-btn"
+        id="adjustBtn"
+        type="button"
+        onclick="toggleAdjust()">
+
+        ⚙️ Adjust Compression
+
+    </button>
+
+
+    <!-- SETTINGS -->
+
+    <div
+        class="settings"
+        id="settings">
+
+
+        <div class="quality-title">
+
+            <span>
+                Compression Quality
+            </span>
+
+            <span id="qualityValue">
+                70%
+            </span>
+
+        </div>
+
+
+        <input
+            type="range"
+            id="quality"
+            min="10"
+            max="95"
+            value="70"
+        >
+
+
+        <div class="manual-title">
+            📦 Manual Target Size
+        </div>
+
+
+        <div class="manual-row">
+
+            <input
+                type="number"
+                id="targetSize"
+                min="1"
+                step="1"
+                placeholder="Example: 500"
+            >
+
+
+            <select id="targetUnit">
+
+                <option value="KB">
+                    KB
+                </option>
+
+                <option value="MB">
+                    MB
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="manual-help">
+            Enter target size if you want a specific output size.
+            Leave empty to use the quality slider.
+        </div>
+
+
+    </div>
+
+
+    <!-- COMPRESS -->
+
+    <button
+        class="compress-btn"
+        id="compressBtn"
+        type="button"
+        onclick="compressImage()">
+
+        Compress Image
+
+    </button>
+
+
+    <!-- RESULT -->
+
+    <div
+        class="result"
+        id="result">
+
+        <h2>
+            ✅ Compression Complete
+        </h2>
+
+        <div
+            class="result-info"
+            id="resultInfo">
+        </div>
+
+        <a
+            id="download"
+            class="download"
+            download="quicktool-compressed.jpg">
+
+            ⬇️ Download Image
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<div
+    id="toolSuggestions"
+    class="tool-suggestions">
+</div>
+<div id="introSection"></div>
+</main>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+<script>
+
+let selectedFile = null;
+let originalImage = null;
+
+
+/* ============================= */
+/* FILE SELECT */
+/* ============================= */
+
+document.getElementById("file").addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(!file){
+        return;
+    }
+
+    if(file.size > 10 * 1024 * 1024){
+
+        alert("Please choose an image smaller than 10MB.");
+
+        this.value = "";
+
+        return;
+    }
+
+    selectedFile = file;
+
+    const preview =
+        document.getElementById("preview");
+
+    const previewImg =
+        document.getElementById("previewImg");
+
+    const info =
+        document.getElementById("info");
+
+    const adjustBtn =
+        document.getElementById("adjustBtn");
+
+    const settings =
+        document.getElementById("settings");
+
+    const compressBtn =
+        document.getElementById("compressBtn");
+
+    const result =
+        document.getElementById("result");
+
+
+    /* Preview */
+
+    const url =
+        URL.createObjectURL(file);
+
+    previewImg.src = url;
+
+    preview.style.display = "block";
+
+
+    /* File information */
+
+    info.innerHTML =
+        "📄 File: <b>" +
+        file.name +
+        "</b><br>" +
+        "📦 Original Size: <b>" +
+        formatSize(file.size) +
+        "</b>";
+
+    info.style.display = "block";
+
+
+    /* Show controls */
+
+    adjustBtn.style.display = "block";
+
+    settings.style.display = "block";
+
+    compressBtn.style.display = "block";
+
+    result.style.display = "none";
+
+
+    /* Load image */
+
+    const img = new Image();
+
+    img.onload = function(){
+
+        originalImage = img;
+
+    };
+
+    img.src = url;
+
+});
+
+
+/* ============================= */
+/* ADJUST BUTTON */
+/* ============================= */
+
+function toggleAdjust(){
+
+    const settings =
+        document.getElementById("settings");
+
+    const btn =
+        document.getElementById("adjustBtn");
+
+    if(settings.style.display === "none"){
+
+        settings.style.display = "block";
+
+        btn.innerText =
+            "⚙️ Hide Compression Settings";
+
+    }
+    else{
+
+        settings.style.display = "none";
+
+        btn.innerText =
+            "⚙️ Adjust Compression";
+
+    }
+
+}
+
+
+/* ============================= */
+/* QUALITY SLIDER */
+/* ============================= */
+
+document.getElementById("quality").addEventListener(
+    "input",
+    function(){
+
+        document.getElementById("qualityValue").innerText =
+            this.value + "%";
+
+    }
+);
+
+
+/* ============================= */
+/* COMPRESS IMAGE */
+/* ============================= */
+
+function compressImage(){
+
+    if(!selectedFile){
+
+        alert("Please select an image first.");
+
+        return;
+    }
+
+    if(!originalImage){
+
+        alert("Image is still loading. Please try again.");
+
+        return;
+    }
+
+
+    const quality =
+        parseInt(
+            document.getElementById("quality").value
+        ) / 100;
+
+
+    const targetInput =
+        document.getElementById("targetSize").value.trim();
+
+
+    const targetUnit =
+        document.getElementById("targetUnit").value;
+
+
+    /*
+       If manual target size is empty,
+       use quality slider.
+    */
+
+    if(!targetInput){
+
+        compressWithQuality(quality);
+
+        return;
+    }
+
+
+    const targetNumber =
+        parseFloat(targetInput);
+
+
+    if(!targetNumber || targetNumber <= 0){
+
+        alert("Please enter a valid target size.");
+
+        return;
+    }
+
+
+    let targetBytes;
+
+
+    if(targetUnit === "MB"){
+
+        targetBytes =
+            targetNumber *
+            1024 *
+            1024;
+
+    }
+    else{
+
+        targetBytes =
+            targetNumber *
+            1024;
+
+    }
+
+
+    compressToTarget(
+        targetBytes,
+        quality
+    );
+
+}
+
+
+/* ============================= */
+/* QUALITY COMPRESSION */
+/* ============================= */
+
+function compressWithQuality(quality){
+
+    const canvas =
+        createCanvas();
+
+
+    canvas.toBlob(
+
+        function(blob){
+
+            if(!blob){
+
+                alert("Compression failed.");
+
+                return;
+            }
+
+
+            showResult(blob);
+
+        },
+
+        "image/jpeg",
+
+        quality
+
+    );
+
+}
+
+
+/* ============================= */
+/* TARGET SIZE COMPRESSION */
+/* ============================= */
+
+function compressToTarget(
+    targetBytes,
+    startingQuality
+){
+
+    const canvas =
+        createCanvas();
+
+
+    /*
+       Binary search quality
+       to get close to target size.
+    */
+
+    let low = 0.05;
+
+    let high = startingQuality;
+
+    let bestBlob = null;
+
+    let attempts = 0;
+
+
+    function testQuality(){
+
+        attempts++;
+
+
+        const quality =
+            (low + high) / 2;
+
+
+        canvas.toBlob(
+
+            function(blob){
+
+                if(!blob){
+
+                    alert("Compression failed.");
+
+                    return;
+                }
+
+
+                if(
+                    blob.size <= targetBytes
+                ){
+
+                    bestBlob = blob;
+
+                    low = quality;
+
+                }
+                else{
+
+                    high = quality;
+
+                }
+
+
+                if(
+                    attempts < 8 &&
+                    high - low > 0.01
+                ){
+
+                    testQuality();
+
+                }
+                else{
+
+                    /*
+                       If no quality level
+                       reached target size,
+                       use lowest tested result.
+                    */
+
+                    if(!bestBlob){
+
+                        canvas.toBlob(
+
+                            function(lowBlob){
+
+                                showResult(lowBlob);
+
+                            },
+
+                            "image/jpeg",
+
+                            0.05
+
+                        );
+
+                    }
+                    else{
+
+                        showResult(bestBlob);
+
+                    }
+
+                }
+
+            },
+
+            "image/jpeg",
+
+            quality
+
+        );
+
+    }
+
+
+    testQuality();
+
+}
+
+
+/* ============================= */
+/* CREATE CANVAS */
+/* ============================= */
+
+function createCanvas(){
+
+    const canvas =
+        document.createElement("canvas");
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    let width =
+        originalImage.width;
+
+    let height =
+        originalImage.height;
+
+
+    /*
+       Maximum width:
+       1600px
+    */
+
+    const maxWidth = 1600;
+
+
+    if(width > maxWidth){
+
+        const ratio =
+            maxWidth / width;
+
+        width = maxWidth;
+
+        height =
+            Math.round(
+                height * ratio
+            );
+
+    }
+
+
+    canvas.width = width;
+
+    canvas.height = height;
+
+
+    ctx.drawImage(
+        originalImage,
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    return canvas;
+
+}
+
+
+/* ============================= */
+/* SHOW RESULT */
+/* ============================= */
+
+function showResult(blob){
+
+    if(!blob){
+
+        alert("Compression failed.");
+
+        return;
+    }
+
+
+    const originalSize =
+        selectedFile.size;
+
+
+    const compressedSize =
+        blob.size;
+
+
+    const saved =
+        Math.max(
+            0,
+            Math.round(
+                (
+                    1 -
+                    compressedSize /
+                    originalSize
+                ) * 100
+            )
+        );
+
+
+    const downloadUrl =
+        URL.createObjectURL(blob);
+
+
+    const download =
+        document.getElementById("download");
+
+
+    download.href =
+        downloadUrl;
+
+
+    download.download =
+        "quicktool-compressed.jpg";
+
+
+    document.getElementById(
+        "resultInfo"
+    ).innerHTML =
+
+        "Original Size: <b>" +
+        formatSize(originalSize) +
+        "</b><br>" +
+
+        "Compressed Size: <b>" +
+        formatSize(compressedSize) +
+        "</b><br>" +
+
+        "Space Saved: <b>" +
+        saved +
+        "%</b>";
+
+
+    document.getElementById(
+        "result"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "result"
+    ).scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+/* ============================= */
+/* FILE SIZE */
+/* ============================= */
+
+function formatSize(bytes){
+
+    if(bytes < 1024){
+
+        return bytes + " B";
+
+    }
+
+
+    if(bytes < 1024 * 1024){
+
+        return (
+            bytes / 1024
+        ).toFixed(1) + " KB";
+
+    }
+
+
+    return (
+        bytes /
+        (1024 * 1024)
+    ).toFixed(2) + " MB";
+
+}
+
+
+/* ============================= */
+/* HOME */
+/* ============================= */
+
+function goHome(){
+
+    window.location.href =
+        "tool.html";
+
+}
+
+
+/* ============================= */
+/* DARK MODE */
+/* ============================= */
+
+if(
+    localStorage.getItem("theme") === "dark"
+){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    font-family:Arial,sans-serif;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.calculator{
+    max-width:520px;
+    margin:auto;
+}
+
+.display{
+    width:100%;
+    min-height:80px;
+    padding:18px;
+    border:0;
+    border-radius:18px;
+    background:#172033;
+    color:white;
+    font-size:28px;
+    text-align:right;
+    outline:none;
+    margin-bottom:15px;
+}
+
+.display::placeholder{
+    color:#aaa;
+}
+
+.mode{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:12px;
+}
+
+.mode button{
+    border:0;
+    padding:9px 14px;
+    border-radius:12px;
+    background:#eeeaff;
+    color:#6c5ce7;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.buttons{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:9px;
+}
+
+.buttons button{
+    border:0;
+    min-height:52px;
+    border-radius:14px;
+    background:#f1efff;
+    color:#172033;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.buttons button:active{
+    transform:scale(.96);
+}
+
+.buttons .operator{
+    background:#e6e2ff;
+    color:#5d4bd8;
+}
+
+.buttons .danger{
+    background:#ffe8e8;
+    color:#d63031;
+}
+
+.buttons .equal{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+}
+
+.buttons .wide{
+    grid-column:span 2;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin:0 0 10px;
+}
+
+.result-info{
+    color:#555;
+    font-size:15px;
+    line-height:1.8;
+    word-break:break-word;
+}
+
+.error{
+    display:none;
+    margin-top:15px;
+    padding:14px;
+    border-radius:14px;
+    background:#fff0f0;
+    color:#d63031;
+    text-align:center;
+    font-size:14px;
+}
+
+.note{
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    color:#666;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.dark{
+    background:#101321;
+    color:white;
+}
+
+.dark .box{
+    background:#191d2d;
+}
+
+.dark .title p{
+    color:#aaa;
+}
+
+.dark .buttons button{
+    background:#242039;
+    color:white;
+}
+
+.dark .buttons .operator{
+    background:#302b50;
+    color:#b5adff;
+}
+
+.dark .buttons .danger{
+    background:#3a2227;
+    color:#ff9999;
+}
+
+.dark .mode button{
+    background:#302b50;
+    color:#b5adff;
+}
+
+.dark .result{
+    background:#102b25;
+}
+
+.dark .result-info{
+    color:#ccc;
+}
+
+.dark .note{
+    background:#242039;
+    color:#ccc;
+}
+
+.dark .error{
+    background:#351d22;
+    color:#ff9999;
+}
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .buttons{
+        gap:7px;
+    }
+
+    .buttons button{
+        min-height:48px;
+        font-size:14px;
+    }
+
+    .display{
+        font-size:24px;
+    }
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+
+        <div class="title">
+            <div class="title-icon">🧮</div>
+            <h1>Scientific Calculator</h1>
+            <p>Perform scientific and advanced mathematical calculations.</p>
+        </div>
+
+        <div class="calculator">
+
+            <div class="mode">
+                <button onclick="toggleMode()" id="modeBtn">
+                    DEG
+                </button>
+            </div>
+
+            <input
+                type="text"
+                class="display"
+                id="display"
+                placeholder="0"
+                readonly
+            >
+
+            <div class="buttons">
+
+                <button class="danger" onclick="clearAll()">AC</button>
+                <button class="danger" onclick="backspace()">⌫</button>
+                <button class="operator" onclick="addValue('(')">(</button>
+                <button class="operator" onclick="addValue(')')">)</button>
+                <button class="operator" onclick="addValue('/')">÷</button>
+
+                <button onclick="scientific('sin')">sin</button>
+                <button onclick="scientific('cos')">cos</button>
+                <button onclick="scientific('tan')">tan</button>
+                <button onclick="scientific('sqrt')">√</button>
+                <button class="operator" onclick="addValue('*')">×</button>
+
+                <button onclick="scientific('log')">log</button>
+                <button onclick="scientific('ln')">ln</button>
+                <button onclick="addValue('π')">π</button>
+                <button onclick="scientific('square')">x²</button>
+                <button class="operator" onclick="addValue('-')">−</button>
+
+                <button onclick="addValue('7')">7</button>
+                <button onclick="addValue('8')">8</button>
+                <button onclick="addValue('9')">9</button>
+                <button onclick="addValue('%')">%</button>
+                <button class="operator" onclick="addValue('+')">+</button>
+
+                <button onclick="addValue('4')">4</button>
+                <button onclick="addValue('5')">5</button>
+                <button onclick="addValue('6')">6</button>
+                <button onclick="scientific('inverse')">1/x</button>
+                <button class="operator" onclick="addValue('**')">xʸ</button>
+
+                <button onclick="addValue('1')">1</button>
+                <button onclick="addValue('2')">2</button>
+                <button onclick="addValue('3')">3</button>
+                <button onclick="addValue('.')">.</button>
+                <button class="equal" onclick="calculate()">=</button>
+
+                <button class="wide" onclick="addValue('0')">0</button>
+                <button onclick="addValue('00')">00</button>
+                <button onclick="scientific('factorial')">n!</button>
+
+            </div>
+
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="result" id="result">
+            <h2>Result</h2>
+            <div class="result-info" id="resultInfo"></div>
+        </div>
+
+        <div class="note">
+            Trigonometric functions use DEG mode by default.
+            Tap DEG to switch to RAD mode.
+        </div>
+
+    </div>
+    <div id="toolSuggestions" class="tool-suggestions"></div>
+    <div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+<script>
+
+let radians=false;
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+function addValue(value){
+
+    const display=document.getElementById("display");
+
+    if(display.value==="Error"){
+        display.value="";
+    }
+
+    display.value+=value;
+}
+
+function clearAll(){
+
+    document.getElementById("display").value="";
+    document.getElementById("result").style.display="none";
+    document.getElementById("error").style.display="none";
+}
+
+function backspace(){
+
+    const display=document.getElementById("display");
+
+    display.value=display.value.slice(0,-1);
+}
+
+function toggleMode(){
+
+    radians=!radians;
+
+    document.getElementById("modeBtn").textContent=
+        radians ? "RAD" : "DEG";
+}
+
+function factorial(n){
+
+    if(!Number.isFinite(n) || n<0 || !Number.isInteger(n)){
+        throw new Error("Factorial needs a positive whole number.");
+    }
+
+    if(n>170){
+        throw new Error("Number is too large.");
+    }
+
+    let result=1;
+
+    for(let i=2;i<=n;i++){
+        result*=i;
+    }
+
+    return result;
+}
+
+function getNumber(){
+
+    const display=document.getElementById("display");
+    const value=display.value.trim();
+
+    if(!value){
+        throw new Error("Enter a number first.");
+    }
+
+    let expression=value
+        .replace(/π/g,"Math.PI")
+        .replace(/÷/g,"/")
+        .replace(/×/g,"*");
+
+    return expression;
+}
+
+function scientific(type){
+
+    const display=document.getElementById("display");
+
+    if(!display.value.trim()){
+        showError("Enter a number first.");
+        return;
+    }
+
+    try{
+
+        const value=Number(
+            evaluateExpression(display.value)
+        );
+
+        let result;
+
+        if(type==="sin"){
+            result=Math.sin(
+                radians ? value : value*Math.PI/180
+            );
+        }
+
+        else if(type==="cos"){
+            result=Math.cos(
+                radians ? value : value*Math.PI/180
+            );
+        }
+
+        else if(type==="tan"){
+            result=Math.tan(
+                radians ? value : value*Math.PI/180
+            );
+        }
+
+        else if(type==="sqrt"){
+            if(value<0) throw new Error("Invalid square root.");
+            result=Math.sqrt(value);
+        }
+
+        else if(type==="log"){
+            if(value<=0) throw new Error("Invalid logarithm.");
+            result=Math.log10(value);
+        }
+
+        else if(type==="ln"){
+            if(value<=0) throw new Error("Invalid logarithm.");
+            result=Math.log(value);
+        }
+
+        else if(type==="square"){
+            result=value*value;
+        }
+
+        else if(type==="inverse"){
+            if(value===0) throw new Error("Cannot divide by zero.");
+            result=1/value;
+        }
+
+        else if(type==="factorial"){
+            result=factorial(value);
+        }
+
+        if(!Number.isFinite(result)){
+            throw new Error("Invalid result.");
+        }
+
+        display.value=formatNumber(result);
+
+        showResult(result);
+
+    }catch(error){
+
+        showError(error.message);
+    }
+}
+
+function evaluateExpression(expression){
+
+    let exp=expression
+        .replace(/π/g,"Math.PI")
+        .replace(/×/g,"*")
+        .replace(/÷/g,"/")
+        .replace(/−/g,"-");
+
+    exp=exp.replace(
+        /(\d+(?:\.\d+)?)%/g,
+        "($1/100)"
+    );
+
+    if(!/^[0-9+\-*/().%\s*MathPI]+$/.test(exp)){
+        throw new Error("Invalid expression.");
+    }
+
+    try{
+
+        const result=Function(
+            '"use strict"; return ('+exp+')'
+        )();
+
+        if(!Number.isFinite(result)){
+            throw new Error("Invalid calculation.");
+        }
+
+        return result;
+
+    }catch(e){
+
+        throw new Error("Invalid expression.");
+    }
+}
+
+function calculate(){
+
+    const display=document.getElementById("display");
+
+    if(!display.value.trim()){
+        showError("Enter a calculation first.");
+        return;
+    }
+
+    try{
+
+        const result=evaluateExpression(display.value);
+
+        display.value=formatNumber(result);
+
+        showResult(result);
+
+        document.getElementById("error").style.display="none";
+
+    }catch(error){
+
+        showError(error.message);
+    }
+}
+
+function formatNumber(number){
+
+    if(
+        Math.abs(number)>=1e12 ||
+        (Math.abs(number)>0 && Math.abs(number)<1e-10)
+    ){
+        return number.toExponential(8);
+    }
+
+    return Number(
+        number.toPrecision(12)
+    ).toString();
+}
+
+function showResult(value){
+
+    document.getElementById("resultInfo").innerHTML=
+        "Answer: <b>"+
+        formatNumber(value)+
+        "</b>";
+
+    document.getElementById("result").style.display="block";
+}
+
+function showError(message){
+
+    const error=document.getElementById("error");
+
+    error.textContent="❌ "+message;
+    error.style.display="block";
+
+    document.getElementById("result").style.display="none";
+}
+
+document.addEventListener("keydown",function(event){
+
+    const key=event.key;
+
+    if(
+        (key>="0" && key<="9") ||
+        key==="+" ||
+        key==="-" ||
+        key==="*" ||
+        key==="/" ||
+        key==="." ||
+        key==="(" ||
+        key===")"
+    ){
+        addValue(key);
+    }
+
+    else if(key==="Enter"){
+        calculate();
+    }
+
+    else if(key==="Backspace"){
+        backspace();
+    }
+
+    else if(key==="Escape"){
+        clearAll();
+    }
+});
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+
+</body>
+</html>

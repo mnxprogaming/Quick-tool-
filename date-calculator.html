@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Date Calculator - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    font-family:Arial,sans-serif;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.input-group{
+    margin-top:18px;
+}
+
+.input-group label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.input-group input,
+.input-group select{
+    width:100%;
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:15px;
+    font-size:16px;
+    outline:none;
+    background:white;
+    color:#172033;
+}
+
+.input-group input:focus,
+.input-group select:focus{
+    border-color:#6c5ce7;
+}
+
+.action-btn{
+    width:100%;
+    border:0;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.secondary{
+    width:100%;
+    border:0;
+    margin-top:12px;
+    padding:14px;
+    border-radius:15px;
+    background:#eeeaff;
+    color:#5547c7;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin:0 0 10px;
+}
+
+.result-value{
+    font-size:26px;
+    font-weight:800;
+    word-break:break-word;
+    margin:12px 0;
+}
+
+.result-info{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.copy{
+    display:inline-block;
+    margin-top:15px;
+    padding:14px 25px;
+    border-radius:15px;
+    background:#00b894;
+    color:white;
+    border:0;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.info{
+    margin-top:20px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.6;
+}
+
+.dark{
+    background:#101321;
+    color:white;
+}
+
+.dark .box{
+    background:#191d2d;
+}
+
+.dark .title p{
+    color:#aaa;
+}
+
+.dark .input-group input,
+.dark .input-group select{
+    background:#15192a;
+    color:white;
+    border-color:#33384d;
+}
+
+.dark .secondary{
+    background:#242039;
+    color:#aaa5ff;
+}
+
+.dark .info{
+    background:#242039;
+}
+
+.dark .result{
+    background:#102b25;
+}
+
+.dark .result-info{
+    color:#ccc;
+}
+
+@media(max-width:500px){
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+
+        <div class="title">
+            <div class="title-icon">⚡</div>
+
+            <h1>Date Calculator</h1>
+
+            <p>
+                Add or subtract days, weeks, months and years from any date.
+            </p>
+        </div>
+
+        <div class="input-group">
+            <label for="baseDate">Starting Date</label>
+
+            <input type="date" id="baseDate">
+        </div>
+
+        <div class="input-group">
+            <label for="operation">Operation</label>
+
+            <select id="operation">
+                <option value="add">Add</option>
+                <option value="subtract">Subtract</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="amount">Amount</label>
+
+            <input
+                type="number"
+                id="amount"
+                placeholder="Example: 30"
+                min="0"
+                step="1"
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="unit">Unit</label>
+
+            <select id="unit">
+                <option value="days">Days</option>
+                <option value="weeks">Weeks</option>
+                <option value="months">Months</option>
+                <option value="years">Years</option>
+            </select>
+        </div>
+
+        <button class="action-btn" onclick="calculateDate()">
+            Calculate Date
+        </button>
+
+        <button class="secondary" onclick="setToday()">
+            Use Today
+        </button>
+
+        <button class="secondary" onclick="clearAll()">
+            Clear
+        </button>
+
+        <div class="result" id="result">
+
+            <h2>Result</h2>
+
+            <div class="result-value" id="resultValue"></div>
+
+            <div class="result-info" id="resultInfo"></div>
+
+            <button class="copy" onclick="copyResult()">
+                Copy Result
+            </button>
+
+        </div>
+
+        <div class="info">
+            <strong>Example:</strong><br>
+            01 January 2026 + 30 Days =
+            <b>31 January 2026</b>
+        </div>
+
+    </div>
+    <div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+
+function formatDate(date){
+
+    return date.toLocaleDateString("en-IN",{
+        day:"2-digit",
+        month:"long",
+        year:"numeric"
+    });
+
+}
+
+
+function toDateInputValue(date){
+
+    const year = date.getFullYear();
+
+    const month = String(
+        date.getMonth()+1
+    ).padStart(2,"0");
+
+    const day = String(
+        date.getDate()
+    ).padStart(2,"0");
+
+    return year + "-" + month + "-" + day;
+
+}
+
+
+function setToday(){
+
+    document.getElementById("baseDate").value =
+        toDateInputValue(new Date());
+
+}
+
+
+function calculateDate(){
+
+    const dateInput =
+        document.getElementById("baseDate").value;
+
+    const amountInput =
+        document.getElementById("amount").value;
+
+    const operation =
+        document.getElementById("operation").value;
+
+    const unit =
+        document.getElementById("unit").value;
+
+    const resultBox =
+        document.getElementById("result");
+
+    const resultValue =
+        document.getElementById("resultValue");
+
+    const resultInfo =
+        document.getElementById("resultInfo");
+
+    resultBox.style.display = "none";
+
+    if(!dateInput){
+        alert("Please select a starting date.");
+        return;
+    }
+
+    if(
+        amountInput === "" ||
+        !Number.isFinite(Number(amountInput)) ||
+        Number(amountInput) < 0
+    ){
+        alert("Please enter a valid amount.");
+        return;
+    }
+
+    const amount = Number(amountInput);
+
+    const parts = dateInput.split("-");
+
+    let date = new Date(
+        Number(parts[0]),
+        Number(parts[1])-1,
+        Number(parts[2])
+    );
+
+    if(isNaN(date.getTime())){
+        alert("Invalid date.");
+        return;
+    }
+
+    const sign =
+        operation === "add" ? 1 : -1;
+
+    if(unit === "days"){
+
+        date.setDate(
+            date.getDate() + sign * amount
+        );
+
+    }
+
+    else if(unit === "weeks"){
+
+        date.setDate(
+            date.getDate() + sign * amount * 7
+        );
+
+    }
+
+    else if(unit === "months"){
+
+        date = addMonthsSafe(
+            date,
+            sign * amount
+        );
+
+    }
+
+    else if(unit === "years"){
+
+        date = addMonthsSafe(
+            date,
+            sign * amount * 12
+        );
+
+    }
+
+    resultValue.textContent =
+        formatDate(date);
+
+    resultInfo.innerHTML =
+        "Starting Date: <b>" +
+        formatDate(new Date(
+            Number(parts[0]),
+            Number(parts[1])-1,
+            Number(parts[2])
+        )) +
+        "</b><br>" +
+
+        "Operation: <b>" +
+        (operation === "add" ? "Add" : "Subtract") +
+        "</b><br>" +
+
+        "Amount: <b>" +
+        amount.toLocaleString("en-IN") +
+        " " +
+        unit +
+        "</b>";
+
+    resultBox.style.display = "block";
+}
+
+
+function addMonthsSafe(date, months){
+
+    const result = new Date(date);
+
+    const originalDay = result.getDate();
+
+    result.setDate(1);
+
+    result.setMonth(
+        result.getMonth() + months
+    );
+
+    const lastDay =
+        new Date(
+            result.getFullYear(),
+            result.getMonth()+1,
+            0
+        ).getDate();
+
+    result.setDate(
+        Math.min(originalDay,lastDay)
+    );
+
+    return result;
+}
+
+
+function copyResult(){
+
+    const value =
+        document.getElementById("resultValue").textContent;
+
+    if(!value) return;
+
+    navigator.clipboard.writeText(value)
+        .then(function(){
+            alert("Result copied!");
+        })
+        .catch(function(){
+            alert("Copy failed. Please copy manually.");
+        });
+
+}
+
+
+function clearAll(){
+
+    document.getElementById("baseDate").value = "";
+
+    document.getElementById("amount").value = "";
+
+    document.getElementById("operation").value = "add";
+
+    document.getElementById("unit").value = "days";
+
+    document.getElementById("result").style.display = "none";
+
+    document.getElementById("resultValue").textContent = "";
+
+    document.getElementById("resultInfo").innerHTML = "";
+
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

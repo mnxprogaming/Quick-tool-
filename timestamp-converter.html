@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Timestamp Converter - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    font-family:Arial,sans-serif;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(30,40,80,.10);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.field{
+    margin-top:16px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:9px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:2px solid #e3e0f5;
+    border-radius:17px;
+    outline:none;
+    font-size:15px;
+    background:#faf9ff;
+    color:#172033;
+}
+
+input:focus{
+    border-color:#6c5ce7;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:20px;
+}
+
+.action{
+    border:0;
+    padding:15px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.secondary{
+    background:#eeeaff;
+    color:#5b4dcc;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin:0 0 12px;
+}
+
+.result-info{
+    color:#555;
+    font-size:15px;
+    line-height:1.8;
+    word-break:break-word;
+}
+
+.result-value{
+    margin-top:12px;
+    padding:14px;
+    background:white;
+    border-radius:14px;
+    font-family:monospace;
+    font-size:16px;
+    word-break:break-all;
+}
+
+@media(max-width:500px){
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+}
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark input{
+    background:#15192a;
+    color:white;
+    border-color:#3a3f58;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+body.dark .result-info{
+    color:#ccc;
+}
+
+body.dark .result-value{
+    background:#191d2d;
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</header>
+
+<div class="container">
+
+<div class="box">
+
+    <div class="title">
+
+        <div class="title-icon">⏱️</div>
+
+        <h1>Timestamp Converter</h1>
+
+        <p>
+            Convert Unix timestamps to date and time, or convert date and time to Unix timestamp.
+        </p>
+
+    </div>
+
+    <div class="field">
+
+        <label for="timestamp">
+            Unix Timestamp
+        </label>
+
+        <input
+            type="text"
+            id="timestamp"
+            placeholder="Example: 1756987200"
+        >
+
+    </div>
+
+    <div class="actions">
+
+        <button class="action" onclick="timestampToDate()">
+            Timestamp → Date
+        </button>
+
+        <button class="action" onclick="dateToTimestamp()">
+            Date → Timestamp
+        </button>
+
+        <button class="action secondary" onclick="useCurrentTime()">
+            🕐 Current Time
+        </button>
+
+        <button class="action secondary" onclick="copyResult()">
+            📋 Copy Result
+        </button>
+
+        <button class="action secondary" onclick="clearAll()">
+            🗑️ Clear
+        </button>
+
+    </div>
+
+    <div class="result" id="result">
+
+        <h2>Conversion Result</h2>
+
+        <div class="result-info" id="resultInfo"></div>
+
+        <div class="result-value" id="resultValue"></div>
+
+    </div>
+
+</div>
+
+<div id="toolSuggestions" class="tool-suggestions"></div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+function goHome(){
+    window.location.href="tool.html";
+}
+
+function timestampToDate(){
+
+    const input=document.getElementById("timestamp").value.trim();
+
+    if(!input){
+        showResult("Enter a Unix timestamp first.","");
+        return;
+    }
+
+    if(!/^-?\d+$/.test(input)){
+        showResult(
+            "Invalid timestamp. Please enter numbers only.",
+            ""
+        );
+        return;
+    }
+
+    try{
+
+        const timestamp=BigInt(input);
+
+        const milliseconds=Number(timestamp)*1000;
+
+        if(!Number.isSafeInteger(milliseconds)){
+            showResult(
+                "Timestamp is too large for this browser.",
+                ""
+            );
+            return;
+        }
+
+        const date=new Date(milliseconds);
+
+        if(isNaN(date.getTime())){
+            showResult("Invalid timestamp.","");
+            return;
+        }
+
+        const local=date.toLocaleString();
+
+        const utc=date.toUTCString();
+
+        showResult(
+            "Timestamp converted successfully.",
+            "Local: " + local + "\nUTC: " + utc
+        );
+
+    }catch(error){
+
+        showResult("Unable to convert timestamp.","");
+
+    }
+}
+
+function dateToTimestamp(){
+
+    const input=document.getElementById("timestamp").value.trim();
+
+    if(!input){
+        showResult(
+            "Enter a date and time first.",
+            ""
+        );
+        return;
+    }
+
+    const date=new Date(input);
+
+    if(isNaN(date.getTime())){
+        showResult(
+            "Invalid date. Example: 2026-09-04 12:30",
+            ""
+        );
+        return;
+    }
+
+    const seconds=Math.floor(
+        date.getTime()/1000
+    );
+
+    showResult(
+        "Date converted successfully.",
+        seconds.toString()
+    );
+}
+
+function useCurrentTime(){
+
+    const seconds=Math.floor(
+        Date.now()/1000
+    );
+
+    document.getElementById("timestamp").value=seconds;
+
+    timestampToDate();
+}
+
+function copyResult(){
+
+    const value=document.getElementById("resultValue").textContent;
+
+    if(!value){
+        showResult("Nothing to copy.","");
+        return;
+    }
+
+    navigator.clipboard.writeText(value)
+    .then(()=>{
+        document.getElementById("resultInfo").textContent=
+            "Copied to clipboard!";
+    })
+    .catch(()=>{
+        showResult(
+            "Copy failed. Please copy manually.",
+            value
+        );
+    });
+}
+
+function clearAll(){
+
+    document.getElementById("timestamp").value="";
+    document.getElementById("result").style.display="none";
+    document.getElementById("resultInfo").textContent="";
+    document.getElementById("resultValue").textContent="";
+}
+
+function showResult(info,value){
+
+    document.getElementById("resultInfo").textContent=info;
+
+    document.getElementById("resultValue").textContent=value;
+
+    document.getElementById("result").style.display="block";
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>

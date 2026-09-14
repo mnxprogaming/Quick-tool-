@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Barcode Scanner - Quick Tool</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+}
+
+/* HEADER */
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+/* CONTAINER */
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+    position:relative;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 10px 30px rgba(40,50,100,.10);
+}
+
+/* TITLE */
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#e4fff5;
+}
+
+/* BARCODE ICON */
+
+.barcode-icon{
+    position:relative;
+    overflow:hidden;
+}
+
+.barcode-lines{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    height:45px;
+}
+
+.barcode-lines i{
+    display:block;
+    width:4px;
+    height:40px;
+    background:#172033;
+    border-radius:2px;
+}
+
+.barcode-lines i:nth-child(2),
+.barcode-lines i:nth-child(5){
+    width:2px;
+}
+
+.barcode-lines i:nth-child(3),
+.barcode-lines i:nth-child(7){
+    width:6px;
+}
+
+.red-scan-line{
+    position:absolute;
+    left:8px;
+    right:8px;
+    top:50%;
+    height:3px;
+    background:#ff3b30;
+    box-shadow:0 0 6px rgba(255,59,48,.7);
+}
+
+/* TITLE TEXT */
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* SCANNER */
+
+.scanner{
+    position:relative;
+    width:100%;
+    max-width:500px;
+    height:320px;
+    margin:auto;
+    background:#777;
+    border-radius:16px;
+    overflow:hidden;
+}
+
+/* CAMERA VIDEO */
+
+#video{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:none;
+    z-index:1;
+}
+
+/* CAMERA PLACEHOLDER */
+
+.camera-placeholder{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    background:#777;
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;
+    z-index:1;
+}
+
+.camera-placeholder-icon{
+    font-size:55px;
+    margin-bottom:10px;
+}
+
+.camera-placeholder small{
+    margin-top:6px;
+    font-size:13px;
+    font-weight:normal;
+    opacity:.85;
+}
+
+/* SCANNER CORNERS */
+
+.scan-corners{
+    position:absolute;
+    inset:45px;
+    border:3px solid rgba(255,255,255,.85);
+    border-radius:12px;
+    pointer-events:none;
+    z-index:3;
+}
+
+/* SCANNING LINE */
+
+.scan-line{
+    position:absolute;
+    left:8%;
+    right:8%;
+    top:50%;
+    height:3px;
+    background:#00b894;
+    box-shadow:0 0 10px #00b894;
+    animation:scan 2s infinite ease-in-out;
+    z-index:4;
+    pointer-events:none;
+}
+
+@keyframes scan{
+
+    0%,100%{
+        transform:translateY(-100px);
+    }
+
+    50%{
+        transform:translateY(100px);
+    }
+
+}
+
+/* MESSAGE */
+
+.scanner-message{
+    text-align:center;
+    color:#777;
+    font-size:13px;
+    margin-top:12px;
+}
+
+/* BUTTONS */
+
+.start-btn{
+    width:100%;
+    border:none;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.start-btn:active{
+    transform:scale(.98);
+}
+
+.stop-btn{
+    display:none;
+    width:100%;
+    border:none;
+    margin-top:10px;
+    padding:14px;
+    border-radius:15px;
+    background:#ff7675;
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* GALLERY BUTTON */
+
+.gallery-btn{
+    width:100%;
+    border:none;
+    margin-top:10px;
+    padding:14px;
+    border-radius:15px;
+    background:#eef0ff;
+    color:#172033;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.gallery-btn:active{
+    transform:scale(.98);
+}
+
+#imageInput{
+    display:none;
+}
+
+/* STATUS */
+
+.status{
+    display:none;
+    margin-top:18px;
+    padding:14px;
+    border-radius:10px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* RESULT */
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin-bottom:12px;
+}
+
+.barcode-value{
+    background:white;
+    border-radius:12px;
+    padding:14px;
+    word-break:break-all;
+    font-size:16px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.result-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.result-buttons button,
+.result-buttons a{
+    flex:1;
+    border:none;
+    padding:13px 10px;
+    border-radius:13px;
+    color:white;
+    font-weight:bold;
+    text-decoration:none;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.copy-btn{
+    background:#6c5ce7;
+}
+
+.open-btn{
+    background:#00b894;
+}
+
+/* DARK MODE */
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .scanner-message{
+    color:#aaa;
+}
+
+body.dark .barcode-value{
+    background:#242039;
+}
+
+body.dark .status{
+    background:#242039;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+body.dark .gallery-btn{
+    background:#242039;
+    color:white;
+}
+
+/* MOBILE */
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .scanner{
+        height:280px;
+    }
+
+    .scan-corners{
+        inset:35px;
+    }
+
+    .result-buttons{
+        flex-direction:column;
+    }
+
+}
+
+/* DESKTOP */
+
+@media(min-width:900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    .scanner{
+        max-width:650px;
+        height:400px;
+    }
+
+}
+
+</style>
+
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">
+            ⚡ Quick Tool
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+<div class="box">
+
+    <div class="title">
+
+        <div class="title-icon barcode-icon">
+
+            <div class="barcode-lines">
+
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+
+            </div>
+
+            <div class="red-scan-line"></div>
+
+        </div>
+
+
+        <h1>Barcode Scanner</h1>
+
+        <p>
+            Scan 1D barcodes quickly using your device camera or gallery image.
+        </p>
+
+    </div>
+
+
+    <!-- CAMERA AREA -->
+
+    <div class="scanner">
+
+        <div
+            class="camera-placeholder"
+            id="cameraPlaceholder">
+
+            <div class="camera-placeholder-icon">
+                📷
+            </div>
+
+            <div>
+                Camera Preview
+            </div>
+
+            <small>
+                Tap "Start Scanner" to begin
+            </small>
+
+        </div>
+
+
+        <video
+            id="video"
+            autoplay
+            muted
+            playsinline>
+        </video>
+
+
+        <div class="scan-corners"></div>
+
+        <div class="scan-line"></div>
+
+    </div>
+
+
+    <div
+        class="scanner-message"
+        id="scannerMessage">
+
+        Scan a 1D barcode using camera or upload a barcode image.
+
+    </div>
+
+
+    <!-- CAMERA BUTTON -->
+
+    <button
+        class="start-btn"
+        id="startBtn"
+        onclick="startScanner()">
+
+        📷 Start Scanner
+
+    </button>
+
+
+    <!-- GALLERY BUTTON -->
+
+    <button
+        class="gallery-btn"
+        onclick="document.getElementById('imageInput').click()">
+
+        🖼️ Upload from Gallery
+
+    </button>
+
+
+    <input
+        type="file"
+        id="imageInput"
+        accept="image/*"
+        onchange="scanImage(this.files[0])">
+
+
+    <!-- STOP BUTTON -->
+
+    <button
+        class="stop-btn"
+        id="stopBtn"
+        onclick="stopScanner()">
+
+        ⛔ Stop Scanner
+
+    </button>
+
+
+    <div
+        class="status"
+        id="status">
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div
+        class="result"
+        id="result">
+
+        <h2>
+            ✅ Barcode Detected
+        </h2>
+
+
+        <div
+            class="barcode-value"
+            id="barcodeValue">
+        </div>
+
+
+        <div class="result-buttons">
+
+            <button
+                class="copy-btn"
+                onclick="copyBarcode()">
+
+                📋 Copy
+
+            </button>
+
+
+            <a
+                id="openBtn"
+                class="open-btn"
+                target="_blank"
+                rel="noopener"
+                style="display:none;">
+
+                🔗 Open
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    id="toolSuggestions"
+    class="tool-suggestions">
+</div>
+<div id="introSection"></div>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+<script>
+
+let stream = null;
+let scanning = false;
+let detector = null;
+
+
+/* ========================= */
+/* BARCODE FORMATS */
+/* ONLY 1D BARCODE */
+/* QR CODE REMOVED */
+/* ========================= */
+
+const BARCODE_FORMATS = [
+
+    "code_128",
+    "code_39",
+    "code_93",
+    "codabar",
+    "ean_13",
+    "ean_8",
+    "itf",
+    "upc_a",
+    "upc_e"
+
+];
+
+
+/* ========================= */
+/* START CAMERA SCANNER */
+/* ========================= */
+
+async function startScanner(){
+
+    const video =
+        document.getElementById("video");
+
+    const startBtn =
+        document.getElementById("startBtn");
+
+    const stopBtn =
+        document.getElementById("stopBtn");
+
+    const status =
+        document.getElementById("status");
+
+    const message =
+        document.getElementById("scannerMessage");
+
+    const placeholder =
+        document.getElementById("cameraPlaceholder");
+
+
+    document.getElementById("result").style.display =
+        "none";
+
+
+    if(!("BarcodeDetector" in window)){
+
+        status.innerHTML =
+            "⚠️ Barcode scanning is not supported in this browser. Please try the latest Chrome browser.";
+
+        status.style.display =
+            "block";
+
+        return;
+
+    }
+
+
+    if(
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+    ){
+
+        status.innerHTML =
+            "⚠️ Camera access is not available here. Please open the website using HTTPS.";
+
+        status.style.display =
+            "block";
+
+        return;
+
+    }
+
+
+    try{
+
+        detector =
+            new BarcodeDetector({
+
+                formats: BARCODE_FORMATS
+
+            });
+
+
+        stream =
+            await navigator.mediaDevices.getUserMedia({
+
+                video:{
+                    facingMode:{
+                        ideal:"environment"
+                    }
+                },
+
+                audio:false
+
+            });
+
+
+        video.srcObject =
+            stream;
+
+
+        video.style.display =
+            "block";
+
+
+        placeholder.style.display =
+            "none";
+
+
+        scanning =
+            true;
+
+
+        startBtn.style.display =
+            "none";
+
+
+        stopBtn.style.display =
+            "block";
+
+
+        status.style.display =
+            "none";
+
+
+        message.innerHTML =
+            "🔍 Point your camera at a 1D barcode...";
+
+
+        scanBarcode();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+
+        status.innerHTML =
+            "❌ Camera access failed. Please allow camera permission and try again.";
+
+        status.style.display =
+            "block";
+
+    }
+
+}
+
+
+/* ========================= */
+/* CAMERA SCAN */
+/* ========================= */
+
+async function scanBarcode(){
+
+    if(!scanning){
+        return;
+    }
+
+
+    const video =
+        document.getElementById("video");
+
+
+    try{
+
+        if(video.readyState >= 2){
+
+            const barcodes =
+                await detector.detect(video);
+
+
+            if(barcodes.length > 0){
+
+                const value =
+                    barcodes[0].rawValue;
+
+
+                if(value){
+
+                    showResult(value);
+
+                    stopScanner();
+
+                    return;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    catch(error){
+
+        console.log(
+            "Barcode scan error:",
+            error
+        );
+
+    }
+
+
+    requestAnimationFrame(
+        scanBarcode
+    );
+
+}
+
+
+/* ========================= */
+/* GALLERY IMAGE SCAN */
+/* ========================= */
+
+async function scanImage(file){
+
+    if(!file){
+        return;
+    }
+
+
+    const status =
+        document.getElementById("status");
+
+    const message =
+        document.getElementById("scannerMessage");
+
+
+    document.getElementById("result").style.display =
+        "none";
+
+
+    if(!("BarcodeDetector" in window)){
+
+        status.innerHTML =
+            "⚠️ Image scanning is not supported in this browser. Please try the latest Chrome browser.";
+
+        status.style.display =
+            "block";
+
+        return;
+
+    }
+
+
+    try{
+
+        status.innerHTML =
+            "🔍 Scanning uploaded barcode image...";
+
+        status.style.display =
+            "block";
+
+
+        const image =
+            await createImageBitmap(file);
+
+
+        const imageDetector =
+            new BarcodeDetector({
+
+                formats: BARCODE_FORMATS
+
+            });
+
+
+        const barcodes =
+            await imageDetector.detect(image);
+
+
+        if(barcodes.length > 0){
+
+            const value =
+                barcodes[0].rawValue;
+
+
+            status.style.display =
+                "none";
+
+
+            showResult(value);
+
+
+            message.innerHTML =
+                "✅ Barcode successfully scanned from image!";
+
+        }
+
+        else{
+
+            status.innerHTML =
+                "❌ No 1D barcode found. QR codes and 2D codes are not supported by this scanner.";
+
+        }
+
+        if(image.close){
+            image.close();
+        }
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+
+        status.innerHTML =
+            "❌ Could not scan this image. Please upload a clear 1D barcode image.";
+
+        status.style.display =
+            "block";
+
+    }
+
+
+    document.getElementById(
+        "imageInput"
+    ).value = "";
+
+}
+
+
+/* ========================= */
+/* SHOW RESULT */
+/* ========================= */
+
+function showResult(value){
+
+    const barcodeValue =
+        document.getElementById("barcodeValue");
+
+    const result =
+        document.getElementById("result");
+
+    const message =
+        document.getElementById("scannerMessage");
+
+    const openBtn =
+        document.getElementById("openBtn");
+
+
+    barcodeValue.textContent =
+        value;
+
+
+    result.style.display =
+        "block";
+
+
+    message.innerHTML =
+        "✅ Barcode successfully scanned!";
+
+
+    if(
+        value.startsWith("http://") ||
+        value.startsWith("https://")
+    ){
+
+        openBtn.href =
+            value;
+
+        openBtn.style.display =
+            "block";
+
+    }
+
+    else{
+
+        openBtn.style.display =
+            "none";
+
+    }
+
+
+    result.scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+/* ========================= */
+/* COPY */
+/* ========================= */
+
+async function copyBarcode(){
+
+    const value =
+        document.getElementById(
+            "barcodeValue"
+        ).textContent;
+
+
+    try{
+
+        await navigator.clipboard.writeText(
+            value
+        );
+
+
+        alert(
+            "Barcode value copied!"
+        );
+
+    }
+
+    catch(error){
+
+        alert(
+            "Copy failed. Please copy it manually."
+        );
+
+    }
+
+}
+
+
+/* ========================= */
+/* STOP SCANNER */
+/* ========================= */
+
+function stopScanner(){
+
+    scanning =
+        false;
+
+
+    if(stream){
+
+        stream.getTracks().forEach(
+            function(track){
+
+                track.stop();
+
+            }
+        );
+
+
+        stream =
+            null;
+
+    }
+
+
+    const video =
+        document.getElementById("video");
+
+
+    video.srcObject =
+        null;
+
+
+    video.style.display =
+        "none";
+
+
+    document.getElementById(
+        "cameraPlaceholder"
+    ).style.display =
+        "flex";
+
+
+    document.getElementById(
+        "startBtn"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "stopBtn"
+    ).style.display =
+        "none";
+
+}
+
+
+/* ========================= */
+/* HOME */
+/* ========================= */
+
+function goHome(){
+
+    window.location.href =
+        "tool.html";
+
+}
+
+
+/* ========================= */
+/* DARK MODE */
+/* ========================= */
+
+if(
+    localStorage.getItem("theme") === "dark"
+){
+
+    document.body.classList.add(
+        "dark"
+    );
+
+}
+
+</script>
+
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+<script src="tool-suggestions.js"></script>
+
+</body>
+</html>

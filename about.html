@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>About Us - Quick Tool</title>
+<meta name="description" content="Learn more about Quick Tool and our free online tools.">
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    font-family:Arial,sans-serif;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin:0 0 8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+}
+
+.section{
+    margin-top:25px;
+}
+
+.section h2{
+    font-size:20px;
+    margin:0 0 10px;
+}
+
+.section p{
+    color:#555;
+    font-size:14px;
+    line-height:1.7;
+    margin:0;
+}
+
+.section ul{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+    padding-left:22px;
+}
+
+.info{
+    margin-top:25px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.6;
+}
+
+.dark{
+    background:#101321;
+    color:white;
+}
+
+.dark .box{
+    background:#191d2d;
+}
+
+.dark .title p,
+.dark .section p,
+.dark .section ul{
+    color:#aaa;
+}
+
+.dark .info{
+    background:#242039;
+}
+
+@media(max-width:500px){
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+}
+/* ============================= */
+/* DESKTOP RESPONSIVE FIX */
+/* ALL QUICK TOOL PAGES */
+/* ============================= */
+
+@media (min-width: 900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+
+    /* Common tool content */
+
+    .input-group,
+    .tool-content,
+    .tool-area,
+    .form-container,
+    .generator,
+    .converter,
+    .result-box,
+    .values{
+        width:100%;
+    }
+
+}
+@media (min-width:900px){
+
+    .color-square,
+    .hue-slider{
+        max-width:850px;
+    }
+
+    .color-square{
+        height:350px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">⚡ Quick Tool</div>
+
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="box">
+
+        <div class="title">
+
+            <div class="title-icon">ℹ️</div>
+
+            <h1>About Quick Tool</h1>
+
+            <p>
+                Simple, fast and useful online tools for everyday tasks.
+            </p>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>What is Quick Tool?</h2>
+
+            <p>
+                Quick Tool is a collection of simple online tools designed
+                to help you complete everyday tasks quickly and easily.
+                Our goal is to provide useful tools with a clean,
+                simple and mobile-friendly interface.
+            </p>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>Our Tools</h2>
+
+            <p>
+                Quick Tool provides different types of tools including:
+            </p>
+
+            <ul>
+                <li>Image tools</li>
+                <li>PDF tools</li>
+                <li>Text tools</li>
+                <li>Calculators</li>
+                <li>Date and time tools</li>
+                <li>Developer tools</li>
+                <li>Number converters</li>
+                <li>Color tools</li>
+                <li>Other useful utilities</li>
+            </ul>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>Free to Use</h2>
+
+            <p>
+                We aim to keep Quick Tool easy and accessible for everyone.
+                Many tools work directly inside your browser without
+                requiring an account or software installation.
+            </p>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>Our Goal</h2>
+
+            <p>
+                Our goal is to build a reliable collection of useful
+                online utilities that are fast, simple and easy to use
+                on both mobile phones and computers.
+            </p>
+
+        </div>
+
+
+        <div class="info">
+
+            <strong>Quick Tool</strong><br>
+
+            Fast • Simple • Useful
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function goHome(){
+
+    window.location.href="tool.html";
+
+}
+/* DARK MODE */
+
+if(localStorage.getItem("theme") === "dark"){
+
+    document.body.classList.add("dark");
+
+}
+</script>
+
+</body>
+</html>

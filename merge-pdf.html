@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Merge PDF - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.upload{
+    display:block;
+    text-align:center;
+    border:2px dashed #6c5ce7;
+    border-radius:10px;
+    padding:35px 15px;
+    background:#faf9ff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload:hover{
+    background:#f1efff;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.upload strong{
+    display:block;
+    font-size:17px;
+    margin-bottom:7px;
+}
+
+.upload small{
+    color:#888;
+    font-size:12px;
+}
+
+#file{
+    display:none;
+}
+
+.info{
+    display:none;
+    margin-top:18px;
+    padding:15px;
+    border-radius:17px;
+    background:#f5f3ff;
+    text-align:center;
+    font-size:14px;
+    line-height:1.7;
+}
+
+.pdf-list{
+    display:none;
+    margin-top:20px;
+}
+
+.pdf-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px;
+    margin-bottom:10px;
+    border-radius:15px;
+    background:#f7f7ff;
+    border:1px solid #e8e5ff;
+}
+
+.pdf-number{
+    width:34px;
+    height:34px;
+    border-radius:11px;
+    background:#eeeaff;
+    color:#6c5ce7;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    flex-shrink:0;
+}
+
+.pdf-name{
+    flex:1;
+    font-size:14px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.pdf-size{
+    color:#888;
+    font-size:12px;
+}
+
+.remove-btn{
+    border:none;
+    background:#ffecec;
+    color:#e74c3c;
+    width:32px;
+    height:32px;
+    border-radius:10px;
+    font-size:18px;
+    cursor:pointer;
+    flex-shrink:0;
+}
+
+.merge-btn{
+    display:none;
+    width:100%;
+    border:none;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.merge-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#eafff7;
+    text-align:center;
+}
+
+.result h2{
+    color:#00a77d;
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.result-info{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.download{
+    display:inline-block;
+    margin-top:15px;
+    padding:14px 25px;
+    border-radius:15px;
+    background:#00b894;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.tool-suggestions{
+    margin-top:25px;
+}
+
+.suggestions-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+}
+
+.suggestions-title span{
+    font-size:22px;
+}
+
+.suggestions-title h2{
+    margin:0;
+    font-size:20px;
+    color:#172033;
+}
+
+.suggestions-grid{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.suggestion-card{
+    background:#fff;
+    border-radius:18px;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    box-shadow:0 5px 18px rgba(0,0,0,.07);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.suggestion-card:hover{
+    transform:translateY(-2px);
+}
+
+.suggestion-icon{
+    width:48px;
+    height:48px;
+    flex-shrink:0;
+    border-radius:15px;
+    background:#eeeaff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+}
+
+.suggestion-content{
+    flex:1;
+    min-width:0;
+}
+
+.suggestion-content h3{
+    margin:0 0 4px;
+    font-size:16px;
+    color:#172033;
+}
+
+.suggestion-content p{
+    margin:0;
+    font-size:12px;
+    color:#777;
+    line-height:1.4;
+}
+
+.suggestion-arrow{
+    font-size:24px;
+    color:#6c5ce7;
+}
+
+/* DARK MODE */
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .upload{
+    background:#15192a;
+    border-color:#8075ef;
+}
+
+body.dark .upload small{
+    color:#aaa;
+}
+
+body.dark .info{
+    background:#242039;
+}
+
+body.dark .pdf-item{
+    background:#202438;
+    border-color:#343852;
+}
+
+body.dark .pdf-name{
+    color:#eee;
+}
+
+body.dark .pdf-size{
+    color:#aaa;
+}
+
+body.dark .result{
+    background:#102b25;
+}
+
+body.dark .result-info{
+    color:#ccc;
+}
+
+body.dark .suggestions-title h2{
+    color:#f4f5ff;
+}
+
+body.dark .suggestion-card{
+    background:#191d2d;
+}
+
+body.dark .suggestion-content h3{
+    color:#f4f5ff;
+}
+
+body.dark .suggestion-content p{
+    color:#aeb4c8;
+}
+
+body.dark .suggestion-icon{
+    background:#242039;
+}
+
+/* MOBILE */
+
+@media(max-width:500px){
+
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .upload{
+        padding:30px 10px;
+    }
+
+    .pdf-item{
+        gap:8px;
+    }
+
+    .pdf-size{
+        display:none;
+    }
+
+    .suggestions-title h2{
+        font-size:18px;
+    }
+
+    .suggestion-card{
+        padding:13px;
+        border-radius:16px;
+    }
+
+    .suggestion-icon{
+        width:44px;
+        height:44px;
+        font-size:22px;
+    }
+
+    .suggestion-content h3{
+        font-size:15px;
+    }
+}
+
+/* DESKTOP */
+
+@media(min-width:900px){
+
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+}
+</style>
+<link rel="stylesheet" href="intro-footer.css">
+
+<link rel="stylesheet" href="tool-suggestions.css">
+</head>
+
+<body>
+
+<div class="header">
+
+    <div class="header-inner">
+
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div class="logo">
+            ⚡ Quick Tool
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+<div class="box">
+
+    <div class="title">
+
+        <div class="title-icon">
+            📚
+        </div>
+
+        <h1>Merge PDF</h1>
+
+        <p>
+            Combine multiple PDF files into one PDF quickly and easily.
+        </p>
+
+    </div>
+
+
+    <label class="upload" for="file">
+
+        <div class="upload-icon">
+            📄
+        </div>
+
+        <strong>
+            Select PDF Files
+        </strong>
+
+        <small>
+            Select 2 or more PDF files
+        </small>
+
+    </label>
+
+
+    <input
+        type="file"
+        id="file"
+        accept=".pdf,application/pdf"
+        multiple
+    >
+
+
+    <div class="info" id="info"></div>
+
+
+    <div class="pdf-list" id="pdfList"></div>
+
+
+    <!-- MERGE BUTTON -->
+
+    <button
+        type="button"
+        class="merge-btn"
+        id="mergeBtn"
+        onclick="mergePDFs()"
+    >
+        🔗 Merge PDF
+    </button>
+
+
+    <div class="result" id="result">
+
+        <h2>
+            ✅ PDF Merged Successfully
+        </h2>
+
+        <div
+            class="result-info"
+            id="resultInfo">
+        </div>
+
+        <a
+            class="download"
+            id="download"
+            download="quicktool-merged.pdf">
+            ⬇ Download Merged PDF
+        </a>
+
+    </div>
+
+</div>
+
+
+<div
+    id="toolSuggestions"
+    class="tool-suggestions">
+</div>
+<div id="introSection"></div>
+</div>
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+<!-- PDF LIBRARY -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+
+<script>
+
+let selectedFiles = [];
+
+const fileInput = document.getElementById("file");
+const info = document.getElementById("info");
+const pdfList = document.getElementById("pdfList");
+const mergeBtn = document.getElementById("mergeBtn");
+const result = document.getElementById("result");
+const resultInfo = document.getElementById("resultInfo");
+const download = document.getElementById("download");
+
+
+/* ============================= */
+/* FILE SELECT */
+/* ============================= */
+
+fileInput.addEventListener("change", function(){
+
+    const newFiles = Array.from(this.files);
+
+    if(newFiles.length === 0){
+        return;
+    }
+
+    selectedFiles = selectedFiles.concat(newFiles);
+
+    renderFiles();
+
+    /* Allow selecting same file again */
+    this.value = "";
+
+});
+
+
+/* ============================= */
+/* RENDER PDF LIST */
+/* ============================= */
+
+function renderFiles(){
+
+    pdfList.innerHTML = "";
+
+    result.style.display = "none";
+
+
+    if(selectedFiles.length === 0){
+
+        info.style.display = "none";
+        pdfList.style.display = "none";
+        mergeBtn.style.display = "none";
+
+        return;
+    }
+
+
+    /* INFO */
+
+    info.style.display = "block";
+
+    if(selectedFiles.length === 1){
+
+        info.innerHTML =
+            "📄 <b>1</b> PDF selected — select one more PDF to merge.";
+
+    }else{
+
+        info.innerHTML =
+            "📄 <b>" +
+            selectedFiles.length +
+            "</b> PDF files selected.";
+
+    }
+
+
+    /* LIST */
+
+    pdfList.style.display = "block";
+
+
+    selectedFiles.forEach(function(file,index){
+
+        const item = document.createElement("div");
+        item.className = "pdf-item";
+
+
+        const number = document.createElement("div");
+        number.className = "pdf-number";
+        number.textContent = index + 1;
+
+
+        const name = document.createElement("div");
+        name.className = "pdf-name";
+        name.textContent = file.name;
+
+
+        const size = document.createElement("div");
+        size.className = "pdf-size";
+        size.textContent = formatSize(file.size);
+
+
+        const remove = document.createElement("button");
+
+        remove.type = "button";
+        remove.className = "remove-btn";
+        remove.textContent = "×";
+        remove.title = "Remove PDF";
+
+
+        remove.addEventListener("click", function(){
+
+            selectedFiles.splice(index,1);
+
+            renderFiles();
+
+        });
+
+
+        item.appendChild(number);
+        item.appendChild(name);
+        item.appendChild(size);
+        item.appendChild(remove);
+
+        pdfList.appendChild(item);
+
+    });
+
+
+    /* ============================= */
+    /* SHOW MERGE BUTTON */
+    /* ============================= */
+
+    if(selectedFiles.length >= 2){
+
+        mergeBtn.style.display = "block";
+        mergeBtn.disabled = false;
+        mergeBtn.textContent = "🔗 Merge PDF";
+
+    }else{
+
+        mergeBtn.style.display = "none";
+
+    }
+
+}
+
+
+/* ============================= */
+/* MERGE PDF */
+/* ============================= */
+
+async function mergePDFs(){
+
+    if(selectedFiles.length < 2){
+
+        alert("Please select at least 2 PDF files.");
+
+        return;
+    }
+
+
+    /* Check PDF library */
+
+    if(typeof PDFLib === "undefined"){
+
+        alert(
+            "PDF library could not load. Please check your internet connection and try again."
+        );
+
+        return;
+    }
+
+
+    mergeBtn.disabled = true;
+
+    mergeBtn.textContent = "⏳ Merging PDFs...";
+
+    result.style.display = "none";
+
+
+    try{
+
+        const mergedPdf =
+            await PDFLib.PDFDocument.create();
+
+        let totalPages = 0;
+
+
+        for(
+            let i = 0;
+            i < selectedFiles.length;
+            i++
+        ){
+
+            const file = selectedFiles[i];
+
+            const bytes =
+                await file.arrayBuffer();
+
+
+            const pdf =
+                await PDFLib.PDFDocument.load(bytes);
+
+
+            const pages =
+                await mergedPdf.copyPages(
+                    pdf,
+                    pdf.getPageIndices()
+                );
+
+
+            pages.forEach(function(page){
+
+                mergedPdf.addPage(page);
+
+            });
+
+
+            totalPages +=
+                pdf.getPageCount();
+
+        }
+
+
+        const mergedBytes =
+            await mergedPdf.save();
+
+
+        const blob =
+            new Blob(
+                [mergedBytes],
+                {
+                    type:"application/pdf"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        download.href = url;
+
+
+        resultInfo.innerHTML =
+            "Files merged: <b>" +
+            selectedFiles.length +
+            "</b><br>" +
+
+            "Total pages: <b>" +
+            totalPages +
+            "</b><br>" +
+
+            "Output size: <b>" +
+            formatSize(blob.size) +
+            "</b>";
+
+
+        result.style.display = "block";
+
+
+        result.scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+
+
+    }catch(error){
+
+        console.error(
+            "Merge PDF Error:",
+            error
+        );
+
+
+        alert(
+            "PDF merge failed. Please make sure all selected files are valid PDF files."
+        );
+
+    }
+
+
+    mergeBtn.disabled = false;
+
+    mergeBtn.textContent =
+        "🔗 Merge PDF";
+
+}
+
+
+/* ============================= */
+/* FORMAT FILE SIZE */
+/* ============================= */
+
+function formatSize(bytes){
+
+    if(bytes < 1024){
+
+        return bytes + " B";
+
+    }
+
+
+    if(bytes < 1024 * 1024){
+
+        return (
+            bytes / 1024
+        ).toFixed(1) + " KB";
+
+    }
+
+
+    return (
+        bytes / (1024 * 1024)
+    ).toFixed(2) + " MB";
+
+}
+
+
+/* ============================= */
+/* BACK BUTTON */
+/* ============================= */
+
+function goHome(){
+
+    window.location.href =
+        "tool.html";
+
+}
+
+
+/* ============================= */
+/* DARK MODE */
+/* ============================= */
+
+if(
+    localStorage.getItem("theme") === "dark"
+){
+
+    document.body.classList.add("dark");
+
+}
+
+</script>
+
+
+<!-- OPTIONAL TOOL SUGGESTIONS -->
+
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Unlock PDF - Quick Tool</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6ff;
+    color:#172033;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    padding:18px 16px 30px;
+    border-radius:0 0 30px 30px;
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+
+.header-inner{
+    max-width:750px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.container{
+    max-width:750px;
+    margin:-15px auto 0;
+    padding:0 15px;
+}
+
+.box{
+    background:white;
+    border-radius:16px;
+    padding:25px 20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.title-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 14px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    background:#eeeaff;
+}
+
+.title h1{
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.title p{
+    color:#777;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.upload{
+    display:block;
+    text-align:center;
+    border:2px dashed #6c5ce7;
+    border-radius:10px;
+    padding:35px 15px;
+    background:#faf9ff;
+    cursor:pointer;
+}
+
+.upload:hover{
+    background:#f1efff;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.upload strong{
+    display:block;
+    font-size:17px;
+    margin-bottom:7px;
+}
+
+.upload small{
+    color:#888;
+    font-size:12px;
+}
+
+#file{
+    display:none;
+}
+
+.info{
+    display:none;
+    margin-top:18px;
+    padding:16px 20px;
+    border-radius:10px;
+    background:#f5f3ff;
+    box-shadow:0 4px 15px rgba(108,92,231,0.06);
+}
+
+.info-item{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:8px;
+    margin:8px 0;
+    color:#2d3436;
+    font-size:15px;
+    white-space:nowrap;
+    overflow:hidden;
+}
+
+.info-item span{
+    color:#636e72;
+    flex-shrink:0;
+}
+
+.info-item b{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    display:inline-block;
+}
+
+.info-extra{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed #dcd6f7;
+    font-size:13px;
+    text-align:center;
+    color:#6c5ce7;
+}
+
+.settings{
+    display:none;
+    margin-top:20px;
+}
+
+.settings label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.password{
+    width:100%;
+    padding:15px;
+    border:2px solid #e4e1f5;
+    border-radius:15px;
+    outline:none;
+    font-size:15px;
+    background:white;
+    color:#172033;
+}
+
+.password:focus{
+    border-color:#6c5ce7;
+}
+
+.hint{
+    color:#888;
+    font-size:12px;
+    margin-top:8px;
+    line-height:1.5;
+}
+
+.unlock-btn{
+    display:none;
+    width:100%;
+    border:none;
+    margin-top:20px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    border-radius:20px;
+    background:#fff5e6;
+    text-align:center;
+}
+
+.result h2{
+    color:#d68910;
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.result-info{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.dark{
+    background:#101321;
+    color:white;
+}
+
+.dark .box{
+    background:#191d2d;
+}
+
+.dark .title p{
+    color:#aaa;
+}
+
+.dark .upload{
+    background:#15192a;
+    border-color:#8075ef;
+}
+
+.dark .upload small{
+    color:#aaa;
+}
+
+.dark .info{
+    background:#242039;
+    box-shadow:none;
+}
+
+.dark .info-item{
+    color:#e4e6eb;
+}
+
+.dark .info-item span{
+    color:#aaa;
+}
+
+.dark .info-extra{
+    border-top-color:#3d3663;
+    color:#a29bfe;
+}
+
+.dark .password{
+    background:#202438;
+    border-color:#343852;
+    color:white;
+}
+
+.dark .hint{
+    color:#aaa;
+}
+
+.dark .result{
+    background:#302718;
+}
+
+.dark .result-info{
+    color:#ccc;
+}
+
+@media(max-width:500px){
+    .header{
+        padding-bottom:28px;
+    }
+
+    .box{
+        padding:22px 16px;
+    }
+
+    .title h1{
+        font-size:23px;
+    }
+
+    .upload{
+        padding:30px 10px;
+    }
+}
+
+@media (min-width: 900px){
+    body{
+        padding-bottom:50px;
+    }
+
+    .header{
+        padding:24px 30px 40px;
+        border-radius:0 0 40px 40px;
+    }
+
+    .header-inner{
+        max-width:1200px;
+        gap:20px;
+    }
+
+    .back{
+        width:56px;
+        height:56px;
+        font-size:34px;
+    }
+
+    .logo{
+        font-size:30px;
+    }
+
+    .container{
+        max-width:1200px;
+        padding:0 25px;
+        margin:-20px auto 0;
+    }
+
+    .box{
+        width:100%;
+        padding:40px;
+        border-radius:30px;
+    }
+
+    .title h1{
+        font-size:38px;
+    }
+
+    .title p{
+        font-size:18px;
+    }
+}
+</style>
+<link rel="stylesheet" href="tool-suggestions.css">
+<link rel="stylesheet" href="intro-footer.css">
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <button class="back" onclick="goHome()">‹</button>
+        <div class="logo">⚡ Quick Tool</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box">
+        <div class="title">
+            <div class="title-icon">🔓</div>
+            <h1>Unlock PDF</h1>
+            <p>Remove password protection from a PDF file.</p>
+        </div>
+
+        <label class="upload" for="file">
+            <div class="upload-icon">📄</div>
+            <strong>Select PDF File</strong>
+            <small>Choose your password-protected PDF</small>
+        </label>
+
+        <input type="file" id="file" accept="application/pdf">
+
+        <div class="info" id="info"></div>
+
+        <div class="settings" id="settings">
+            <label for="password">PDF Password</label>
+            <input type="password" id="password" class="password" placeholder="Enter PDF password" autocomplete="off">
+            <div class="hint">Enter the correct password for your PDF.</div>
+        </div>
+
+        <button class="unlock-btn" id="unlockBtn" onclick="unlockPDF()">🔓 Unlock PDF</button>
+
+        <div class="result" id="result">
+            <h2 id="resultTitle">⚠️ Browser Limitation</h2>
+            <div class="result-info" id="resultInfo"></div>
+        </div>
+    </div>
+
+    <div id="toolSuggestions" class="tool-suggestions"></div>
+    <div id="introSection"></div>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+    </div>
+    <p>© 2026 Quick Tool. All rights reserved.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+let selectedFile = null;
+let cachedBuffer = null;
+let needsPassword = false;
+
+const fileInput = document.getElementById("file");
+const info = document.getElementById("info");
+const settings = document.getElementById("settings");
+const password = document.getElementById("password");
+const unlockBtn = document.getElementById("unlockBtn");
+const result = document.getElementById("result");
+const resultTitle = document.getElementById("resultTitle");
+const resultInfo = document.getElementById("resultInfo");
+
+fileInput.addEventListener("change", async function(){
+    const file = this.files[0];
+    if(!file) return;
+
+    if(file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")){
+        alert("Please select a valid PDF file.");
+        return;
+    }
+
+    selectedFile = file;
+    result.style.display = "none";
+    info.style.display = "block";
+    info.innerHTML = "<div style='text-align:center;'>⏳ Checking PDF...</div>";
+
+    try{
+        cachedBuffer = await file.arrayBuffer();
+
+        const renderFileInfo = (extraNote = "") => `
+            <div class="info-item">
+                <span>📄 File:</span> <b title="${escapeHTML(file.name)}">${escapeHTML(file.name)}</b>
+            </div>
+            <div class="info-item">
+                <span>📦 Original Size:</span> <b>${formatSize(file.size)}</b>
+            </div>
+            ${extraNote ? `<div class="info-extra">${extraNote}</div>` : ""}
+        `;
+
+        try{
+            const pdf = await pdfjsLib.getDocument({ data: cachedBuffer.slice(0) }).promise;
+
+            info.innerHTML = renderFileInfo(`📑 <b>${pdf.numPages}</b> Pages • 🔓 PDF can be opened without a password.`);
+
+            needsPassword = false;
+            password.value = "";
+            settings.style.display = "block";
+            unlockBtn.style.display = "block";
+
+        }catch(error){
+            if(error && error.name === "PasswordException"){
+                info.innerHTML = renderFileInfo(`🔒 Password protected • Enter password below.`);
+
+                needsPassword = true;
+                settings.style.display = "block";
+                unlockBtn.style.display = "block";
+            }else{
+                throw error;
+            }
+        }
+    }catch(error){
+        console.error("PDF Read Error:", error);
+        info.innerHTML = "<div style='text-align:center;color:#e74c3c;'>❌ Unable to read this PDF.</div>";
+        settings.style.display = "none";
+        unlockBtn.style.display = "none";
+    }
+});
+
+async function unlockPDF(){
+    if(!selectedFile || !cachedBuffer){
+        alert("Please select a PDF first.");
+        return;
+    }
+
+    const passVal = password.value;
+
+    if(needsPassword && !passVal){
+        alert("Please enter the PDF password.");
+        password.focus();
+        return;
+    }
+
+    unlockBtn.disabled = true;
+    unlockBtn.textContent = needsPassword ? "⏳ Verifying password..." : "⏳ Unlocking...";
+    result.style.display = "none";
+
+    try{
+        let unlockedBytes;
+
+        if(!needsPassword){
+            try{
+                const { PDFDocument } = PDFLib;
+                const pdfDoc = await PDFDocument.load(cachedBuffer.slice(0), { ignoreEncryption: true });
+                unlockedBytes = await pdfDoc.save();
+            }catch(fastErr){
+                unlockedBytes = await rebuildFromImages(cachedBuffer.slice(0), undefined);
+            }
+        }else{
+            unlockBtn.textContent = "⏳ Processing pages...";
+            unlockedBytes = await rebuildFromImages(cachedBuffer.slice(0), passVal);
+        }
+
+        const blob = new Blob([unlockedBytes], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        const downloadName = selectedFile.name.replace(/\.pdf$/i, "") + "-unlocked.pdf";
+
+        resultTitle.textContent = "✅ PDF Unlocked";
+        resultInfo.innerHTML =
+            "Password has been removed successfully.<br><br>" +
+            "<a href=\"" + url + "\" download=\"" + escapeHTML(downloadName) + "\" " +
+            "class=\"unlock-btn\" style=\"display:block;text-decoration:none;line-height:1.4;\">" +
+            "⬇️ Download Unlocked PDF</a>";
+
+        result.style.display = "block";
+
+    }catch(error){
+        console.error("Unlock Error:", error);
+
+        if(error && error.name === "PasswordException"){
+            alert("Incorrect PDF password. Please try again.");
+        }else{
+            resultTitle.textContent = "⚠️ Could Not Unlock";
+            resultInfo.innerHTML =
+                "Error: " + (error.message || "Failed to process PDF.") + "<br>" +
+                "Please check the password or try again.";
+            result.style.display = "block";
+        }
+    }
+
+    unlockBtn.disabled = false;
+    unlockBtn.textContent = "🔓 Unlock PDF";
+}
+
+async function rebuildFromImages(buffer, pass){
+    const loadingTask = pdfjsLib.getDocument(
+        pass ? { data: buffer, password: pass } : { data: buffer }
+    );
+
+    const pdf = await loadingTask.promise;
+    const { PDFDocument } = PDFLib;
+    const newPdf = await PDFDocument.create();
+
+    for(let i = 1; i <= pdf.numPages; i++){
+        unlockBtn.textContent = "⏳ Rendering page " + i + "/" + pdf.numPages + "...";
+        
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 1.5 });
+
+        const canvas = document.createElement("canvas");
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        const ctx = canvas.getContext("2d", { willReadFrequently: false });
+        await page.render({
+            canvasContext: ctx,
+            viewport: viewport
+        }).promise;
+
+        const imgData = canvas.toDataURL("image/jpeg", 0.85);
+        const jpgImage = await newPdf.embedJpg(imgData);
+
+        const pdfPage = newPdf.addPage([viewport.width, viewport.height]);
+        pdfPage.drawImage(jpgImage, {
+            x: 0,
+            y: 0,
+            width: viewport.width,
+            height: viewport.height
+        });
+
+        canvas.width = 0;
+        canvas.height = 0;
+    }
+
+    return await newPdf.save();
+}
+
+function formatSize(bytes){
+    if(bytes < 1024) return bytes + " B";
+    if(bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+}
+
+function escapeHTML(text){
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function goHome(){
+    window.location.href = "tool.html";
+}
+
+if(localStorage.getItem("theme") === "dark"){
+    document.body.classList.add("dark");
+}
+</script>
+<script src="tool-suggestions.js"></script>
+<script>
+fetch("intro.html")
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("introSection").innerHTML = html;
+    });
+</script>
+</body>
+</html>
