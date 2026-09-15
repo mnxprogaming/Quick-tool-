@@ -7,13 +7,13 @@
 <title>Digital Clock - Quick Tool</title>
 
 <style>
-
 *{
     box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
 body{
-    margin:0;
     min-height:100vh;
     background:#f4f6ff;
     color:#172033;
@@ -40,9 +40,9 @@ body{
 .back{
     width:44px;
     height:44px;
-    border:0;
+    border:none;
     border-radius:14px;
-    background:rgba(255,255,255,.18);
+    background:rgba(255,255,255,.2);
     color:white;
     font-size:28px;
     cursor:pointer;
@@ -85,85 +85,62 @@ body{
 
 .title h1{
     font-size:27px;
-    margin:0 0 8px;
+    margin-bottom:8px;
 }
 
 .title p{
     color:#777;
     font-size:14px;
     line-height:1.5;
-    margin:0;
 }
 
 .clock{
-    margin-top:20px;
-    padding:35px 15px;
-    border-radius:10px;
-    background:#faf9ff;
-    border:2px dashed #6c5ce7;
+    background:linear-gradient(135deg,#6c5ce7,#00b894);
+    border-radius:20px;
+    padding:40px 20px;
     text-align:center;
+    color:white;
+    margin-bottom:25px;
+    box-shadow:0 8px 30px rgba(0,0,0,.1);
 }
 
 .time{
-    font-size:52px;
-    font-weight:800;
+    font-size:56px;
+    font-weight:bold;
+    font-family:monospace;
+    margin-bottom:15px;
     letter-spacing:2px;
-    line-height:1.2;
 }
 
 .date{
-    margin-top:12px;
-    font-size:16px;
-    color:#666;
-    font-weight:600;
+    font-size:18px;
+    opacity:0.95;
 }
 
 .info{
-    margin-top:18px;
-    padding:15px;
-    border-radius:17px;
-    background:#f5f3ff;
     text-align:center;
+    padding:18px;
+    border-radius:15px;
+    background:#f5f3ff;
+    color:#555;
     font-size:14px;
+    margin-bottom:20px;
 }
 
 .toggle{
     width:100%;
-    margin-top:20px;
+    border:none;
     padding:14px;
-    border:0;
-    border-radius:17px;
-    background:linear-gradient(135deg,#6c5ce7,#00b894);
-    color:white;
+    border-radius:15px;
+    background:#eeeaff;
+    color:#6c5ce7;
     font-size:16px;
     font-weight:bold;
     cursor:pointer;
 }
 
-.dark{
-    background:#101321;
-    color:white;
-}
-
-.dark .box{
-    background:#191d2d;
-}
-
-.dark .title p{
-    color:#aaa;
-}
-
-.dark .clock{
-    background:#15192a;
-    border-color:#8075ef;
-}
-
-.dark .date{
-    color:#aaa;
-}
-
-.dark .info{
-    background:#242039;
+.toggle:active{
+    transform:scale(.98);
 }
 
 @media(max-width:500px){
@@ -180,12 +157,8 @@ body{
         font-size:23px;
     }
 
-    .clock{
-        padding:30px 10px;
-    }
-
     .time{
-        font-size:40px;
+        font-size:42px;
     }
 
     .date{
@@ -193,6 +166,30 @@ body{
     }
 
 }
+
+body.dark{
+    background:#101321;
+    color:white;
+}
+
+body.dark .box{
+    background:#191d2d;
+}
+
+body.dark .title p{
+    color:#aaa;
+}
+
+body.dark .info{
+    background:#242039;
+    color:#aeb4c8;
+}
+
+body.dark .toggle{
+    background:#242039;
+    color:#aaa5ff;
+}
+
 /* ============================= */
 /* DESKTOP RESPONSIVE FIX */
 /* ALL QUICK TOOL PAGES */
@@ -399,7 +396,7 @@ function toggleFormat(){
 
 function goHome(){
 
-    window.location.href = "tool.html";
+    window.location.href = "index.html";
 
 }
 

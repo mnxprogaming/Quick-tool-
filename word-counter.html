@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Word Counter - Quick Tool</title>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -26,7 +28,7 @@ body{
     color:white;
     padding:18px 16px 30px;
     border-radius:0 0 30px 30px;
-    box-shadow:0 5px 20px rgba(0,0,0,.12);
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
 }
 
 .header-inner{
@@ -96,15 +98,14 @@ body{
 
 textarea{
     width:100%;
-    min-height:220px;
-    padding:16px;
-    border:2px solid #eee;
-    border-radius:10px;
-    resize:vertical;
+    min-height:200px;
+    padding:20px;
+    border:1px solid #ddd;
+    border-radius:15px;
     font-size:16px;
-    line-height:1.6;
-    outline:none;
     font-family:Arial,sans-serif;
+    outline:none;
+    resize:vertical;
 }
 
 textarea:focus{
@@ -114,40 +115,45 @@ textarea:focus{
 .stats{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:12px;
-    margin-top:18px;
+    gap:15px;
+    margin-top:25px;
 }
 
 .stat{
-    background:#f5f3ff;
-    border-radius:17px;
-    padding:18px 10px;
+    background:#eeeaff;
+    border-radius:15px;
+    padding:20px;
     text-align:center;
 }
 
 .stat strong{
     display:block;
-    font-size:24px;
+    font-size:32px;
     color:#6c5ce7;
-    margin-bottom:5px;
+    margin-bottom:8px;
 }
 
 .stat span{
-    font-size:13px;
     color:#777;
+    font-size:14px;
+    font-weight:bold;
 }
 
 .clear-btn{
     width:100%;
     border:none;
-    margin-top:18px;
-    padding:15px;
-    border-radius:17px;
-    background:#eeeaff;
+    margin-top:20px;
+    padding:14px;
+    border-radius:15px;
+    background:#f5f3ff;
     color:#6c5ce7;
-    font-size:15px;
+    font-size:16px;
     font-weight:bold;
     cursor:pointer;
+}
+
+.clear-btn:active{
+    transform:scale(.98);
 }
 
 @media(max-width:500px){
@@ -164,9 +170,10 @@ textarea:focus{
         font-size:23px;
     }
 
-    textarea{
-        min-height:190px;
+    .stats{
+        grid-template-columns:1fr;
     }
+
 }
 
 body.dark{
@@ -198,8 +205,9 @@ body.dark .stat span{
 
 body.dark .clear-btn{
     background:#242039;
-    color:#aaa;
+    color:#aaa5ff;
 }
+
 /* ============================= */
 /* DESKTOP RESPONSIVE FIX */
 /* ALL QUICK TOOL PAGES */
@@ -367,7 +375,7 @@ body.dark .clear-btn{
 
 function goHome(){
 
-    window.location.href="tool.html";
+    window.location.href="index.html";
 
 }
 
@@ -414,11 +422,12 @@ function countText(){
 
 function clearText(){
 
-    document.getElementById("text").value="";
+    document.getElementById("text").value = "";
 
     countText();
 
 }
+
 /* DARK MODE */
 
 if(localStorage.getItem("theme") === "dark"){
@@ -426,6 +435,7 @@ if(localStorage.getItem("theme") === "dark"){
     document.body.classList.add("dark");
 
 }
+
 </script>
 <script src="tool-suggestions.js"></script>
 <script>
